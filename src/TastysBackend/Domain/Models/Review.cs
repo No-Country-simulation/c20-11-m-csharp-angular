@@ -21,5 +21,5 @@ public partial class Review
 
     public virtual Receta Receta { get; set; } = null!;
 
-    public virtual Usuarios Usuario { get; set; } = null!;
+    public virtual Usuario Usuario { get; set; } = null!;
 }

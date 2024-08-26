@@ -7,13 +7,13 @@ namespace Tastys.Infrastructure;
 
 public partial class TastysContext : DbContext
 {
-    public virtual DbSet<Usuarios> Usuarios { get; set; }
+    public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    public virtual DbSet<Receta> Receta { get; set; }
+    public virtual DbSet<Receta> Recetas { get; set; }
 
-    public virtual DbSet<Review> Review { get; set; }
+    public virtual DbSet<Review> Reviews { get; set; }
 
-    public virtual DbSet<Categoria> Categoria { get; set; }
+    public virtual DbSet<Categoria> Categorias { get; set; }
 
 
     public TastysContext(DbContextOptions<TastysContext> options) : base(options) { }
@@ -40,12 +40,12 @@ public partial class TastysContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");
 
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Receta)
+            entity.HasOne(d => d.Usuario).WithMany(p => p.Recetas)
                 .HasForeignKey(d => d.UsuarioID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Receta_ibfk_1");
 
-            entity.HasMany(d => d.Categoria).WithMany(p => p.Receta)
+            entity.HasMany(d => d.Categorias).WithMany(p => p.Recetas)
                 .UsingEntity<Dictionary<string, object>>(
                     "RecetaCategoria",
                     r => r.HasOne<Categoria>().WithMany()
@@ -76,18 +76,18 @@ public partial class TastysContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");
 
-            entity.HasOne(d => d.Receta).WithMany(p => p.Review)
+            entity.HasOne(d => d.Receta).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.RecetaID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Review_ibfk_1");
 
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Review)
+            entity.HasOne(d => d.Usuario).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.UsuarioID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Review_ibfk_2");
         });
 
-        modelBuilder.Entity<Usuarios>(entity =>
+        modelBuilder.Entity<Usuario>(entity =>
         {
             entity.HasKey(e => e.UsuarioID).HasName("PRIMARY");
 

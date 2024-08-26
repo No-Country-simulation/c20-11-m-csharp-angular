@@ -19,9 +19,9 @@ public partial class Receta
 
     public DateTime? create_at { get; set; }
 
-    public virtual ICollection<Review> Review { get; set; } = new List<Review>();
+    public virtual Usuario Usuario { get; set; } = null!;
 
-    public virtual Usuarios Usuario { get; set; } = null!;
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-    public virtual ICollection<Categoria> Categoria { get; set; } = new List<Categoria>();
+    public virtual ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();
 }

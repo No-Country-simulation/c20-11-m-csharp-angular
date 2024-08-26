@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain;
 
-public partial class Usuarios
+public partial class Usuario
 {
     public int UsuarioID { get; set; }
 
@@ -17,7 +17,7 @@ public partial class Usuarios
 
     public DateTime? create_at { get; set; }
 
-    public virtual ICollection<Receta> Receta { get; set; } = new List<Receta>();
+    public virtual ICollection<Receta> Recetas { get; set; } = new List<Receta>();
 
-    public virtual ICollection<Review> Review { get; set; } = new List<Review>();
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 }
