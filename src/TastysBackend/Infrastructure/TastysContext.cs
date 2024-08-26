@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,101 +8,36 @@ public partial class TastysContext : DbContext
 {
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
+    public virtual DbSet<RecetaCategoria> RecetaCategoria { get; set; }
     public virtual DbSet<Receta> Recetas { get; set; }
 
     public virtual DbSet<Review> Reviews { get; set; }
 
     public virtual DbSet<Categoria> Categorias { get; set; }
 
-
     public TastysContext(DbContextOptions<TastysContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Categoria>(entity =>
-        {
-            entity.HasKey(e => e.CategoriaID).HasName("PRIMARY");
+        modelBuilder.Entity<Receta>()
+            .HasOne(d => d.Usuario)
+            .WithMany(p => p.Recetas)
+            .HasForeignKey(d => d.UsuarioID);
 
-            entity.Property(e => e.Nombre).HasMaxLength(100);
-        });
+        modelBuilder.Entity<Review>()
+            .HasOne(d => d.Receta)
+            .WithMany(p => p.Reviews)
+            .HasForeignKey(d => d.RecetaID);
 
-        modelBuilder.Entity<Receta>(entity =>
-        {
-            entity.HasKey(e => e.RecetaID).HasName("PRIMARY");
+        modelBuilder.Entity<Review>()
+            .HasOne(d => d.Usuario)
+            .WithMany(p => p.Reviews)
+            .HasForeignKey(d => d.UsuarioID);
 
-            entity.HasIndex(e => e.UsuarioID, "UsuarioID");
-
-            entity.Property(e => e.Descripcion).HasColumnType("text");
-            entity.Property(e => e.ImageUrl).HasColumnType("text");
-            entity.Property(e => e.Nombre).HasMaxLength(100);
-            entity.Property(e => e.create_at)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime");
-
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Recetas)
-                .HasForeignKey(d => d.UsuarioID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Receta_ibfk_1");
-
-            entity.HasMany(d => d.Categorias).WithMany(p => p.Recetas)
-                .UsingEntity<Dictionary<string, object>>(
-                    "RecetaCategoria",
-                    r => r.HasOne<Categoria>().WithMany()
-                        .HasForeignKey("CategoriaID")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("RecetaCategoria_ibfk_2"),
-                    l => l.HasOne<Receta>().WithMany()
-                        .HasForeignKey("RecetaID")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("RecetaCategoria_ibfk_1"),
-                    j =>
-                    {
-                        j.HasKey("RecetaID", "CategoriaID").HasName("PRIMARY");
-                        j.HasIndex(new[] { "CategoriaID" }, "CategoriaID");
-                    });
-        });
-
-        modelBuilder.Entity<Review>(entity =>
-        {
-            entity.HasKey(e => e.ReviewID).HasName("PRIMARY");
-
-            entity.HasIndex(e => e.RecetaID, "RecetaID");
-
-            entity.HasIndex(e => e.UsuarioID, "UsuarioID");
-
-            entity.Property(e => e.Comentario).HasColumnType("text");
-            entity.Property(e => e.create_at)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime");
-
-            entity.HasOne(d => d.Receta).WithMany(p => p.Reviews)
-                .HasForeignKey(d => d.RecetaID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Review_ibfk_1");
-
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Reviews)
-                .HasForeignKey(d => d.UsuarioID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Review_ibfk_2");
-        });
-
-        modelBuilder.Entity<Usuario>(entity =>
-        {
-            entity.HasKey(e => e.UsuarioID).HasName("PRIMARY");
-
-            entity.HasIndex(e => e.Auth0Id, "Auth0Id").IsUnique();
-
-            entity.HasIndex(e => e.Email, "Email").IsUnique();
-
-            entity.Property(e => e.Auth0Id).HasMaxLength(200);
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.Nombre).HasMaxLength(100);
-            entity.Property(e => e.create_at)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime");
-        });
-
-        OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<Receta>()
+            .HasMany(d => d.Categorias)
+            .WithMany(p => p.Recetas)
+            .UsingEntity<RecetaCategoria>();
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

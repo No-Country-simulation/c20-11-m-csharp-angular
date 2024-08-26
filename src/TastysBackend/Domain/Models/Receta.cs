@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain;
 
 public partial class Receta
 {
+    [Key]
     public int RecetaID { get; set; }
-
+    [Required]
     public int UsuarioID { get; set; }
-
+    [Required]
+    [MaxLength(100)]
     public string Nombre { get; set; } = null!;
-
+    [Required]
+    [Column(TypeName = "text")]
     public string Descripcion { get; set; } = null!;
-
+    [Required]
+    [Column(TypeName = "text")]
     public string ImageUrl { get; set; } = null!;
 
     public bool IsDeleted { get; set; }
-
-    public DateTime? create_at { get; set; }
+    [Column(TypeName = "datetime")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public DateTime? create_at { get; set; } = DateTime.UtcNow;
 
     public virtual Usuario Usuario { get; set; } = null!;
 
