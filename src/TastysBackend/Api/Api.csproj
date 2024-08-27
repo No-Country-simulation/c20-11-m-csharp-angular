@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <RootNamespace>Tastys.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>Tastys.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

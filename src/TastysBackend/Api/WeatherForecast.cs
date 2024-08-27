@@ -1,4 +1,4 @@
-namespace Api;
+namespace Tastys.Api;
 
 public class WeatherForecast
 {

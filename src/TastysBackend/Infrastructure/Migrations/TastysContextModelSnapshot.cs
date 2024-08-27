@@ -8,7 +8,7 @@ using Tastys.Infrastructure;
 
 #nullable disable
 
-namespace Infrastructure.Migrations
+namespace Tastys.Infrastructure.Migrations
 {
     [DbContext(typeof(TastysContext))]
     partial class TastysContextModelSnapshot : ModelSnapshot

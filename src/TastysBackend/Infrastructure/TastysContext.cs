@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Domain;
+using Tastys.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Tastys.Infrastructure;
