@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers;
+namespace Tastys.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Infrastructure.Migrations
+namespace Tastys.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class m1 : Migration

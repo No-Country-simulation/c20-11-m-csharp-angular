@@ -1,4 +1,4 @@
-﻿namespace BLL;
+﻿namespace Tastys.BLL;
 
 public class Class1
 {
