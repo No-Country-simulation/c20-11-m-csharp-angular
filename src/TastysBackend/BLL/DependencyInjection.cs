@@ -8,6 +8,8 @@ public static class DependencyInjection
     {
         services.AddAutoMapper(typeof(MappingProfile));
 
+        services.AddScoped<RecetaService>();
+
         return services;
     }
 }
