@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Tastys.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>Tastys.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
 </Project>
