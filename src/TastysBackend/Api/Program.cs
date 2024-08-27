@@ -1,14 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Tastys.Infrastructure;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<TastysContext>(
-    options => options
-    .UseMySql(builder.Configuration.GetConnectionString("MySqlConnection"),
-        new MySqlServerVersion(new Version(8, 0, 23)),
-            b => b.MigrationsAssembly("Infrastructure")));
+builder.Services.AddBLLServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
