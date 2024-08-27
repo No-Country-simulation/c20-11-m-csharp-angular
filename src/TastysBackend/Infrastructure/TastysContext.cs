@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using Tastys.BLL;
 using Tastys.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Tastys.Infrastructure;
 
-public partial class TastysContext : DbContext
+public partial class TastysContext : DbContext, ITastysContext
 {
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
     public virtual DbSet<RecetaCategoria> RecetaCategoria { get; set; }
+
     public virtual DbSet<Receta> Recetas { get; set; }
 
     public virtual DbSet<Review> Reviews { get; set; }
