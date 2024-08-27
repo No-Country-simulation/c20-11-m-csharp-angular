@@ -9,7 +9,7 @@ using Tastys.Infrastructure;
 
 #nullable disable
 
-namespace Infrastructure.Migrations
+namespace Tastys.Infrastructure.Migrations
 {
     [DbContext(typeof(TastysContext))]
     [Migration("20240826203839_m1")]
