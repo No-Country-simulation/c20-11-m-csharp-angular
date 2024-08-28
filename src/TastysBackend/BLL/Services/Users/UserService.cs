@@ -41,6 +41,7 @@ public class UserServices:IUserService
     {
         try
         {
+
             Usuario usuarioExist = _userService.Usuarios.FirstOrDefault( u => u.Email == email);
 
             if (usuarioExist != null)

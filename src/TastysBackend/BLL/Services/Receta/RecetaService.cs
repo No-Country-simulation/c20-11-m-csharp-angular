@@ -20,6 +20,7 @@ public class RecetaService
             .Include(receta => receta.Usuario)
             .Select(receta => _mapper.Map<RecetaDto>(receta))
             .ToList();
+        
     }
 
     public List<RecetaDto> GetAllRecetas(RecetasQuery queryParameters)
