@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tastys.BLL;
 
-namespace Tastys.Api.Controllers;
+namespace Tastys.API.Controllers.Recetas;
 
 [ApiController]
 [Route("receta")]
