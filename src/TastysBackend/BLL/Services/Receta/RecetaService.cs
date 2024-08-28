@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tastys.BLL;
 
@@ -18,6 +20,8 @@ public class RecetaService
     {
         return _context.Recetas
             .Include(receta => receta.Usuario)
+            .Include(receta => receta.Categorias)
+            .Include(receta => receta.Reviews)
             .Select(receta => _mapper.Map<RecetaDto>(receta))
             .ToList();
         
@@ -25,15 +29,43 @@ public class RecetaService
 
     public List<RecetaDto> GetAllRecetas(RecetasQuery queryParameters)
     {
-        var query = _context.Recetas.Include(receta => receta.Usuario).AsQueryable();
+        var query = _context.Recetas
+            .Include(receta => receta.Usuario)
+            .Include(receta => receta.Categorias)
+            .AsQueryable();
+
+        // TODO: Full-text search en nombre + descripción, pero probablemente requiera
+        // hacer cambios en la DB para incluir un índice, porque si no es muy ineficiente
+        if (!string.IsNullOrWhiteSpace(queryParameters.S))
+        {
+            query = query
+                .Where(receta => receta.Nombre
+                    .Contains(queryParameters.S, StringComparison.CurrentCultureIgnoreCase));
+        }
 
         if (queryParameters.Offset.HasValue)
+        {
+            if (queryParameters.Offset.Value < 0)
+                throw new ValidationException($"El parámetro '{nameof(queryParameters.Offset)}' debe ser mayor o igual a cero.");
+
             query = query.Skip(queryParameters.Offset.Value);
+        }
 
         if (queryParameters.Length.HasValue)
-            query = query.Take(queryParameters.Length.Value);
+        {
+            if (queryParameters.Length.Value < 0)
+                throw new ValidationException($"El parámetro '{nameof(queryParameters.Length)}' debe ser mayor o igual a cero.");
 
-        // TODO: Falta la validación y también los filtros S y Review_Length
+            query = query.Take(queryParameters.Length.Value);
+        }
+
+        if (queryParameters.Reviews_Length.HasValue)
+        {
+            if (queryParameters.Reviews_Length.Value < 0)
+                throw new ValidationException($"El parámetro '{nameof(queryParameters.Reviews_Length)}' debe ser mayor o igual a cero.");
+
+            // TODO: Falta filtro Reviews_Length
+        }
 
         return query
             .Select(receta => _mapper.Map<RecetaDto>(receta))
