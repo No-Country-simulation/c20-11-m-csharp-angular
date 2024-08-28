@@ -4,7 +4,7 @@ using AutoMapper;
 using Tastys.BLL;
 using Tastys.Domain;
 
-public class UserServices
+public class UserServices:IUserService
 {
     private readonly ITastysContext _userService;
     private readonly IMapper _mapper;
