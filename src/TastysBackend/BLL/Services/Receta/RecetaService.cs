@@ -44,13 +44,27 @@ public class RecetaService
 
         if (queryParameters.Offset.HasValue)
         {
+            if (queryParameters.Offset.Value < 0)
+                throw new ValidationException($"El parámetro '{nameof(queryParameters.Offset)}' debe ser mayor o igual a cero.");
+
             query = query.Skip(queryParameters.Offset.Value);
         }
 
         if (queryParameters.Length.HasValue)
-            query = query.Take(queryParameters.Length.Value);
+        {
+            if (queryParameters.Length.Value < 0)
+                throw new ValidationException($"El parámetro '{nameof(queryParameters.Length)}' debe ser mayor o igual a cero.");
 
-        // TODO: Falta filtro Reviews_Length
+            query = query.Take(queryParameters.Length.Value);
+        }
+
+        if (queryParameters.Reviews_Length.HasValue)
+        {
+            if (queryParameters.Reviews_Length.Value < 0)
+                throw new ValidationException($"El parámetro '{nameof(queryParameters.Reviews_Length)}' debe ser mayor o igual a cero.");
+
+            // TODO: Falta filtro Reviews_Length
+        }
 
         return query
             .Select(receta => _mapper.Map<RecetaDto>(receta))
