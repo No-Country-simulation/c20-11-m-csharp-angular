@@ -15,7 +15,7 @@ public class UserController:ControllerBase
     }
 
     [HttpPost]
-    public ActionResult PostUser([FromBody]Usuario user)
+    public ActionResult PostUsers([FromBody]Usuario user)
     {
         try
         {
