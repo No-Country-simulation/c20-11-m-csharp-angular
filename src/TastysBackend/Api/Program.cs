@@ -1,3 +1,5 @@
+using Tastys.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,6 +19,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    // Migra y agrega datos semilla a la DB si no existe.
+    app.Services.InitialiseDatabase();
 }
 
 app.UseHttpsRedirection();
