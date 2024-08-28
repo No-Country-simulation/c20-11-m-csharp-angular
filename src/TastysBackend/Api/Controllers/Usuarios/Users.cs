@@ -19,13 +19,15 @@ public class UserController:ControllerBase
     {
         try
         {
-            UsuarioPublicDto usuarioPublicDto= _userService.PostUser(user);
+
+            UsuarioPublicDto usuarioPublicDto = _userService.PostUser(user);
 
             return Ok(usuarioPublicDto);
+            
         }
         catch (System.Exception)
         {
-            
+
             throw;
         }
     }
@@ -34,13 +36,14 @@ public class UserController:ControllerBase
     {
         try
         {
+
             UsuarioPublicDto usuarioPublicDto= _userService.GetUserByEmail(email);
 
             return Ok(usuarioPublicDto);
+
         }
         catch (System.Exception)
         {
-            
             throw;
         }
     }
@@ -49,9 +52,11 @@ public class UserController:ControllerBase
     {
         try
         {
+
             UsuarioPublicDto usuarioPublicDto= _userService.AuthDeleteUser(Auth0Id);
 
             return Ok(usuarioPublicDto);
+
         }
         catch (System.Exception)
         {
