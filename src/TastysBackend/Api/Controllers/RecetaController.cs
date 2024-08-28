@@ -7,10 +7,10 @@ namespace Tastys.Api.Controllers;
 [Route("receta")]
 public class RecetaController : ControllerBase
 {
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILogger<RecetaController> _logger;
     private readonly RecetaService _recetaService;
 
-    public RecetaController(ILogger<WeatherForecastController> logger, RecetaService recetaService)
+    public RecetaController(ILogger<RecetaController> logger, RecetaService recetaService)
     {
         _logger = logger;
         _recetaService = recetaService;
@@ -27,7 +27,7 @@ public class RecetaController : ControllerBase
 
         try
         {
-            var recetas = _recetaService.GetAllRecetas();
+            var recetas = _recetaService.GetAllRecetas(queryParameters);
 
             return Ok(recetas);
         }
