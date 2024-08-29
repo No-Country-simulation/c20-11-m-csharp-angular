@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc.Filters;
+using Tastys.API.Middlewares;
 using Tastys.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddBLLServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddScoped<UserServices>();
+
+//Autenticacion
+builder.Services.AddTransient<IAsyncAuthorizationFilter,CheckToken>();
+builder.Services.AddTransient<IAsyncAuthorizationFilter,SetToken>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

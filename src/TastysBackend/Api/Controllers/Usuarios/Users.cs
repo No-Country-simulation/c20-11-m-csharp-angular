@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Tastys.BLL;
 using Tastys.Domain;
+using Tastys.API.Middlewares;
 
 namespace Tastys.Api.Controllers;
 
@@ -15,6 +16,8 @@ public class UserController:ControllerBase
     }
 
     [HttpPost]
+    [SetToken]
+    [CheckToken]
     public ActionResult PostUsers([FromBody]Usuario user)
     {
         try
@@ -31,6 +34,7 @@ public class UserController:ControllerBase
             throw;
         }
     }
+
     [HttpGet]
     public ActionResult GetUser([FromQuery]string email)
     {
@@ -47,6 +51,7 @@ public class UserController:ControllerBase
             throw;
         }
     }
+
     [HttpDelete]
     public ActionResult DeleteUser([FromQuery] string Auth0Id)
     {
@@ -64,6 +69,7 @@ public class UserController:ControllerBase
             throw;
         }
     }
+    
     [HttpPut]
     public ActionResult PutUser([FromBody]Usuario user)
     {

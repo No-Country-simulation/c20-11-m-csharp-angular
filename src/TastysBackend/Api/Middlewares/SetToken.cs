@@ -4,7 +4,7 @@ using Tastys.API.Token;
 
 namespace Tastys.API.Middlewares;
 
-public class SetToken:IAsyncAuthorizationFilter
+public class SetToken:Attribute,IAsyncAuthorizationFilter
 {
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
