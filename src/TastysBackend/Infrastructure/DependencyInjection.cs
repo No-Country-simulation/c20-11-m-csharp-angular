@@ -17,6 +17,8 @@ public static class DependencyInjection
 
         services.AddScoped<ITastysContext>(provider => provider.GetRequiredService<TastysContext>());
 
+        services.AddScoped<TastysContextInitialiser>();
+
         return services;
     }
 }

@@ -7,33 +7,34 @@ using AutoMapper;
 namespace Tastys.API.Controllers.Recetas
 {
     [Route("/api/receta")]
-    [ApiController]
-    public class RecetaController : ControllerBase
-    {
-        private readonly ILogger<RecetaController> _logger;
+[ApiController]
+[Route("receta")]
+public class RecetaController : ControllerBase
+{
+    private readonly ILogger<RecetaController> _logger;
         private readonly RecetaCRUD _recetaService;
 
         public RecetaController(ILogger<RecetaController> logger, RecetaCRUD recetaService)
-        {
-            _logger = logger;
-            _recetaService = recetaService;
-        }
+    {
+        _logger = logger;
+        _recetaService = recetaService;
+    }
 
-        [HttpGet]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
-        [ProducesResponseType<RecetaDto[]>(200)]
+    [HttpGet]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType<RecetaDto[]>(200)]
         public async Task<ActionResult<RecetaDto[]>> Get([FromQuery] RecetasQuery queryParameters)
-        {
-            // Los queryParameters se validan automáticamente
-            // de acuerdo a las anotaciones en RecetasQuery
+    {
+        // Los queryParameters se validan automáticamente
+        // de acuerdo a las anotaciones en RecetasQuery
 
-            try
-            {
+        try
+        {
                 var recetas = _recetaService.GetAllRecetas();
 
-                return Ok(recetas);
-            }
+            return Ok(recetas);
+        }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al traer recetas desde DB");
@@ -72,9 +73,9 @@ namespace Tastys.API.Controllers.Recetas
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear la receta en DB");
-                return StatusCode(500);
-            }
+            return StatusCode(500);
         }
+    }
         [HttpDelete]
         public async Task<ActionResult<RecetaDto>> DeleteReceta(int ID)
         {

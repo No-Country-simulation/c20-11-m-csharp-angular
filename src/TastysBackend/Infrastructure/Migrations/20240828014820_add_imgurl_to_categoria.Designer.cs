@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tastys.Infrastructure;
 
@@ -11,9 +12,11 @@ using Tastys.Infrastructure;
 namespace Tastys.Infrastructure.Migrations
 {
     [DbContext(typeof(TastysContext))]
-    partial class TastysContextModelSnapshot : ModelSnapshot
+    [Migration("20240828014820_add_imgurl_to_categoria")]
+    partial class add_imgurl_to_categoria
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

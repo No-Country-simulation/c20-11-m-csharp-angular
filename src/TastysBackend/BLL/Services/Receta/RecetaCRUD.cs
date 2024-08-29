@@ -35,6 +35,7 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
             {
                 throw new ApplicationException("Algo falló");
             }
+
         }
 
         public async Task<RecetaDto> GetRecetaByID(int ID)
@@ -55,6 +56,7 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
         }
         public async Task<bool> UpdateReceta(RecetaDto recetaDto, int ID)
         {
+
             try
             {
                 var receta = await _Context.Recetas.FindAsync(ID);
