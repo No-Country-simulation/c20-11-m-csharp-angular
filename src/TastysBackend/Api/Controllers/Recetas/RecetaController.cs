@@ -8,7 +8,6 @@ namespace Tastys.API.Controllers.Recetas
 {
     [Route("/api/receta")]
 [ApiController]
-[Route("receta")]
 public class RecetaController : ControllerBase
 {
     private readonly ILogger<RecetaController> _logger;
@@ -31,7 +30,7 @@ public class RecetaController : ControllerBase
 
         try
         {
-                var recetas = _recetaService.GetAllRecetas();
+                var recetas = await _recetaService.GetAllRecetas();
 
             return Ok(recetas);
         }
@@ -41,7 +40,7 @@ public class RecetaController : ControllerBase
                 return StatusCode(500);
             }
         }
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
         {
             try
@@ -76,12 +75,12 @@ public class RecetaController : ControllerBase
             return StatusCode(500);
         }
     }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<RecetaDto>> DeleteReceta(int ID)
         {
             try
             {
-                var receta = _recetaService.GetRecetaByID(ID);
+                var receta = await _recetaService.GetRecetaByID(ID);
                 if (receta==null)
                 {
                     return NotFound();

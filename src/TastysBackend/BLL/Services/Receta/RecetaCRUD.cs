@@ -79,7 +79,7 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
                 var mappedReceta = _Mapper.Map<Tastys.Domain.Receta>(receta);
                 _Context.Recetas.Add(mappedReceta);
                 await _Context.SaveChangesAsync();
-                var createdRecetaDto = _Mapper.Map<RecetaDto>(receta);
+                var createdRecetaDto = _Mapper.Map<RecetaDto>(mappedReceta);
                 return createdRecetaDto;
             } 
             catch(Exception ex)
@@ -96,7 +96,7 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
                 {
                     throw new KeyNotFoundException($"Receta con ID {ID} no fue encontrada");
                 }
-                _Mapper.Map<RecetaDto>(receta);
+                _Context.Recetas.Remove(receta);
                 await _Context.SaveChangesAsync();
                 return true;
             }
