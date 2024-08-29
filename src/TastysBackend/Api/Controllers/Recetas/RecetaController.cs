@@ -6,8 +6,7 @@ using AutoMapper;
 
 namespace Tastys.API.Controllers.Recetas
 {
-
-[Route("/api/receta")]
+    [Route("/api/receta")]
 [ApiController]
 public class RecetaController : ControllerBase
 {
@@ -41,7 +40,7 @@ public class RecetaController : ControllerBase
                 return StatusCode(500);
             }
         }
-        [HttpGet("{ID}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
         {
             try
@@ -76,7 +75,7 @@ public class RecetaController : ControllerBase
             return StatusCode(500);
         }
     }
-        [HttpDelete("{ID}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<RecetaDto>> DeleteReceta(int ID)
         {
             try
