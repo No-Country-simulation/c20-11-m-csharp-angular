@@ -9,10 +9,11 @@ internal class ManageToken(IConfiguration configuration)
         try
         {
             Console.WriteLine(code);
+            //Estos datos son keys auth0
             var CLIEN_ID = configuration.GetSection("AUTH")["CLIEN_ID"];
             var CLIENT_SECRET = configuration.GetSection("AUTH")["CLIENT_SECRET"];
             var CLIENT_HOST = configuration.GetSection("AUTH")["CLIEN_HOST"];
-            
+
             HttpClient httpClient = new HttpClient();
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,"https://dev-v2roygalmy6qyix2.us.auth0.com/oauth/token");
 
