@@ -86,7 +86,24 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
             {
                 throw new ApplicationException("Algo falló al crear la receta", ex);
             }
-
+        }
+        public async Task<bool> DeleteReceta(int ID)
+        {
+            try
+            {
+                var receta = await _Context.Recetas.FindAsync(ID);
+                if (receta == null)
+                {
+                    throw new KeyNotFoundException($"Receta con ID {ID} no fue encontrada");
+                }
+                _Mapper.Map<RecetaDto>(receta);
+                await _Context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Algo falló al actualizar la receta, {ex}");
+            }
         }
     }
 }
