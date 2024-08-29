@@ -1,3 +1,4 @@
+using Tastys.BLL.Services.Receta.RecetaCRUD;
 using Tastys.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddBLLServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddScoped<UserServices>();
-
+builder.Services.AddScoped<RecetaCRUD>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
