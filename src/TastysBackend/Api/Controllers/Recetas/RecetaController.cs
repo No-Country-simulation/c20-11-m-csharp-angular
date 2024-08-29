@@ -40,7 +40,9 @@ public class RecetaController : ControllerBase
                 return StatusCode(500);
             }
         }
+
         [HttpGet("{ID}")]
+
         public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
         {
             try
@@ -75,7 +77,9 @@ public class RecetaController : ControllerBase
             return StatusCode(500);
         }
     }
+
         [HttpDelete("{ID}")]
+
         public async Task<ActionResult<RecetaDto>> DeleteReceta(int ID)
         {
             try
