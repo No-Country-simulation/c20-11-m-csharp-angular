@@ -20,44 +20,44 @@ public class RecetaController : ControllerBase
         _recetaService = recetaService;
     }
 
-    [HttpGet]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    [ProducesResponseType<RecetaDto[]>(200)]
-        public async Task<ActionResult<RecetaDto[]>> Get([FromQuery] RecetasQuery queryParameters)
-    {
-        // Los queryParameters se validan automáticamente
-        // de acuerdo a las anotaciones en RecetasQuery
+    // [HttpGet]
+    // [ProducesResponseType(400)]
+    // [ProducesResponseType(500)]
+    // [ProducesResponseType<RecetaDto[]>(200)]
+    //     public async Task<ActionResult<RecetaDto[]>> Get([FromQuery] RecetasQuery queryParameters)
+    // {
+    //     // Los queryParameters se validan automáticamente
+    //     // de acuerdo a las anotaciones en RecetasQuery
 
-        try
-        {
-                var recetas = await _recetaService.GetAllRecetas();
+    //     try
+    //     {
+    //             var recetas = _recetaService.GetAllRecetas();
 
-            return Ok(recetas);
-        }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al traer recetas desde DB");
-                return StatusCode(500);
-            }
-        }
-        [HttpGet("{ID}")]
-        public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
-        {
-            try
-            {
-                var receta = await  _recetaService.GetRecetaByID(ID);
-                if(receta == null){
-                    return NotFound();
-                }
-                return Ok(receta);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al traer la receta, comprobar que el ID sea correcto");
-                return StatusCode(500);
-            }
-        }
+    //         return Ok(recetas);
+    //     }
+    //         catch (Exception ex)
+    //         {
+    //             _logger.LogError(ex, "Error al traer recetas desde DB");
+    //             return StatusCode(500);
+    //         }
+    //     }
+        // [HttpGet]
+        // public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
+        // {
+        //     try
+        //     {
+        //         var receta = await  _recetaService.GetRecetaByID(ID);
+        //         if(receta == null){
+        //             return NotFound();
+        //         }
+        //         return Ok(receta);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         _logger.LogError(ex, "Error al traer la receta, comprobar que el ID sea correcto");
+        //         return StatusCode(500);
+        //     }
+        // }
         [HttpPost]
         public async Task<ActionResult<RecetaDto>> CreateReceta(RecetaDto receta)
         {

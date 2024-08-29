@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Tastys.API.Middlewares;
 using Tastys.BLL.Services.Receta.RecetaCRUD;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Tastys.API.Middlewares;
 using Tastys.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,11 @@ builder.Services.AddTransient<IAsyncAuthorizationFilter,CheckToken>();
 builder.Services.AddTransient<IAsyncAuthorizationFilter,SetToken>();
 
 builder.Services.AddScoped<RecetaCRUD>();
+
+//Autenticacion
+builder.Services.AddTransient<IAsyncAuthorizationFilter,CheckToken>();
+builder.Services.AddTransient<IAsyncAuthorizationFilter,SetToken>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
