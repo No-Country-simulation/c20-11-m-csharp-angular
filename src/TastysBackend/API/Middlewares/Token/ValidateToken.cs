@@ -35,6 +35,7 @@ internal class ValidateToken(IConfiguration configuration)
             
             var claimsPrincipal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
             jwtToken = (JwtSecurityToken)validatedToken;
+            
             return jwtToken;
 
         }
