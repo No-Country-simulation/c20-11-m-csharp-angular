@@ -36,6 +36,8 @@ public class UserController:ControllerBase
     }
 
     [HttpGet]
+    [SetToken]
+    [CheckToken]
     public ActionResult GetUser([FromQuery]string email)
     {
         try
@@ -52,6 +54,32 @@ public class UserController:ControllerBase
         }
     }
 
+    [HttpGet]
+    [SetToken]
+    [CheckToken]
+    public ActionResult GetUserAuth()
+    {
+        try
+        {
+            string authorizationHeader = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+            if (authorizationHeader != null)
+            {
+                string token = authorizationHeader.Substring("Bearer ".Length).Trim();
+                UsuarioPublicDto usuarioPublicDto= _userService.GetUserAuth0(token);
+
+                return Ok(usuarioPublicDto);
+            }else
+            {
+                return BadRequest("No se proporciono el token para obtener el usuairo");
+            }
+
+
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
+    }
     [HttpDelete]
     public ActionResult DeleteUser([FromQuery] string Auth0Id)
     {
