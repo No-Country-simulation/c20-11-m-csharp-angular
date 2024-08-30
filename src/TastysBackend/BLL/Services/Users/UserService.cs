@@ -1,7 +1,9 @@
 
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using AutoMapper;
 using Tastys.BLL;
+using Tastys.BLL.Utils;
 using Tastys.Domain;
 
 
@@ -14,6 +16,37 @@ public class UserServices:IUserService
         _userService = tastysContext;
         _mapper = mapper;
     }
+    public UsuarioPublicDto PostUserAuth0(string token)
+    {
+        try
+        {
+            
+            Dictionary<string,string> claims = JwtValidate.ValidateClaimsToken(token,["custom_email_claim","custom_name_claim","sub"]);
+
+            Usuario usuarioExist = _userService.Usuarios.FirstOrDefault( u => u.Auth0Id == claims["sub"]);
+
+            if (usuarioExist == null)
+            {
+                Usuario newUsuario = new Usuario {
+                    Auth0Id = claims["sub"],
+                    Email = claims["custom_email_claim"],
+                    Nombre = claims["custom_name_claim"]
+                };
+                _userService.Usuarios.Add(newUsuario);
+                _userService.SaveChanges();
+
+                return _mapper.Map<UsuarioPublicDto>(usuarioExist);
+            }else
+            {
+                throw new HttpRequestException("El usuario ya existe en la db",null,HttpStatusCode.BadRequest);
+            }
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
+    } 
     public UsuarioPublicDto PostUser(Usuario usuario)
     {
         try
@@ -58,6 +91,29 @@ public class UserServices:IUserService
             throw;
         }
     }    
+    public UsuarioPublicDto GetUserAuth0(string token)
+    {
+        try
+        {
+
+            Dictionary<string,string> claims = JwtValidate.ValidateClaimsToken(token,["custom_email_claim"]);
+
+            Usuario usuarioExist = _userService.Usuarios.FirstOrDefault( u => u.Email == claims["custom_email_claim"]);
+
+            if (usuarioExist != null)
+            {
+                return _mapper.Map<UsuarioPublicDto>(usuarioExist);
+            }else
+            {
+                throw new HttpRequestException("El usuario no existe en la db",null,HttpStatusCode.BadRequest);
+            }
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
+    }  
     public UsuarioPublicDto AuthDeleteUser(string Auth0Id)
     {
         try
