@@ -4,6 +4,7 @@ using AutoMapper;
 using Tastys.BLL;
 using Tastys.Domain;
 
+
 public class UserServices:IUserService
 {
     private readonly ITastysContext _userService;
@@ -40,6 +41,7 @@ public class UserServices:IUserService
     {
         try
         {
+
             Usuario usuarioExist = _userService.Usuarios.FirstOrDefault( u => u.Email == email);
 
             if (usuarioExist != null)

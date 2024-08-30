@@ -9,6 +9,7 @@ public class MappingProfile : Profile
     {
         CreateMap<Receta, RecetaDto>();
         CreateMap<Usuario, UsuarioPublicDto>();
+        CreateMap<Usuario, UsuarioAuthDto>();
         CreateMap<Review, ReviewDto>();
         CreateMap<Categoria, CategoriaDto>();
     }

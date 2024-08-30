@@ -6,7 +6,8 @@ using AutoMapper;
 
 namespace Tastys.API.Controllers.Recetas
 {
-    [Route("/api/receta")]
+
+[Route("/api/receta")]
 [ApiController]
 public class RecetaController : ControllerBase
 {
@@ -19,18 +20,18 @@ public class RecetaController : ControllerBase
         _recetaService = recetaService;
     }
 
-    [HttpGet]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    [ProducesResponseType<RecetaDto[]>(200)]
-        public async Task<ActionResult<RecetaDto[]>> Get([FromQuery] RecetasQuery queryParameters)
-    {
-        // Los queryParameters se validan automáticamente
-        // de acuerdo a las anotaciones en RecetasQuery
+    // [HttpGet]
+    // [ProducesResponseType(400)]
+    // [ProducesResponseType(500)]
+    // [ProducesResponseType<RecetaDto[]>(200)]
+    //     public async Task<ActionResult<RecetaDto[]>> Get([FromQuery] RecetasQuery queryParameters)
+    // {
+    //     // Los queryParameters se validan automáticamente
+    //     // de acuerdo a las anotaciones en RecetasQuery
 
-        try
-        {
-                var recetas = await _recetaService.GetAllRecetas();
+    //     try
+    //     {
+    //             var recetas = _recetaService.GetAllRecetas();
 
             return Ok(recetas);
         }
