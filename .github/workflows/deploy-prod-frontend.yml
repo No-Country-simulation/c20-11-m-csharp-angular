@@ -1,14 +1,13 @@
 name: "Desplegar front de PROD a Firebase"
-run-name: "Despliegue del front de PROD a Firebase. Evento: @${{ github.event_name }} por @${{ github.actor }}"
+run-name: "Despliegue del front de PROD a Firebase. Evento: ${{ github.event_name }} por @${{ github.actor }}"
 
 on:
   push:
     branches:
       - main
     paths:
-      - ${{ vars.PROD_FRONT_PROJECT_PATH }}/**
-    paths-ignore:
-      - '**/*.md'
+      - "${{ vars.PROD_FRONT_PROJECT_PATH }}/**"
+      - "**/*.md"
   workflow-dispatch:
 
 jobs:
