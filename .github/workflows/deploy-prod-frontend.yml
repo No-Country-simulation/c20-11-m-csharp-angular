@@ -8,7 +8,7 @@ on:
     paths:
       - "${{ vars.PROD_FRONT_PROJECT_PATH }}/**"
       - "**/*.md"
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
