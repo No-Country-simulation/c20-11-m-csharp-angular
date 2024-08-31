@@ -1,12 +1,16 @@
 name: "Desplegar front de PROD a Firebase"
 run-name: "Despliegue del front de PROD a Firebase. Evento: ${{ github.event_name }} por @${{ github.actor }}"
 
+env:
+  FRONT_BUILD_PATH: dist
+  FRONT_PROJECT_PATH: cliente
+
 on:
   push:
     branches:
       - main
     paths:
-      - "${{ vars.PROD_FRONT_PROJECT_PATH }}/**"
+      - "${{ env.FRONT_PROJECT_PATH }}/**"
       - "**/*.md"
   workflow_dispatch:
 
@@ -16,7 +20,7 @@ jobs:
     name: Compilar y crear artifact de prod
     defaults:
       run:
-        working-directory: ${{ vars.PROD_FRONT_PROJECT_PATH }}
+        working-directory: ${{ env.FRONT_PROJECT_PATH }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@master
@@ -34,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: prod_dist
-          path: ${{ vars.PROD_FRONT_PROJECT_PATH }}/${{ vars.PROD_FRONT_BUILD_PATH }}
+          path: ${{ env.FRONT_PROJECT_PATH }}/${{ env.FRONT_BUILD_PATH }}
   deploy:
     name: Desplegar a Firebase
     needs: build
@@ -46,12 +50,12 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: prod_dist
-          path: ${{ vars.PROD_FRONT_PROJECT_PATH }}/${{ vars.PROD_FRONT_BUILD_PATH }}
+          path: ${{ env.FRONT_PROJECT_PATH }}/${{ env.FRONT_BUILD_PATH }}
       - name: Desplegar a Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
-          PROJECT_ID: ${{ vars.PROD_FRONT_PROJECT_ID }}
-          PROJECT_PATH: ${{ vars.PROD_FRONT_PROJECT_PATH }}
+          PROJECT_ID: ${{ vars.PROD_FRONT_FIREBASE_ID }}
+          PROJECT_PATH: ${{ env.FRONT_PROJECT_PATH }}
           FIREBASE_TOKEN: ${{ secrets.PROD_FRONT_FIREBASE_TOKEN }}
