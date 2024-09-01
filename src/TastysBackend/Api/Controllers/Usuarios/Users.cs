@@ -34,9 +34,23 @@ public class UserController:ControllerBase
             throw;
         }
     }
+    [HttpGet("all")]
+    public ActionResult GetUser()
+    {
+        try
+        {
 
-    [HttpGet]
-    [SetToken]
+            List<Usuario> usuarioPublicDto= _userService.GetAllUsers();
+
+            return Ok(usuarioPublicDto);
+
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
+    }
+    [HttpGet("email")]
     [CheckToken]
     public ActionResult GetUser([FromQuery]string email)
     {
