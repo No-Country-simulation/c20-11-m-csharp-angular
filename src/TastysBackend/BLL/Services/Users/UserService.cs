@@ -16,6 +16,20 @@ public class UserServices:IUserService
         _userService = tastysContext;
         _mapper = mapper;
     }
+    public List<Usuario> GetAllUsers()
+    {
+        try
+        {
+            List<Usuario> usuarios = _userService.Usuarios.Where(u => u.IsDeleted != false).ToList();
+
+            return usuarios;
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
+    }
     public UsuarioPublicDto PostUserAuth0(string token)
     {
         try
