@@ -4,6 +4,8 @@ Este repo está configurado para hacer el despliegue del código automáticament
 
 Se despliegan tres servicios:
  - El frontend ([ver el workflow](./frontend/Readme.md)) se despliega a [Firebase Hosting](https://firebase.google.com/docs/hosting?hl=es-419).
+   - Link del sitio de PROD: [https://tasty-cliente.web.app/](https://tasty-cliente.web.app/)
+   - Link del sitio de STAGING: [https://tasty-cliente-staging.web.app/](https://tasty-cliente-staging.web.app/)
  - El backend (workflow todavía no implementado) se despliega a [Render Web Services](https://docs.render.com/web-services).
  - La base de datos (workflow todavía no implementado) se despliega a [Aiven MySQL](https://aiven.io/mysql).
 
