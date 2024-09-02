@@ -13,7 +13,7 @@ namespace Tastys.BLL.Interfaces
         //public List <ReviewDto> GetAll();
         // public ReviewDto GetID(int ID);
         //Task<ReviewDto> GetReviewByID(int ID);
-        //public ReviewDto GetReviewById(int id);
+        public ReviewDto GetReviewById(int id);
         public ReviewDto IsDeleteReview(int id);
         public ReviewDto PutReview(Review review);
 
