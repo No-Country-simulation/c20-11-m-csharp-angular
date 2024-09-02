@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.OpenApi.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Tastys.API.Middlewares;
 using Tastys.BLL.Services.Receta.RecetaCRUD;
 using Tastys.BLL.Services.Review;
@@ -24,7 +26,17 @@ builder.Services.AddTransient<IAsyncAuthorizationFilter,SetToken>();
 builder.Services.AddScoped<ReviewCRUD>();
 
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        // Convertir enums de los DTOs a strings para que sea mas legible para el front
+        var enumConverter = new JsonStringEnumConverter(JsonNamingPolicy.CamelCase);
+        opts.JsonSerializerOptions.Converters.Add(enumConverter);
+
+        opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
 
 
 

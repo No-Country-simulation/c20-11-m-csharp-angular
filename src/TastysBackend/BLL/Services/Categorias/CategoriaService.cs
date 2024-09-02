@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Tastys.BLL.Interfaces;
 using Tastys.Domain;
 
 namespace Tastys.BLL;
-public class CategoriaService
+public class CategoriaService : ICategoriaService
 {
     private readonly IMapper _mapper;
     private readonly ITastysContext _context;
@@ -24,10 +25,10 @@ public class CategoriaService
 
         switch (queryParameters.OrdenPorCantRecetas)
         {
-            case Ordering.Ascending:
+            case Ordenamiento.Ascendente:
                 query = query.OrderBy(cat => cat.Recetas.Count);
                 break;
-            case Ordering.Descending:
+            case Ordenamiento.Descendente:
                 query = query.OrderByDescending(cat => cat.Recetas.Count);
                 break;
         }
@@ -40,17 +41,21 @@ public class CategoriaService
         // de resultados en un Include (que en SQL sería un JOIN)
         foreach (var categoria in categorias)
         {
+            var dto = _mapper.Map<CategoriaConRecetasDto>(categoria);
+
             var recetasQuery = _context.Recetas
                 .Include(receta => receta.Categorias)
                 .Where(receta => receta.Categorias.Contains(categoria));
+
+            var totalRecetas = await recetasQuery.CountAsync();
 
             if (queryParameters.CantRecetas.HasValue)
             {
                 recetasQuery = recetasQuery.Take(queryParameters.CantRecetas.Value);
             }
 
-            var dto = _mapper.Map<CategoriaConRecetasDto>(categoria);
             dto.Recetas = await recetasQuery.Select(receta => _mapper.Map<RecetaDto>(receta)).ToArrayAsync();
+            dto.TotalRecetas = totalRecetas;
 
             dtos.Add(dto);
         }
@@ -63,40 +68,44 @@ public class CategoriaService
     /// </summary>
     public async Task<CategoriaConRecetasDto> GetCategoriaById(int id, CategoriaByIdQuery queryParameters)
     {
-        // No hago Include("Recetas"). Lo hago luego para poder limitar la cantidad
+        // No hago Include("Recetas") porque EF Core no permite limitar la cantidad
+        // de resultados en un Include (que en SQL sería un JOIN)
         var categoria = await _context.Categorias.FirstAsync(cat => cat.CategoriaID == id);
 
         var recetasQuery = _context.Recetas
             .Include(receta => receta.Categorias)
-            .Where(receta => receta.Categorias.Contains(categoria))
-            .Paginate(queryParameters);
+            .Where(receta => receta.Categorias.Contains(categoria));
 
-        switch (queryParameters.OrdenarPorCantReviews)
+        var totalRecetas = await recetasQuery.CountAsync();
+
+        recetasQuery = recetasQuery.Paginate(queryParameters);
+
+        switch (queryParameters.OrdenPorCantReviews)
         {
-            case Ordering.Ascending:
+            case Ordenamiento.Ascendente:
                 recetasQuery = recetasQuery.OrderBy(receta => receta.Reviews.Count);
                 break;
-            case Ordering.Descending:
+            case Ordenamiento.Descendente:
                 recetasQuery = recetasQuery.OrderByDescending(receta => receta.Reviews.Count);
                 break;
         }
 
-        switch (queryParameters.OrdenarPorFecha)
+        switch (queryParameters.OrdenPorFecha)
         {
-            case Ordering.Ascending:
+            case Ordenamiento.Ascendente:
                 recetasQuery = recetasQuery.OrderBy(receta => receta.create_at);
                 break;
-            case Ordering.Descending:
+            case Ordenamiento.Descendente:
                 recetasQuery = recetasQuery.OrderByDescending(receta => receta.create_at);
                 break;
         }
 
-        switch (queryParameters.OrdenarPorPuntuacion)
+        switch (queryParameters.OrdenPorPuntuacion)
         {
-            case Ordering.Ascending:
+            case Ordenamiento.Ascendente:
                 recetasQuery = recetasQuery.OrderBy(receta => receta.Reviews.Average(rev => rev.Calificacion));
                 break;
-            case Ordering.Descending:
+            case Ordenamiento.Descendente:
                 recetasQuery = recetasQuery.OrderByDescending(receta => receta.Reviews.Average(rev => rev.Calificacion));
                 break;
         }
@@ -105,6 +114,7 @@ public class CategoriaService
         var recetasDtos = await recetasQuery.Select(receta => _mapper.Map<RecetaDto>(receta)).ToArrayAsync();
 
         categoriaDto.Recetas = recetasDtos;
+        categoriaDto.TotalRecetas = totalRecetas;
 
         return categoriaDto;
     }

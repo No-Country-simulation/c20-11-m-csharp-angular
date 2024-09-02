@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Tastys.BLL;
 
@@ -14,7 +15,7 @@ public record CategoriasQuery : PaginatedQuery
     public int? CantRecetas { get; init; } = 3;
 
     /// <summary>
-    /// Indica si se ordenan de las categorias según la cantidad total de recetas.
+    /// Indica si se ordenan las categorias según la cantidad total de recetas.
     /// </summary>
-    public Ordering OrdenPorCantRecetas { get; init; } = Ordering.None;
+    public Ordenamiento OrdenPorCantRecetas { get; init; } = Ordenamiento.Ninguno;
 }

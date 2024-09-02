@@ -1,4 +1,6 @@
-﻿namespace Tastys.BLL;
+﻿using System.Text.Json.Serialization;
+
+namespace Tastys.BLL;
 
 /// <summary>
 /// Representa los filtros que se pueden agregar cuando se pide una categoría por ID.
@@ -8,16 +10,16 @@ public record CategoriaByIdQuery : PaginatedQuery
     /// <summary>
     /// Indica si se ordenan las recetas según la cantidad total de reviews.
     /// </summary>
-    public Ordering OrdenarPorCantReviews { get; init; } = Ordering.None;
+    public Ordenamiento OrdenPorCantReviews { get; init; } = Ordenamiento.Ninguno;
 
     /// <summary>
     /// Indica si se ordenan las recetas según su puntuación.
     /// </summary>
-    public Ordering OrdenarPorPuntuacion { get; init; } = Ordering.Descending;
+    public Ordenamiento OrdenPorPuntuacion { get; init; } = Ordenamiento.Descendente;
 
     /// <summary>
     /// Indica si se ordenan las recetas según su fecha de publicación.
     /// </summary>
-    public Ordering OrdenarPorFecha { get; init; } = Ordering.None;
+    public Ordenamiento OrdenPorFecha { get; init; } = Ordenamiento.Ninguno;
 
 }

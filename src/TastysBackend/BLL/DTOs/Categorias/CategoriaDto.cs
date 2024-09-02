@@ -8,5 +8,5 @@ public record CategoriaDto
 
     public required string ImgUrl { get; init; }
 
-    public required int TotalRecetas { get; init; }
+    public required int TotalRecetas { get; set; }
 }

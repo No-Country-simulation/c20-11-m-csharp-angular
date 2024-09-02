@@ -3,18 +3,18 @@
 /// <summary>
 /// Se usa para indicar el ordenamiento.
 /// </summary>
-public enum Ordering
+public enum Ordenamiento
 {
     /// <summary>
     /// No ordenar.
     /// </summary>
-    None,
+    Ninguno,
     /// <summary>
     /// Ordenar ascendentemente (de menor a mayor).
     /// </summary>
-    Ascending,
+    Ascendente,
     /// <summary>
     /// Ordenar descendentemente (de mayor a menor).
     /// </summary>
-    Descending
+    Descendente
 }
