@@ -38,7 +38,8 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+// No exponer Swagger en producción: https://medium.com/@tommy.adeoye/exploring-the-risks-of-leaving-swagger-pages-on-production-apis-sensitive-data-exposure-and-a20c7345c468
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
