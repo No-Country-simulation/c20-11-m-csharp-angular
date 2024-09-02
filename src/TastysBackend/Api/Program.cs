@@ -43,7 +43,7 @@ if (app.Environment.IsDevelopment())
     app.Services.InitialiseDatabase();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
