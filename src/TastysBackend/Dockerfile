@@ -16,4 +16,3 @@ COPY --from=build /out .
 EXPOSE 5435
 
 ENTRYPOINT ["dotnet", "Tastys.Api.dll"]
-
