@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tastys.Domain;
 
-public partial  class Review
+public partial class Review
 {
     [Key]
     public int ReviewID { get; set; }
