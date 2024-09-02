@@ -20,27 +20,27 @@ public class RecetaController : ControllerBase
         _recetaService = recetaService;
     }
 
-    // [HttpGet]
-    // [ProducesResponseType(400)]
-    // [ProducesResponseType(500)]
-    // [ProducesResponseType<RecetaDto[]>(200)]
-    //     public async Task<ActionResult<RecetaDto[]>> Get([FromQuery] RecetasQuery queryParameters)
-    // {
-    //     // Los queryParameters se validan automáticamente
-    //     // de acuerdo a las anotaciones en RecetasQuery
+       //[HttpGet]
+       //[ProducesResponseType(400)]
+       //[ProducesResponseType(500)]
+       //[ProducesResponseType<RecetaDto[]>(200)]
+       //  public async Task<ActionResult<RecetaDto[]>> Get([FromQuery] RecetasQuery queryParameters)
+       //{
+       //   // Los queryParameters se validan automáticamente
+       //    // de acuerdo a las anotaciones en RecetasQuery
 
-    //     try
-    //     {
-    //             var recetas = _recetaService.GetAllRecetas();
+       //    try
+       //    {
+       //            var recetas = _recetaService.GetAllRecetas();
 
-    //         return Ok(recetas);
-    //     }
-    //         catch (Exception ex)
-    //         {
-    //             _logger.LogError(ex, "Error al traer recetas desde DB");
-    //             return StatusCode(500);
-    //         }
-    //     }
+       //        return Ok(recetas);
+       //    }
+       //        catch (Exception ex)
+       //        {
+       //            _logger.LogError(ex, "Error al traer recetas desde DB");
+       //            return StatusCode(500);
+       //        }
+       //  }
         // [HttpGet]
         // public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
         // {
