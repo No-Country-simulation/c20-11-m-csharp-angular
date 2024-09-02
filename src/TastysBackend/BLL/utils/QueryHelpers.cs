@@ -1,6 +1,6 @@
 ﻿namespace Tastys.BLL;
 
-public static class Helpers
+public static class QueryHelpers
 {
     /// <summary>
     /// Pagina los resultados de una query que es subclase de PaginatedQuery.

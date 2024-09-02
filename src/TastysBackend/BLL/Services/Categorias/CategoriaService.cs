@@ -35,6 +35,9 @@ public class CategoriaService
         var categorias = await query.Paginate(queryParameters).ToListAsync();
         var dtos = new List<CategoriaConRecetasDto>();
 
+        // Obtengo las recetas de cada categoria en una query separada
+        // Esto es a propósito, porque EF Core no permite limitar la cantidad
+        // de resultados en un Include (que en SQL sería un JOIN)
         foreach (var categoria in categorias)
         {
             var recetasQuery = _context.Recetas
