@@ -18,5 +18,5 @@ public record RecetasQuery : PaginatedQuery
     /// Debe ser mayor que 0.
     /// </summary>
     [Range(0, int.MaxValue)]
-    public int? Reviews_Length { get; init; }
+    public int? CantReviews { get; init; }
 }

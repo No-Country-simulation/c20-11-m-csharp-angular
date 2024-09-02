@@ -11,6 +11,7 @@ public class MappingProfile : Profile
         CreateMap<Usuario, UsuarioPublicDto>();
         CreateMap<Usuario, UsuarioAuthDto>();
         CreateMap<Review, ReviewDto>();
-        CreateMap<Categoria, CategoriaDto>();
+        CreateMap<Categoria, CategoriaDto>()
+            .ForMember(dest => dest.TotalRecetas, opt => opt.MapFrom(src => src.Recetas.Count));
     }
 }
