@@ -7,6 +7,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <RootNamespace>Tastys.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <AssemblyName>Tastys.$(MSBuildProjectName)</AssemblyName>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
