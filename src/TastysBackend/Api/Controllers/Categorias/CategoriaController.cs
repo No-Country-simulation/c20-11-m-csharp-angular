@@ -3,6 +3,9 @@ using Tastys.BLL;
 
 namespace Tastys.Api.Controllers;
 
+/// <summary>
+/// Endpoints para obtener categorías y algunas recetas de cada una.
+/// </summary>
 [Route("/api/categorias")]
 [ApiController]
 public class CategoriaController : ControllerBase
@@ -15,7 +18,10 @@ public class CategoriaController : ControllerBase
         _logger = logger;
         _categoriaService = categoriaService;
     }
-
+    
+    /// <summary>
+    /// Obtener una lista de todas las categorías disponibles, incluyendo algunas recetas de cada una.
+    /// </summary>
     [HttpGet]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
@@ -38,6 +44,11 @@ public class CategoriaController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Obtener el detalle de una categoría, incluyendo una lista de las recetas que contiene.
+    /// Esta lista de recetas se puede ordenar y filtrar.
+    /// </summary>
+    /// <param name="id">El id de la categoría.</param>
     [HttpGet("{id}")]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
