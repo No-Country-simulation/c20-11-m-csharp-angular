@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Tastys.Domain;
 
@@ -25,10 +26,10 @@ public partial class Receta
     [Column(TypeName = "datetime")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime? create_at { get; set; } = DateTime.UtcNow;
-
-    public virtual Usuario Usuario { get; set; } = null!;
-
-    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
-
-    public virtual ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();
+    [JsonIgnore]
+    public virtual Usuario? Usuario { get; set; } = null!;
+    [JsonIgnore]
+    public virtual ICollection<Review>? Reviews { get; set; } = new List<Review>();
+    [JsonIgnore]
+    public virtual ICollection<Categoria>? Categorias { get; set; } = new List<Categoria>();
 }

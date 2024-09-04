@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tastys.BLL.Services.Receta;
 using Tastys.Domain;
 
-namespace Tastys.BLL.Services.Receta.RecetaCRUD
+namespace Tastys.BLL.Services.RecetaCRUD
 {
     public class RecetaCRUD:IRecetaService
     {
@@ -29,6 +28,7 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
                 .Include(receta => receta.Categorias)
                 .Include(receta => receta.Reviews)
                 .Select(receta => _Mapper.Map<RecetaDto>(receta))
+                .Where(receta => !receta.IsDeleted)
                 .ToListAsync();
             }
             catch
@@ -42,7 +42,7 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
         {
             try
             {
-                var receta = await _Context.Recetas.FindAsync(ID);
+                var receta = await _Context.Recetas.Where(receta => !receta.IsDeleted).FirstAsync(r => r.RecetaID == ID);
                 if (receta == null)
                 {
                     throw new KeyNotFoundException($"Receta con ID {ID} no fue encontrada");
@@ -73,14 +73,47 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
                 throw new ApplicationException($"Algo falló al actualizar la receta, {ex}");
             }
         }
-        public async Task<RecetaDto> CreateReceta(RecetaDto receta)
+        public async Task<Receta> CreateReceta(Receta receta,List<string> list_c,int userId)
         {
             try {
-                var mappedReceta = _Mapper.Map<Tastys.Domain.Receta>(receta);
-                _Context.Recetas.Add(mappedReceta);
+                Receta recetaExist = _Context.Recetas.FirstOrDefault(r => r.RecetaID == receta.RecetaID);
+
+                if (recetaExist != null)
+                {
+                    throw new Exception("La receta ya existe");
+                }
+
+                Usuario userE = _Context.Usuarios.FirstOrDefault(u => u.UsuarioID == userId);
+
+                Receta newReceta = new Receta{
+                    Nombre = receta.Nombre,
+                    Descripcion = receta.Descripcion,
+                    ImageUrl = receta.ImageUrl
+                };
+
+                if (userE != null)
+                {
+
+                    foreach (var categoria in list_c)
+                    {
+                        Categoria categoriaE = _Context.Categorias.FirstOrDefault(c => c.Nombre == categoria.ToLower());
+
+                        if (categoriaE == null)
+                        {
+                            throw  new Exception($"{categoria} no existe");
+                        }
+                        newReceta.Categorias.Add(categoriaE);
+
+                    }
+
+                    newReceta.Usuario = userE;
+
+                }
+
+                _Context.Recetas.Add(newReceta);
                 await _Context.SaveChangesAsync();
-                var createdRecetaDto = _Mapper.Map<RecetaDto>(mappedReceta);
-                return createdRecetaDto;
+                Console.WriteLine("RECETA CREADA!");
+                return newReceta;
             } 
             catch(Exception ex)
             {

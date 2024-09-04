@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using Tastys.BLL.Services.RecetaCRUD;
 using Tastys.BLL;
 using Tastys.Domain;
-using Tastys.BLL.Services.Receta.RecetaCRUD;
-using AutoMapper;
 
 namespace Tastys.API.Controllers.Recetas
 {
@@ -59,11 +59,11 @@ public class RecetaController : ControllerBase
         //     }
         // }
         [HttpPost]
-        public async Task<ActionResult<RecetaDto>> CreateReceta(RecetaDto receta)
+        public async Task<ActionResult<Receta>> CreateReceta([FromBody]NewRecetaDTO recetaData)
         {
             try
             {
-                var postReceta = await _recetaService.CreateReceta(receta);
+                Receta postReceta = await _recetaService.CreateReceta(recetaData.receta,recetaData.list_c,recetaData.user_id);
 
                 //ok, esta la vi en un tutorial y esta interesante:
                 //te retorna el codigo 201 -created- cuando se crea
