@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tastys.API.Middlewares;
@@ -45,18 +46,32 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mi API", Version = "v1" });
+
+    // Incluir comentarios en Swagger
+    foreach (var filePath in Directory.GetFiles(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!), "*.xml"))
+    {
+        try
+        {
+            c.IncludeXmlComments(filePath, includeControllerXmlComments: true);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+// No exponer Swagger en producción: https://medium.com/@tommy.adeoye/exploring-the-risks-of-leaving-swagger-pages-on-production-apis-sensitive-data-exposure-and-a20c7345c468
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API v1");
-        c.RoutePrefix = string.Empty;  
+        c.RoutePrefix = string.Empty;
     });
 
 

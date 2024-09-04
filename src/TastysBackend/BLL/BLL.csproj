@@ -10,6 +10,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>Tastys.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>Tastys.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   
   <ItemGroup>
