@@ -28,10 +28,9 @@ public class UserController:ControllerBase
             return Ok(usuarioPublicDto);
             
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-
-            throw;
+            throw new Exception("Error en la peticion:" + e.Message);
         }
     }
     [HttpGet("all")]
@@ -45,9 +44,9 @@ public class UserController:ControllerBase
             return Ok(usuarioPublicDto);
 
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            throw;
+            throw new Exception("Error en la peticion:" + e.Message);
         }
     }
     [HttpGet("email")]
@@ -62,9 +61,9 @@ public class UserController:ControllerBase
             return Ok(usuarioPublicDto);
 
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            throw;
+            throw new Exception("Error en la peticion:" + e.Message);
         }
     }
 
@@ -89,9 +88,9 @@ public class UserController:ControllerBase
 
 
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            throw;
+            throw new Exception("Error en la peticion:" + e.Message);
         }
     }
     [HttpDelete]
@@ -105,10 +104,9 @@ public class UserController:ControllerBase
             return Ok(usuarioPublicDto);
 
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            
-            throw;
+            throw new Exception("Error en la peticion:" + e.Message);
         }
     }
     
@@ -121,10 +119,9 @@ public class UserController:ControllerBase
 
             return Ok(usuarioPublicDto);
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            
-            throw;
+            throw new Exception("Error en la peticion:" + e.Message);
         }
     }
 }
