@@ -16,7 +16,6 @@ public class UserController:ControllerBase
     }
 
     [HttpPost]
-    [SetToken]
     [CheckToken]
     public ActionResult PostUsers([FromBody]Usuario user)
     {
@@ -66,7 +65,7 @@ public class UserController:ControllerBase
             throw new Exception("Error en la peticion:" + e.Message);
         }
     }
-
+    
     [HttpGet]
     [SetToken]
     [CheckToken]

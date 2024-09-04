@@ -5,7 +5,7 @@ using Tastys.BLL;
 using Tastys.BLL.Services.Receta.RecetaCRUD;
 using Tastys.BLL.Services.Review;
 using Tastys.Domain;
-
+using Tastys.API.Middlewares;
 
 
 namespace Tastys.API.Controllers.Review
@@ -24,10 +24,7 @@ namespace Tastys.API.Controllers.Review
             _logger = logger;
             _reviewService = recetaService;
         }
-
-
-
-
+        
         [HttpGet]
         public async Task<ActionResult> GetAllReview()
         {
@@ -68,11 +65,9 @@ namespace Tastys.API.Controllers.Review
         {
             try
             {
-
                 ReviewDto reviewDelete = _reviewService.IsDeleteReview(id);
 
                 return Ok(reviewDelete);
-
             }
             catch (System.Exception)
             {
