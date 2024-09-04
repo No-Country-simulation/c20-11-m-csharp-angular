@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Tastys.API.Middlewares;
 using Tastys.BLL.Services.Receta.RecetaCRUD;
 using Tastys.BLL.Services.Review;
@@ -33,6 +36,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mi API", Version = "v1" });
+
+    // Incluir comentarios en Swagger
+    foreach (var filePath in Directory.GetFiles(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!), "*.xml"))
+    {
+        try
+        {
+            c.IncludeXmlComments(filePath, includeControllerXmlComments: true);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 });
 
 var app = builder.Build();
@@ -45,7 +61,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API v1");
-        c.RoutePrefix = string.Empty;  
+        c.RoutePrefix = string.Empty;
     });
 
 
