@@ -1,5 +1,32 @@
 # Deploy del frontend
 
+## Deploy manual
+
+> [!NOTE]
+> No es necesario hacerlo manualmente. Cuando combines tus cambios con la rama `main` o `develop` se deployea el sitio automágicamente.
+
+Para deployar manualmente a producción se necesita tener instalado el [Firebase CLI](https://firebase.google.com/docs/cli?hl=es-419).
+
+Luego, se deben ejecutar estos comandos:
+
+```sh
+# Ejecutar los comandos en la siguiente carpeta:
+# cliente
+
+# Instalar node_modules y compilar
+npm install
+npm run build
+
+# Deployar a https://tasty-cliente.web.app/
+firebase deploy --project tasty-cliente --only hosting --token TOKEN
+```
+
+El `TOKEN` es una clave secreta, no se puede poner públicamente porque nos hackean :(
+
+Pedila por el canal de backend y te la pasamos por privado.
+
+## Deploy automático
+
 Los workflows que se ejecutan para el despliegue del frontend son los siguientes:
  - Cuando se hace un push a la rama `main` se ejecuta el workflow "[_Desplegar front de **PROD** a Firebase_](#desplegar-front-de-prod-a-firebase)".
  - Cuando se hace un push a la rama `develop` se ejecuta el workflow de [_Desplegar front de **STAGING** a Firebase_](#desplegar-front-de-staging-a-firebase).
