@@ -6,7 +6,7 @@ public interface IUserService
     public List<Usuario> GetAllUsers();
     public UsuarioPublicDto GetUserByEmail(string email);
     public UsuarioPublicDto AuthDeleteUser(string Auth0Id);
-    public UsuarioPublicDto GetUserAuth0(string token);
+    public UsuarioPublicDto GetUserAuth0(UserDataToken userdata);
     public UsuarioPublicDto PutUser(Usuario usuario);
-    public UsuarioPublicDto PostUserAuth0(string token);
+    public UsuarioPublicDto PostUserAuth0(UserDataToken userdata);
 }
