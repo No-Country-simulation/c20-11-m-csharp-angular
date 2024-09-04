@@ -20,7 +20,7 @@ public class UserServices:IUserService
     {
         try
         {
-            List<Usuario> usuarios = _userService.Usuarios.Where(u => u.IsDeleted != false).ToList();
+            List<Usuario> usuarios = _userService.Usuarios.Where(u => u.IsDeleted == false).ToList();
 
             return usuarios;
         }
