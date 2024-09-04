@@ -29,14 +29,11 @@ public class CheckToken:Attribute,IAsyncAuthorizationFilter
                 else
                 {
                     Console.WriteLine("Token Validado");
+                    return;
                 }
 
-                
-
-                return;
-
             }
-
+            throw new UnauthorizedAccessException("Error en la validacion del token");
         }
         catch (System.Exception)
         {
