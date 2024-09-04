@@ -18,7 +18,7 @@ public class UserController:ControllerBase
     [HttpPost]
     [SetToken]
     [CheckToken]
-    public ActionResult PostUsers([FromBody]Usuario user)
+    public ActionResult PostUsers([FromBody] Usuario user)
     {
         try
         {

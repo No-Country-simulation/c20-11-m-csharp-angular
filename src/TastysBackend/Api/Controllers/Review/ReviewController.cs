@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Tastys.API.Controllers.Recetas;
 using Tastys.BLL;
-using Tastys.BLL.Services.Receta.RecetaCRUD;
+using Tastys.BLL.Services;
 using Tastys.BLL.Services.Review;
 using Tastys.Domain;
 using Tastys.API.Middlewares;

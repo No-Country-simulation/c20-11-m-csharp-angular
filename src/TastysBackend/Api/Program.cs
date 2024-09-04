@@ -4,7 +4,8 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tastys.API.Middlewares;
-using Tastys.BLL.Services.Receta.RecetaCRUD;
+using Tastys.BLL.Services;
+using Tastys.BLL.Services.RecetaCRUD;
 using Tastys.BLL.Services.Review;
 using Tastys.Infrastructure;
 
