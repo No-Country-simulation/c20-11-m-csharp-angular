@@ -6,7 +6,6 @@ using Tastys.BLL;
 using Tastys.BLL.Utils;
 using Tastys.Domain;
 
-
 public class UserServices:IUserService
 {
     private readonly ITastysContext _userService;
@@ -30,21 +29,19 @@ public class UserServices:IUserService
             throw;
         }
     }
-    public UsuarioPublicDto PostUserAuth0(string token)
+    public UsuarioPublicDto PostUserAuth0(UserDataToken userData)
     {
         try
         {
             
-            Dictionary<string,string> claims = JwtValidate.ValidateClaimsToken(token,["custom_email_claim","custom_name_claim","sub"]);
-
-            Usuario usuarioExist = _userService.Usuarios.FirstOrDefault( u => u.Auth0Id == claims["sub"]);
+            Usuario usuarioExist = _userService.Usuarios.FirstOrDefault( u => u.Auth0Id == userData.authId);
 
             if (usuarioExist == null)
             {
                 Usuario newUsuario = new Usuario {
-                    Auth0Id = claims["sub"],
-                    Email = claims["custom_email_claim"],
-                    Nombre = claims["custom_name_claim"]
+                    Auth0Id = userData.authId,
+                    Email = userData.email,
+                    Nombre = userData.authName
                 };
                 _userService.Usuarios.Add(newUsuario);
                 _userService.SaveChanges();
@@ -105,12 +102,12 @@ public class UserServices:IUserService
             throw;
         }
     }    
-    public UsuarioPublicDto GetUserAuth0(string token)
+    public UsuarioPublicDto GetUserAuth0(UserDataToken userdata)
     {
         try
         {
 
-            Dictionary<string,string> claims = JwtValidate.ValidateClaimsToken(token,["custom_email_claim"]);
+            Dictionary<string,string> claims = JwtValidate.ValidateClaimsToken(userdata.token,["custom_email_claim"]);
 
             Usuario usuarioExist = _userService.Usuarios.FirstOrDefault( u => u.Email == claims["custom_email_claim"]);
 

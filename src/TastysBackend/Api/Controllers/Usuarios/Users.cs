@@ -16,13 +16,14 @@ public class UserController:ControllerBase
     }
 
     [HttpPost]
+    [SetToken]
     [CheckToken]
     public ActionResult PostUsers([FromBody]Usuario user)
     {
         try
         {
-
-            UsuarioPublicDto usuarioPublicDto = _userService.PostUser(user);
+            UserDataToken userData = (UserDataToken)HttpContext.Items["userdata"];
+            UsuarioPublicDto usuarioPublicDto = _userService.PostUserAuth0(userData);
 
             return Ok(usuarioPublicDto);
             
@@ -73,11 +74,10 @@ public class UserController:ControllerBase
     {
         try
         {
-            string authorizationHeader = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-            if (authorizationHeader != null)
+            UserDataToken userData = (UserDataToken)HttpContext.Items["userdata"];
+            if (userData != null)
             {
-                string token = authorizationHeader.Substring("Bearer ".Length).Trim();
-                UsuarioPublicDto usuarioPublicDto= _userService.GetUserAuth0(token);
+                UsuarioPublicDto usuarioPublicDto= _userService.GetUserAuth0(userData);
 
                 return Ok(usuarioPublicDto);
             }else
