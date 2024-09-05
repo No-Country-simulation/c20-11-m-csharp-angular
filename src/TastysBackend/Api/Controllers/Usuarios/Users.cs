@@ -51,6 +51,7 @@ public class UserController : ControllerBase
     }
     [HttpGet("email")]
     [CheckToken]
+    [CheckPermissions("user:user")]
     public ActionResult GetUser([FromQuery] string email)
     {
         try

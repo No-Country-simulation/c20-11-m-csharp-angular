@@ -25,6 +25,7 @@ builder.Services.AddScoped<RecetaCRUD>();
 //Autenticacion
 builder.Services.AddTransient<IAsyncAuthorizationFilter,CheckToken>();
 builder.Services.AddTransient<IAsyncAuthorizationFilter,SetToken>();
+builder.Services.AddTransient<IAsyncAuthorizationFilter,CheckPermissions>();
 builder.Services.AddScoped<ReviewCRUD>();
 
 
