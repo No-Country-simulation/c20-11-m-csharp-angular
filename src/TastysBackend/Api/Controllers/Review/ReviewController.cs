@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Tastys.API.Controllers.Recetas;
 using Tastys.BLL;
-using Tastys.BLL.Services;
 using Tastys.BLL.Services.Review;
-using Tastys.Domain;
-using Tastys.API.Middlewares;
 
 
 namespace Tastys.API.Controllers.Review
@@ -15,8 +10,6 @@ namespace Tastys.API.Controllers.Review
     [Route("review")]
     public class ReviewController : ControllerBase
     {
-
-
         private readonly ILogger<ReviewController> _logger;
         private readonly ReviewCRUD _reviewService;
         public ReviewController(ILogger<ReviewController> logger, ReviewCRUD recetaService)
@@ -90,9 +83,5 @@ namespace Tastys.API.Controllers.Review
                 throw;
             }
         }
-
-
-
-
     }
 }

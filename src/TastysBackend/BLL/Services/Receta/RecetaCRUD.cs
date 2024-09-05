@@ -9,7 +9,7 @@ using Tastys.Domain;
 
 namespace Tastys.BLL.Services.RecetaCRUD
 {
-    public class RecetaCRUD:IRecetaService
+    public class RecetaCRUD : IRecetaService
     {
         private readonly ITastysContext _Context;
         private readonly IMapper _Mapper;
@@ -64,28 +64,23 @@ namespace Tastys.BLL.Services.RecetaCRUD
                 {
                     throw new KeyNotFoundException($"Receta con ID {ID} no fue encontrada");
                 }
-                _Mapper.Map(recetaDto,receta);
+                _Mapper.Map(recetaDto, receta);
                 await _Context.SaveChangesAsync();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new ApplicationException($"Algo falló al actualizar la receta, {ex}");
             }
         }
-        public async Task<Receta> CreateReceta(Receta receta,List<string> list_c,int userId)
+        public async Task<Receta> CreateReceta(Receta receta, List<string> list_c, int userId)
         {
-            try {
-                Receta recetaExist = _Context.Recetas.FirstOrDefault(r => r.RecetaID == receta.RecetaID);
-
-                if (recetaExist != null)
-                {
-                    throw new Exception("La receta ya existe");
-                }
-
+            try
+            {
                 Usuario userE = _Context.Usuarios.FirstOrDefault(u => u.UsuarioID == userId);
 
-                Receta newReceta = new Receta{
+                Receta newReceta = new Receta
+                {
                     Nombre = receta.Nombre,
                     Descripcion = receta.Descripcion,
                     ImageUrl = receta.ImageUrl
@@ -100,7 +95,7 @@ namespace Tastys.BLL.Services.RecetaCRUD
 
                         if (categoriaE == null)
                         {
-                            throw  new Exception($"{categoria} no existe");
+                            throw new Exception($"{categoria} no existe");
                         }
                         newReceta.Categorias.Add(categoriaE);
 
@@ -114,8 +109,8 @@ namespace Tastys.BLL.Services.RecetaCRUD
                 await _Context.SaveChangesAsync();
                 Console.WriteLine("RECETA CREADA!");
                 return newReceta;
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new ApplicationException("Algo falló al crear la receta", ex);
             }
