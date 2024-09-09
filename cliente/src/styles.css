@@ -1,1 +1,68 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .home-header {
+    width: 95%;
+    height: 250px;
+    background-color: #333;
+    color: rgb(252, 215, 9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    margin: 20px auto 0 auto;
+  }
+  .navBar-main{
+    width: 95%;
+    background-color: rgb(255, 235, 163, 0.3);
+    color: #333;
+    margin: 0 auto 0 auto;
+  }
+  
+  .body-card {
+    width: 95%;
+    background-color: rgb(255, 235, 163, 0.3);
+    color:#333;
+    padding: 20px;
+    margin: 0 auto 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  
+  .body-card-interna {
+    background-color: #ffffff;
+    height: 350px;
+    padding: 15px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+  }
+  
+  .body-card-interna-content{
+      background-color: #ffffff;
+      padding: 20px;
+      margin: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      justify-content: center;
+      width: 90%;
+  }
+  
+  @media (max-width: 768px) {
+    .home-header{
+      width: 80%;
+      padding: 15px;
+    }
+    .body-card , .navBar-main{
+        width: 80%;
+        padding: 15px;
+    }
+  }
