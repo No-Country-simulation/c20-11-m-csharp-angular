@@ -16,7 +16,7 @@
   padding: 0 20px;
   margin: 20px auto 0 auto;
 }
-.navBar-main{
+.navBar-main {
   width: 95%;
   background-color: rgb(255, 235, 163, 0.3);
   color: #333;
@@ -26,13 +26,12 @@
 .body-card {
   width: 95%;
   background-color: rgb(255, 235, 163, 0.3);
-  color:#333;
+  color: #333;
   padding: 20px;
   margin: 0 auto 0 auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
-
 
 .body-card-interna {
   background-color: #ffffff;
@@ -45,25 +44,68 @@
   display: flex;
 }
 
-.body-card-interna-content{
-    background-color: #ffffff;
-    padding: 20px;
-    margin: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    justify-content: center;
-    width: 90%;
+.body-card-interna-content {
+  background-color: #ffffff;
+  padding: 20px;
+  margin: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  width: 90%;
 }
 
 @media (max-width: 768px) {
-  .home-header{
+  .home-header {
     width: 80%;
     padding: 15px;
   }
-  .body-card , .navBar-main{
-      width: 80%;
-      padding: 15px;
+  .body-card,
+  .navBar-main {
+    width: 80%;
+    padding: 15px;
   }
 }
 
+img {
+  width: 80%;
+  height: 100%;
+  align-content: end;
+}
 
+#imgRecetaDelDia {
+  border-radius: 10px;
+}
+
+.flex-container-categoria {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.card-categoria-interna {
+  background-color: #ffffff;
+  width: 10.6rem;
+  height: 15.6rem;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: rgb(248, 248, 147);
+  margin: 10px;
+  padding: 20px;
+}
+
+.card-categoria-interna > img {
+  background-color: wheat;
+  width: 100%;
+  height: 70%;
+  border-radius: 0.625rem;
+}
+
+.card-categoria-interna > p {
+  color: #030000;
+  text-align: center;
+  margin: 0.6rem auto;
+  padding: 0.8rem;
+  font-size: 16px;
+  font-weight: bold;
+}
