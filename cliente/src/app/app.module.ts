@@ -8,6 +8,7 @@ import { HeaderComponent } from './componentes/header/header.component';
 import { NavBarComponent } from './componentes/navBar/navBar.component';
 import { BodyComponent } from './componentes/body/body.component';
 import { CategoriaComponent } from './componentes/categoria/categoria.component';
+import { ChefsComponent } from './componentes/chefs/chefs.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +19,7 @@ import { CategoriaComponent } from './componentes/categoria/categoria.component'
     NavBarComponent,
     BodyComponent,
     CategoriaComponent,
+    ChefsComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],
