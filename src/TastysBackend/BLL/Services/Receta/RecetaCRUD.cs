@@ -19,23 +19,45 @@ namespace Tastys.BLL.Services.RecetaCRUD
             _Context = _context;
             _Mapper = _mapper;
         }
-        public async Task<List<Receta>> GetAllRecetas()
+        public async Task<List<RecetaDto>> GetAllRecetas()
         {
-            try
-            {
-                return await _Context.Recetas
-                .Include(receta => receta.Usuario)
-                .Include(receta => receta.Categorias)
-                .Include(receta => receta.Reviews)
-                .Where(receta => !receta.IsDeleted)
+            return await _Context.Recetas
+                .Include(r => r.Usuario)
+                .Include(r => r.RecetaCategorias).ThenInclude(rc => rc.Categoria)
+                .Include(r => r.Reviews).ThenInclude(review => review.Usuario)
+                .Where(r => !r.IsDeleted)
+                .Select(r => new RecetaDto
+                {
+                    RecetaID = r.RecetaID,
+                    Nombre = r.Nombre ?? "Default",
+                    Descripcion = r.Descripcion ?? "Default",
+                    ImageUrl = r.ImageUrl ?? "Default",
+                    Usuario = new UsuarioPublicDto
+                    {
+                        UsuarioID = r.Usuario.UsuarioID,
+                        Nombre = r.Usuario.Nombre ?? "Default"
+                    },
+                    Reviews = r.Reviews.Select(review => new ReviewDto
+                    {
+                        ReviewID = review.ReviewID,
+                        Comentario = review.Comentario ?? "No Comment",
+                        Calificacion = review.Calificacion,
+                        Usuario = new UsuarioPublicDto
+                        {
+                            UsuarioID = review.Usuario.UsuarioID,
+                            Nombre = review.Usuario.Nombre ?? "Default"
+                        }
+                    }).ToList(),  // Convert the IEnumerable<ReviewDto> to List<ReviewDto>
+                    Categorias = r.RecetaCategorias.Select((rc) => new CategoriaDto
+                    {
+                        CategoriaID = rc.Categoria.CategoriaID,
+                        Nombre = rc.Categoria.Nombre ?? "Default"
+                    }).ToList()  // Convert the IEnumerable<CategoriaDto> to List<CategoriaDto>
+                })
                 .ToListAsync();
-            }
-            catch
-            {
-                throw new ApplicationException("Algo falló");
-            }
-
         }
+
+
 
         public async Task<RecetaDto> GetRecetaByID(int ID)
         {

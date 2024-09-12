@@ -17,4 +17,5 @@ public partial class Categoria
     public string ImgUrl { get; set; }
 
     public virtual ICollection<Receta> Recetas { get; set; } = new List<Receta>();
+    public virtual ICollection<RecetaCategoria> RecetaCategorias { get; set; } = new List<RecetaCategoria>();
 }
