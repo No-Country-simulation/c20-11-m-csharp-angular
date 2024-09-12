@@ -26,7 +26,7 @@ public class RecetaService
             .ToList();
         
     }
-
+    
     public List<RecetaDto> GetAllRecetas(RecetasQuery queryParameters)
     {
         var query = _context.Recetas

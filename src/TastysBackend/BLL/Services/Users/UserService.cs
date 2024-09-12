@@ -1,5 +1,4 @@
 
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using AutoMapper;
 using Tastys.BLL;
@@ -46,7 +45,7 @@ public class UserServices:IUserService
                 _userService.Usuarios.Add(newUsuario);
                 _userService.SaveChanges();
 
-                return _mapper.Map<UsuarioPublicDto>(usuarioExist);
+                return _mapper.Map<UsuarioPublicDto>(newUsuario);
             }else
             {
                 throw new HttpRequestException("El usuario ya existe en la db",null,HttpStatusCode.BadRequest);
