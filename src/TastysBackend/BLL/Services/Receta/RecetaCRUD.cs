@@ -19,7 +19,7 @@ namespace Tastys.BLL.Services.RecetaCRUD
             _Context = _context;
             _Mapper = _mapper;
         }
-        public async Task<List<RecetaDto>> GetAllRecetas()
+        public async Task<List<Receta>> GetAllRecetas()
         {
             try
             {
@@ -27,7 +27,6 @@ namespace Tastys.BLL.Services.RecetaCRUD
                 .Include(receta => receta.Usuario)
                 .Include(receta => receta.Categorias)
                 .Include(receta => receta.Reviews)
-                .Select(receta => _Mapper.Map<RecetaDto>(receta))
                 .Where(receta => !receta.IsDeleted)
                 .ToListAsync();
             }

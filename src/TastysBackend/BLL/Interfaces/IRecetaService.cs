@@ -5,7 +5,7 @@ using Tastys.Domain;
     public interface IRecetaService
     {
         
-        Task<List<RecetaDto>> GetAllRecetas();
+        Task<List<Receta>> GetAllRecetas();
         Task<RecetaDto> GetRecetaByID(int ID);
         Task<bool> UpdateReceta(RecetaDto receta, int ID);//te devuelve bool si encontro o no la receta
         Task<Receta> CreateReceta(Receta receta,List<string> list_c,int userId);

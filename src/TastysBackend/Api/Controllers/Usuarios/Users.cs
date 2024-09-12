@@ -15,14 +15,18 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost]
+    [HttpPost("register")]
     [SetToken]
     [CheckToken]
-    public ActionResult PostUsers([FromBody] Usuario user)
+    public ActionResult PostUsers()
     {
         try
         {
-            UserDataToken userData = (UserDataToken)HttpContext.Items["userdata"];
+            if (HttpContext.Items["userdata"] is not UserDataToken userData)
+            {
+                return BadRequest("No se encontró información del usuario.");
+            }
+
             UsuarioPublicDto usuarioPublicDto = _userService.PostUserAuth0(userData);
 
             return Ok(usuarioPublicDto);
@@ -30,7 +34,7 @@ public class UserController : ControllerBase
         }
         catch (System.Exception e)
         {
-            throw new Exception("Error en la peticion:" + e.Message);
+            throw new Exception("Error en la peticion:" + e);
         }
     }
     [HttpGet("all")]

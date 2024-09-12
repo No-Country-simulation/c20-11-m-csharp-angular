@@ -24,24 +24,18 @@ public class SetToken:Attribute,IAsyncAuthorizationFilter
 
             string code = context.HttpContext.Request.Query["code"];
 
-            if (string.IsNullOrEmpty(code))
+            if (string.IsNullOrEmpty(code) == false)
             {
                 RefreshTokenDTO tokenWRT = await manageToken.GetTokenWCode(code);
                 context.HttpContext.Request.Headers.Add("Refresh-Token",$"{tokenWRT.RefreshToken}");
                 context.HttpContext.Request.Headers.Add("Authorization", $"Bearer {tokenWRT.AccessToken}");
-
+                //añadiendo la cookie del token y refresh_token
+                context.HttpContext.Response.Cookies.Append("Token",tokenWRT.AccessToken,SetCookie.Config(10));
+                context.HttpContext.Response.Cookies.Append("Refresh-Token",tokenWRT.RefreshToken,SetCookie.Config(10));
                 return;
             }
                 
             string refresh_token = context.HttpContext.Request.Headers["Refresh-Token"].FirstOrDefault();
-
-            if (string.IsNullOrEmpty(refresh_token))
-            {
-                TokenDTO token = await manageToken.GetTokenFromRT(refresh_token);
-                Console.WriteLine(token.ExpiresIn);
-                context.HttpContext.Request.Headers.Add("Authorization", $"Bearer {token.AccessToken}");
-                return;
-            }
 
             
             context.Result = new UnauthorizedResult();
