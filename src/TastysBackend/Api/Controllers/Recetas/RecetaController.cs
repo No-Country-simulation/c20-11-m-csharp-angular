@@ -21,14 +21,14 @@ public class RecetaController : ControllerBase
     }
 
        [HttpGet]
-        public async Task<ActionResult<List<Receta>>> GetAllRecetas()
+        public async Task<ActionResult<List<RecetaDto>>> GetAllRecetas()
        {
          // Los queryParameters se validan automáticamente
           // de acuerdo a las anotaciones en RecetasQuery
 
           try
           {
-                List<Receta> recetas = await _recetaService.GetAllRecetas();
+                List<RecetaDto> recetas = await _recetaService.GetAllRecetas();
 
               return Ok(recetas);
           }

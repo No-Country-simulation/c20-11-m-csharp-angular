@@ -28,8 +28,13 @@ public partial class Receta
     public DateTime? create_at { get; set; } = DateTime.UtcNow;
     [JsonIgnore]
     public virtual Usuario? Usuario { get; set; } = null!;
+
     [JsonIgnore]
     public virtual ICollection<Review>? Reviews { get; set; } = new List<Review>();
+
     [JsonIgnore]
     public virtual ICollection<Categoria>? Categorias { get; set; } = new List<Categoria>();
+
+    [JsonIgnore]
+    public virtual ICollection<RecetaCategoria> RecetaCategorias { get; set; } = new List<RecetaCategoria>();
 }
