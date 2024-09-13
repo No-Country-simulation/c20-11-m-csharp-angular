@@ -17,7 +17,21 @@ namespace Tastys.API.Controllers.Review
             _logger = logger;
             _reviewService = recetaService;
         }
-        
+        [HttpPost]
+        public async Task<IActionResult> PostReview([FromBody]Domain.Review reviewDTO)
+        {
+            try
+            {
+                ReviewDto review =  await _reviewService.AddReview(reviewDTO);
+
+                return Ok(review);
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+        }
         [HttpGet]
         public async Task<ActionResult> GetAllReview()
         {

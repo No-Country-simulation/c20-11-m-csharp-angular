@@ -16,6 +16,24 @@ public class CategoriaService : ICategoriaService
         _mapper = mapper;
     }
 
+    public List<Categoria> GetCategorias(int pageIndex,int pageSize)
+    {
+        IQueryable<Categoria> categorias = _context.Categorias.AsQueryable();
+        int skip = (pageIndex - 1) * pageSize;
+        try
+        {
+            List<Categoria> allCategorias = categorias.Skip(skip)
+            .Take(pageIndex)
+            .ToList();
+
+            return allCategorias;
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
+    }
     /// <summary>
     /// Obtener todas las categorias, incluyendo sus recetas.
     /// </summary>

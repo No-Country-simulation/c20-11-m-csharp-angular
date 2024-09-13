@@ -23,8 +23,10 @@ namespace Tastys.BLL.Services.RecetaCRUD
         {
             return await _Context.Recetas
                 .Include(r => r.Usuario)
-                .Include(r => r.RecetaCategorias).ThenInclude(rc => rc.Categoria)
-                .Include(r => r.Reviews).ThenInclude(review => review.Usuario)
+                .Include(r => r.RecetaCategorias)
+                .ThenInclude(rc => rc.Categoria)
+                .Include(r => r.Reviews)
+                .ThenInclude(review => review.Usuario)
                 .Where(r => !r.IsDeleted)
                 .Select(r => new RecetaDto
                 {
