@@ -12,7 +12,7 @@ using Tastys.BLL.Interfaces;
 using Tastys.Domain;
 namespace Tastys.BLL.Services.Review
 {
-    public class ReviewCRUD: IReviewService
+    public class ReviewCRUD : IReviewService
     {
         private readonly ITastysContext _Context;
         private readonly IMapper _Mapper;
@@ -24,28 +24,72 @@ namespace Tastys.BLL.Services.Review
             _Mapper = mapper;
         }
 
-       
+        public async Task<ReviewDto> AddReview(Domain.Review review)
+        {
+            try
+            {
+                Domain.Review reviewExist = _Context.Reviews.FirstOrDefault(r => r.RecetaID == review.RecetaID && r.UsuarioID == review.UsuarioID);
+
+                if (reviewExist == null)
+                {
+                    Domain.Review newReview = new Domain.Review
+                    {
+                        Calificacion = review.Calificacion,
+                        Comentario = review.Comentario,
+                        RecetaID = review.RecetaID,
+                        UsuarioID = review.UsuarioID,
+                    };
+                    _Context.Reviews.Add(newReview);
+
+                    _Context.SaveChanges();
+
+                    var reviewCheck = await _Context.Reviews
+                        .Include(r => r.Usuario)
+                        .Include(r => r.Receta)
+                        .FirstOrDefaultAsync(r => r.ReviewID == newReview.ReviewID);
+
+                    return new ReviewDto
+                    {
+                        ReviewID = reviewCheck.ReviewID,
+                        IsDeleted = reviewCheck.IsDeleted,
+                        Comentario = reviewCheck.Comentario,
+                        Calificacion = reviewCheck.Calificacion,
+                        create_at = reviewCheck.create_at,
+                        Usuario = new UsuarioPublicDto
+                        {
+                            UsuarioID = reviewCheck.Usuario.UsuarioID,
+                            Nombre = reviewCheck.Usuario.Nombre
+                        },
+                        Receta =reviewCheck.Receta
+                    };
+                }
+                else
+                {
+                    throw new Exception("El usuario ya hizo una review de la receta");
+                }
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+        }
 
         public async Task<List<ReviewDto>> GetAllReview()
         {
             try
             {
                 return await _Context.Reviews.Where(review => review.IsDeleted != true)
-               
+
                 .Include(review => review.Usuario)
                 .Select(review => _Mapper.Map<ReviewDto>(review))
                 .ToListAsync();
-
 
             }
             catch (System.Exception e)
             {
                 throw new Exception(e.Message);
             }
-                
-                
-                 
-                
 
         }
 

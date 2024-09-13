@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tastys.BLL;
+using Tastys.Domain;
 
 namespace Tastys.Api.Controllers;
 
@@ -17,6 +18,22 @@ public class CategoriaController : ControllerBase
     {
         _logger = logger;
         _categoriaService = categoriaService;
+    }
+
+    [HttpGet("all")]
+    public IActionResult All([FromQuery] int page=0,[FromQuery] int pageSize = 100)
+    {
+        try
+        {
+            List<Categoria> categorias = _categoriaService.GetCategorias(pageSize,page);
+
+            return Ok(categorias);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al traer categorias desde DB");
+            return StatusCode(500);
+        }
     }
     
     /// <summary>
