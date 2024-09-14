@@ -11,17 +11,15 @@ public record ExceptionDto : ErrorResponseDto
     /// Excepción encapsulada.
     /// </summary>
     [JsonIgnore]
-    public required Exception Exception { get; init; }
+    public Exception? Exception { get; init; }
 
     /// <summary>
     /// Contiene el mensaje de error de la excepción.
     /// </summary>
-    [JsonInclude]
-    public string ExceptionDetails => Exception.Message;
+    public string ExceptionDetails => Exception?.Message ?? "Excepción vacía.";
 
     /// <summary>
     /// Contiene la pila de llamadas hasta el punto en que se produjo la excepción.
     /// </summary>
-    [JsonInclude]
-    public string ExceptionStackTrace => Exception.StackTrace ?? "Pila vacía.";
+    public string ExceptionStackTrace => Exception?.StackTrace ?? "Pila vacía.";
 }

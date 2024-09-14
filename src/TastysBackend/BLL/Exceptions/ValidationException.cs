@@ -16,13 +16,13 @@ public class ValidationException : DomainException
     public string? Reason {  get; init; } = null;
 
     /// <inheritdoc/>
-    public ValidationException() : base("El parámetro ingresado no es conforme a las reglas de dominio.") { }
+    public ValidationException() : base("Un parámetro ingresado es inválido.") { }
 
     /// <summary>
     /// Crea una nueva instancia de este error con el nombre del parámetro que falló la validación.
     /// </summary>
     /// <param name="parameter">El nombre del parámetro que falló la validación.</param>
-    public ValidationException(string parameter) : base($"El parámetro '{parameter}' no es conforme a las reglas de dominio.")
+    public ValidationException(string parameter) : base($"El parámetro '{parameter}' es inválido.")
     {
         Parameter = parameter;
     }
@@ -33,7 +33,7 @@ public class ValidationException : DomainException
     /// <param name="parameter">El nombre del parámetro que falló la validación. <para>Tip: escribí <c>nameof(Parametro)</c> para que a futuro sea mas facil refactorizar.</para></param>
     /// <param name="reason">El motivo por el que falló la validación.</param>
     public ValidationException(string parameter, string reason) :
-        base($"El parámetro '{parameter}' no es conforme a las reglas de dominio por el siguiente motivo: {reason}")
+        base($"El parámetro '{parameter}' es inválido por el siguiente motivo: {reason}")
     {
         Parameter = parameter;
         Reason = reason;
