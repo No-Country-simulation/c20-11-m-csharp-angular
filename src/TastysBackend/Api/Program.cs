@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -15,10 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddBLLServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddScoped<UserServices>();
-
-//Autenticacion
-builder.Services.AddTransient<IAsyncAuthorizationFilter,CheckToken>();
-builder.Services.AddTransient<IAsyncAuthorizationFilter,SetToken>();
 
 builder.Services.AddScoped<RecetaCRUD>();
 
@@ -48,6 +45,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mi API", Version = "v1" });
+    c.ExampleFilters();
 
     // Incluir comentarios en Swagger
     foreach (var filePath in Directory.GetFiles(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!), "*.xml"))
@@ -62,6 +60,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     }
 });
+builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
 //CORS para el Cliente
 builder.Services.AddCors(options =>
@@ -71,9 +70,18 @@ builder.Services.AddCors(options =>
         {
             builder.WithOrigins("http://localhost:4200")
                    .AllowAnyMethod()
-                   .AllowAnyHeader();
+                   .AllowAnyHeader()
+                   .AllowCredentials();
         });
 });
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.CheckConsentNeeded = context => false;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
+builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 
@@ -98,10 +106,10 @@ if (app.Environment.IsDevelopment())
 
 
 // app.UseHttpsRedirection();
+
 app.UseCors("AllowSpecificOrigin");
-
+app.UseCookiePolicy();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

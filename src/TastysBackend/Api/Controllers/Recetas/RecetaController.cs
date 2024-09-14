@@ -3,6 +3,8 @@ using AutoMapper;
 using Tastys.BLL.Services.RecetaCRUD;
 using Tastys.BLL;
 using Tastys.Domain;
+using Microsoft.CodeAnalysis.Host.Mef;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace Tastys.API.Controllers.Recetas
 {
@@ -56,13 +58,19 @@ public class RecetaController : ControllerBase
             }
         }
         [HttpPost]
+        [SwaggerRequestExample(typeof(NewRecetaDTO), typeof(RecetaRequestExample))]
         public async Task<ActionResult<Receta>> CreateReceta([FromBody]NewRecetaDTO recetaData)
         {
             try
             {
-                Receta postReceta = await _recetaService.CreateReceta(recetaData.receta,recetaData.list_c,recetaData.user_id);
+                Receta postReceta = await _recetaService.CreateReceta(
+                    new Receta {
+                        Nombre = recetaData.receta.nombre,
+                        ImageUrl = recetaData.receta.imageUrl,
+                        Descripcion = recetaData.receta.descripcion
+                    }
+                    ,recetaData.list_c,recetaData.user_id);
 
-                //ok, esta la vi en un tutorial y esta interesante:
                 //te retorna el codigo 201 -created- cuando se crea
                 //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id
                 return CreatedAtAction(nameof(CreateReceta), new { id = postReceta.RecetaID }, postReceta);

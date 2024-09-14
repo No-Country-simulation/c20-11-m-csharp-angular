@@ -1,49 +1,79 @@
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 using Tastys.API.Token;
 
-namespace Tastys.API.Middlewares;
-
-public class SetToken:Attribute,IAsyncAuthorizationFilter
+public class SetToken : Attribute, IAsyncAuthorizationFilter
 {
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
+        string tokenCookieName = "token";
+        string refreshTokenCookieName = "refresh-token";
+
         try
         {
-
             var configuration = context.HttpContext.RequestServices.GetService<IConfiguration>();
-            
-            string authorizationHeader = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-
-            if (authorizationHeader != null && authorizationHeader.StartsWith("Bearer "))
+            if (configuration == null)
             {
-                return;
+                Console.WriteLine("Configuration service is null");
+                throw new NullReferenceException("Configuration service is null");
+            }
+
+            string tokenCookie = context.HttpContext.Request.Cookies[tokenCookieName];
+            Console.WriteLine($"Token Cookie Read: {tokenCookie}");
+
+            if (!string.IsNullOrEmpty(tokenCookie) && tokenCookie.StartsWith("Bearer "))
+            {
+                string token = tokenCookie.Substring("Bearer ".Length).Trim();
+                ValidateToken validate = new ValidateToken(configuration);
+
+                JwtSecurityToken validatedToken = await validate.ValidateAsync(token);
+                if (validatedToken != null)
+                {
+                    context.HttpContext.Items["token"] = $"Bearer {token}";
+                    Console.WriteLine("Token validated successfully");
+                    return;
+                }
             }
 
             ManageToken manageToken = new ManageToken(configuration);
-
             string code = context.HttpContext.Request.Query["code"];
 
-            if (string.IsNullOrEmpty(code) == false)
+            if (!string.IsNullOrEmpty(code))
             {
                 RefreshTokenDTO tokenWRT = await manageToken.GetTokenWCode(code);
-                context.HttpContext.Request.Headers.Add("Refresh-Token",$"{tokenWRT.RefreshToken}");
-                context.HttpContext.Request.Headers.Add("Authorization", $"Bearer {tokenWRT.AccessToken}");
-                //añadiendo la cookie del token y refresh_token
-                context.HttpContext.Response.Cookies.Append("Token",tokenWRT.AccessToken,SetCookie.Config(10));
-                context.HttpContext.Response.Cookies.Append("Refresh-Token",tokenWRT.RefreshToken,SetCookie.Config(10));
+
+                Console.WriteLine($"Setting token cookie: Bearer {tokenWRT.AccessToken}");
+                context.HttpContext.Response.Cookies.Append(tokenCookieName, $"Bearer {tokenWRT.AccessToken}", new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = false,  // En desarrollo sin HTTPS
+                    SameSite = SameSiteMode.Lax,
+                    Expires = DateTimeOffset.UtcNow.AddHours(100)
+                });
+
+                Console.WriteLine($"Setting refresh-token cookie: {tokenWRT.RefreshToken}");
+                context.HttpContext.Response.Cookies.Append(refreshTokenCookieName, tokenWRT.RefreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = false,  // En desarrollo sin HTTPS
+                    SameSite = SameSiteMode.Lax,
+                    Expires = DateTimeOffset.UtcNow.AddHours(100)
+                });
+
+                context.HttpContext.Items["token"] = $"Bearer {tokenWRT.AccessToken}";
+                context.HttpContext.Items["refresh-token"] = tokenWRT.RefreshToken;
                 return;
             }
-                
-            string refresh_token = context.HttpContext.Request.Headers["Refresh-Token"].FirstOrDefault();
 
-            
             context.Result = new UnauthorizedResult();
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-            
-            throw;
+            Console.WriteLine($"Exception: {ex.Message}");
+            context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
 }

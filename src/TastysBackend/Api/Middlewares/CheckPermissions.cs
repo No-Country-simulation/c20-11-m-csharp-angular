@@ -48,7 +48,11 @@ public class CheckPermissions(string customPermission = null, int tokenTimeCheck
                     }
                 }
 
-                if (!permissionExists) throw new Exception("No esta autorizado");
+                if (!permissionExists)
+                {
+                    var reset = RequestUtilities.FirstRequestTime(context);
+                    throw new Exception("No esta autorizado");
+                }
 
                 Console.WriteLine($"La permisión '{customPermission}' está presente en la respuesta.");
                 return;
@@ -56,8 +60,8 @@ public class CheckPermissions(string customPermission = null, int tokenTimeCheck
             else
             {
                 Console.WriteLine("El Token fue comprobado recientemente");
+                return;
             }
-            context.Result = new UnauthorizedResult();
         }
         catch (System.Exception)
         {
