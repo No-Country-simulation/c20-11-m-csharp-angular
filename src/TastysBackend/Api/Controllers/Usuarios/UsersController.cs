@@ -22,17 +22,6 @@ public class UserController : ControllerBase
     {
         try
         {
-            HttpContext.Request.Cookies.TryGetValue("token", out string tokenCookie);
-
-            Console.WriteLine($"SOY EL COOKIE TOKEN {tokenCookie}");
-
-            Response.Cookies.Append("test-cookie", "test-value", new CookieOptions
-            {
-                HttpOnly = false, // Establecido en false para que sea accesible en el navegador
-                Secure = false, // Cambia a true si estás en HTTPS
-                SameSite = SameSiteMode.Lax, // Ajusta según sea necesario
-                Expires = DateTimeOffset.UtcNow.AddHours(1)
-            });
             if (HttpContext.Items["userdata"] is not UserDataToken userData)
             {
                 return BadRequest("No se encontró información del usuario.");
