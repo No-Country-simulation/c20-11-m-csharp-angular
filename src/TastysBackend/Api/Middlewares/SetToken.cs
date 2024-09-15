@@ -46,22 +46,10 @@ public class SetToken : Attribute, IAsyncAuthorizationFilter
                 RefreshTokenDTO tokenWRT = await manageToken.GetTokenWCode(code);
 
                 Console.WriteLine($"Setting token cookie: Bearer {tokenWRT.AccessToken}");
-                context.HttpContext.Response.Cookies.Append(tokenCookieName, $"Bearer {tokenWRT.AccessToken}", new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = false,  // En desarrollo sin HTTPS
-                    SameSite = SameSiteMode.Lax,
-                    Expires = DateTimeOffset.UtcNow.AddHours(100)
-                });
+                context.HttpContext.Response.Cookies.Append(tokenCookieName, $"Bearer {tokenWRT.AccessToken}", SetCookie.Config());
 
                 Console.WriteLine($"Setting refresh-token cookie: {tokenWRT.RefreshToken}");
-                context.HttpContext.Response.Cookies.Append(refreshTokenCookieName, tokenWRT.RefreshToken, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = false,  // En desarrollo sin HTTPS
-                    SameSite = SameSiteMode.Lax,
-                    Expires = DateTimeOffset.UtcNow.AddHours(100)
-                });
+                context.HttpContext.Response.Cookies.Append(refreshTokenCookieName, tokenWRT.RefreshToken,SetCookie.Config());
 
                 context.HttpContext.Items["token"] = $"Bearer {tokenWRT.AccessToken}";
                 context.HttpContext.Items["refresh-token"] = tokenWRT.RefreshToken;
