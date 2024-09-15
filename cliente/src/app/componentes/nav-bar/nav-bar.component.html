@@ -1,16 +1,18 @@
 
+
 <div class="navBar-main">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Receta del día</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Categorías</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Chefs</a>
-      </li>
-  
-    </ul>
-  
-  </div>
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <!-- Añadimos exact: true para que solo esté activo en la ruta exacta `/` -->
+      <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" aria-current="page">
+        Receta del día
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/categorias" routerLinkActive="active">Categorías</a>
+    </li>
+    <!-- <li class="nav-item">
+      <a class="nav-link" routerLink="/chefs" routerLinkActive="active">Chefs</a>
+    </li> -->
+  </ul>
+</div>

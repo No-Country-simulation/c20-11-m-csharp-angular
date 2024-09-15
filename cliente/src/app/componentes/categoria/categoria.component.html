@@ -1,8 +1,13 @@
 <div class="body-card">
-    <div class="flex-container-categoria">
-      <div class="card-categoria-interna">
-        <img src="/assets/ensaladilla.jpg" />
-        <p>CATEGORIA UNO</p>
-      </div>
+  <div class="flex-container-categoria">
+    <!-- Recorremos cada categoría y la mostramos en una tarjeta -->
+    <div class="card-categoria-interna" *ngFor="let categoria of categorias">
+      <!-- Reemplazamos el src y el nombre con los datos de la categoría -->
+      <img [src]="categoria.imgUrl" alt="{{ categoria.nombre }}" />
+      <p>{{ categoria.nombre }}</p>
     </div>
   </div>
+</div>
+
+
+

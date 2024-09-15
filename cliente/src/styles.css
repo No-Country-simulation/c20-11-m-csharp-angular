@@ -1,4 +1,3 @@
-/* You can add global styles to this file, and also import other style files*/
 * {
   margin: 0;
   padding: 0;
@@ -13,9 +12,6 @@
   display: flex;
   justify-content: right;
   margin: 20px auto 0 auto;
-}
-
-.home-header > img {
   opacity: 0.2;
 }
 
@@ -23,7 +19,7 @@
   width: 95%;
   background-color: rgb(255, 235, 163, 0.3);
   color: #333;
-  margin: 0 auto 0 auto;
+  margin: 0 auto;
 }
 
 .body-card {
@@ -31,30 +27,51 @@
   background-color: rgb(255, 235, 163, 0.3);
   color: #333;
   padding: 20px;
-  margin: 0 auto 0 auto;
+  margin: 0 auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
 .body-card-interna {
   background-color: #ffffff;
-  height: 350px;
+  height: auto;
   padding: 15px;
   margin-top: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  text-align: center;
   display: flex;
+  align-items: flex-start;
 }
 
-.body-card-interna-content {
-  background-color: #ffffff;
-  padding: 20px;
-  margin: 30px;
+.image-container {
+  flex: 0 0 150px;
+  margin-right: 15px;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  width: 90%;
+}
+
+.content-container h5 {
+  margin: 0 0 10px 0;
+}
+
+.content-container p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 
 @media (max-width: 768px) {
@@ -102,6 +119,8 @@ img {
   width: 100%;
   height: 70%;
   border-radius: 0.625rem;
+  object-fit: cover;
+  display: block;
 }
 
 .card-categoria-interna > p {
@@ -113,14 +132,14 @@ img {
   font-weight: bold;
 }
 
-.card-chefs{
+.card-chefs {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: flex-start;
 }
 
-.card-chefs-interna{
+.card-chefs-interna {
   background-color: white;
   width: 30vw;
   height: 30vh;
@@ -128,20 +147,135 @@ img {
   border-style: solid;
   border-color: rgb(248, 248, 147);
 }
-.card-imagen{
+
+.card-imagen {
   width: 30%;
   height: 22vh;
   margin: 20px 0 0 30px;
   border-radius: 10px;
 }
-.card-imagen > img{
+
+.card-imagen > img {
   width: 100%;
   border-radius: 10px;
 }
 
-
-.card-texto{
+.card-texto {
   width: 50%;
   height: 22vh;
   margin: 20px auto auto auto;
 }
+
+.barra-lateral {
+  width: 30vw;
+  height: 100vh;
+  background-color: #000000;
+  color: rgb(252, 215, 9);
+  position: fixed;
+  top: 0;
+  left: 0;
+  clip-path: polygon(0 0, 40% 0, 60% 100%, 0 100%);
+  justify-content: right;
+  margin: 0px 0px;
+  opacity: 0.2;
+}
+
+.body-card-lista-receta {
+  width: 80vw;
+  height: 100vh;
+  float: right;
+  color: #333;
+  padding: 20px;
+}
+
+.body-card-lista-receta-interna {
+  width: 90%;
+  float: left;
+  padding: auto;
+  margin: 20px;
+  border: solid;
+  border-radius: 10px;
+  word-wrap: break-word;
+  border-color: rgb(248, 248, 147);
+}
+
+.col-txt {
+  width: 66.66%;
+  float: left;
+  font-size: 1rem;
+}
+
+.col-img {
+  width: 33.34%;
+  padding: 10px;
+  float: left;
+}
+
+.lista-receta-fila {
+  padding-left: 20px;
+}
+
+.col-img > img {
+  max-width: 100%;
+  border-radius: 25px;
+  margin: 20px;
+  padding: 20px;
+}
+
+.titulo-receta {
+  width: 40vw;
+  margin-top: 60px;
+  padding: 10px;
+  text-align: right;
+  background: linear-gradient(to right, #f8f8f8, #f8f893);
+}
+
+@media (max-width: 768px) {
+  .col-txt {
+    width: 100%;
+    float: left;
+    font-size: 1rem;
+  }
+
+  .col-img {
+    width: 100%;
+    padding: 10px;
+    float: left;
+  }
+  .titulo-receta {
+    width: 60vw;
+  }
+}
+
+
+/* .body-card {
+  width: 95%;
+  background-color: rgb(255, 235, 163, 0.3);
+  color: #333;
+  padding: 20px;
+  margin: 0 auto 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.body-card-interna {
+  background-color: #ffffff;
+  height: 350px;
+  padding: 15px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  
+}
+
+.body-card-interna-content {
+  background-color: #ffffff;
+  padding: 20px;
+  margin: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  width: 90%;
+} */

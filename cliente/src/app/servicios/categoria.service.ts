@@ -5,13 +5,12 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class RecetaService {
+export class CategoriasService {
+  private apiUrl = 'https://tasty-api-staging.onrender.com/api/categorias/all?page=0&pageSize=100';
 
-  private apiUrl = 'https://tu-api.com/recetas'; // Cambia esta URL por tu endpoint
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  obtenerRecetas(): Observable<any> {
+  getCategorias(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
   }
 }
