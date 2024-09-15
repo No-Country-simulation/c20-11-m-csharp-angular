@@ -26,7 +26,7 @@ public class RecetaService
             .ToList();
         
     }
-
+    
     public List<RecetaDto> GetAllRecetas(RecetasQuery queryParameters)
     {
         var query = _context.Recetas
@@ -59,10 +59,10 @@ public class RecetaService
             query = query.Take(queryParameters.Length.Value);
         }
 
-        if (queryParameters.Reviews_Length.HasValue)
+        if (queryParameters.CantReviews.HasValue)
         {
-            if (queryParameters.Reviews_Length.Value < 0)
-                throw new ValidationException($"El parámetro '{nameof(queryParameters.Reviews_Length)}' debe ser mayor o igual a cero.");
+            if (queryParameters.CantReviews.Value < 0)
+                throw new ValidationException($"El parámetro '{nameof(queryParameters.CantReviews)}' debe ser mayor o igual a cero.");
 
             // TODO: Falta filtro Reviews_Length
         }

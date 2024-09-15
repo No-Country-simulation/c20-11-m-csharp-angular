@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tastys.BLL.Services.Receta;
 using Tastys.Domain;
 
-namespace Tastys.BLL.Services.Receta.RecetaCRUD
+namespace Tastys.BLL.Services.RecetaCRUD
 {
-    public class RecetaCRUD:IRecetaService
+    public class RecetaCRUD : IRecetaService
     {
         private readonly ITastysContext _Context;
         private readonly IMapper _Mapper;
@@ -20,29 +19,120 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
             _Context = _context;
             _Mapper = _mapper;
         }
-        public async Task<List<RecetaDto>> GetAllRecetas()
+        public async Task<List<RecetaDto>> GetOrderRecetas(int pageIndex, int pageSize, QueryOrdersRecetas order, int day = -7)
         {
+            var desdeFecha = DateTime.UtcNow.AddDays(day);
+
             try
             {
-                return await _Context.Recetas
-                .Include(receta => receta.Usuario)
-                .Include(receta => receta.Categorias)
-                .Include(receta => receta.Reviews)
-                .Select(receta => _Mapper.Map<RecetaDto>(receta))
-                .ToListAsync();
-            }
-            catch
-            {
-                throw new ApplicationException("Algo falló");
-            }
+                var recetasQuery = _Context.Recetas
+                    .Include(r => r.Reviews)
+                    .Include(r => r.RecetaCategorias).ThenInclude(rc => rc.Categoria)
+                    .Include(r => r.Usuario)
+                    .AsQueryable();
 
+                if (order == QueryOrdersRecetas.Fav)
+                {
+                    recetasQuery = recetasQuery
+                        .Where(r => r.Reviews.Any(review => review.create_at >= desdeFecha))
+                        .OrderByDescending(r => r.Reviews.Count(review => review.create_at >= desdeFecha));
+                }
+                else if (order == QueryOrdersRecetas.CreateDate)
+                {
+                    recetasQuery = recetasQuery.OrderByDescending(r => r.RecetaID);
+                }
+
+                var recetasPaged = await recetasQuery
+                    .Skip(pageIndex * pageSize)
+                    .Take(pageSize)
+                    .Select(r => new RecetaDto
+                    {
+                        RecetaID = r.RecetaID,
+                        Nombre = r.Nombre,
+                        Descripcion = r.Descripcion,
+                        ImageUrl = r.ImageUrl,
+                        Usuario = new UsuarioPublicDto
+                        {
+                            UsuarioID = r.Usuario.UsuarioID,
+                            Nombre = r.Usuario.Nombre
+                        },
+                        Reviews = r.Reviews.Select(review => new ReviewDto
+                        {
+                            ReviewID = review.ReviewID,
+                            Comentario = review.Comentario,
+                            Calificacion = review.Calificacion,
+                            Usuario = new UsuarioPublicDto
+                            {
+                                UsuarioID = review.Usuario.UsuarioID,
+                                Nombre = review.Usuario.Nombre
+                            }
+                        }).ToList(),
+                        Categorias = r.RecetaCategorias.Select(rc => new CategoriaDto
+                        {
+                            CategoriaID = rc.Categoria.CategoriaID,
+                            Nombre = rc.Categoria.Nombre
+                        }).ToList()
+                    })
+                    .ToListAsync();
+
+                return recetasPaged;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Ocurrió un error al obtener las recetas.", ex);
+            }
         }
+
+
+
+
+        public async Task<List<RecetaDto>> GetAllRecetas()
+        {
+            return await _Context.Recetas
+                .Include(r => r.Usuario)
+                .Include(r => r.RecetaCategorias)
+                .ThenInclude(rc => rc.Categoria)
+                .Include(r => r.Reviews)
+                .ThenInclude(review => review.Usuario)
+                .Where(r => !r.IsDeleted)
+                .Select(r => new RecetaDto
+                {
+                    RecetaID = r.RecetaID,
+                    Nombre = r.Nombre,
+                    Descripcion = r.Descripcion,
+                    ImageUrl = r.ImageUrl,
+                    Usuario = new UsuarioPublicDto
+                    {
+                        UsuarioID = r.Usuario.UsuarioID,
+                        Nombre = r.Usuario.Nombre
+                    },
+                    Reviews = r.Reviews.Select(review => new ReviewDto
+                    {
+                        ReviewID = review.ReviewID,
+                        Comentario = review.Comentario,
+                        Calificacion = review.Calificacion,
+                        Usuario = new UsuarioPublicDto
+                        {
+                            UsuarioID = review.Usuario.UsuarioID,
+                            Nombre = review.Usuario.Nombre
+                        }
+                    }).ToList(),
+                    Categorias = r.RecetaCategorias.Select((rc) => new CategoriaDto
+                    {
+                        CategoriaID = rc.Categoria.CategoriaID,
+                        Nombre = rc.Categoria.Nombre
+                    }).ToList()
+                })
+                .ToListAsync();
+        }
+
+
 
         public async Task<RecetaDto> GetRecetaByID(int ID)
         {
             try
             {
-                var receta = await _Context.Recetas.FindAsync(ID);
+                var receta = await _Context.Recetas.Where(receta => !receta.IsDeleted).FirstAsync(r => r.RecetaID == ID);
                 if (receta == null)
                 {
                     throw new KeyNotFoundException($"Receta con ID {ID} no fue encontrada");
@@ -64,25 +154,53 @@ namespace Tastys.BLL.Services.Receta.RecetaCRUD
                 {
                     throw new KeyNotFoundException($"Receta con ID {ID} no fue encontrada");
                 }
-                _Mapper.Map(recetaDto,receta);
+                _Mapper.Map(recetaDto, receta);
                 await _Context.SaveChangesAsync();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new ApplicationException($"Algo falló al actualizar la receta, {ex}");
             }
         }
-        public async Task<RecetaDto> CreateReceta(RecetaDto receta)
+        public async Task<Receta> CreateReceta(Receta receta, List<string> list_c, int userId)
         {
-            try {
-                var mappedReceta = _Mapper.Map<Tastys.Domain.Receta>(receta);
-                _Context.Recetas.Add(mappedReceta);
+            try
+            {
+                Usuario userE = _Context.Usuarios.FirstOrDefault(u => u.UsuarioID == userId);
+
+                Receta newReceta = new Receta
+                {
+                    Nombre = receta.Nombre,
+                    Descripcion = receta.Descripcion,
+                    ImageUrl = receta.ImageUrl
+                };
+
+                if (userE != null)
+                {
+
+                    foreach (var categoria in list_c)
+                    {
+                        Categoria categoriaE = _Context.Categorias.FirstOrDefault(c => c.Nombre == categoria.ToLower());
+
+                        if (categoriaE == null)
+                        {
+                            throw new Exception($"{categoria} no existe");
+                        }
+                        newReceta.Categorias.Add(categoriaE);
+
+                    }
+
+                    newReceta.Usuario = userE;
+
+                }
+
+                _Context.Recetas.Add(newReceta);
                 await _Context.SaveChangesAsync();
-                var createdRecetaDto = _Mapper.Map<RecetaDto>(mappedReceta);
-                return createdRecetaDto;
-            } 
-            catch(Exception ex)
+                Console.WriteLine("RECETA CREADA!");
+                return newReceta;
+            }
+            catch (Exception ex)
             {
                 throw new ApplicationException("Algo falló al crear la receta", ex);
             }

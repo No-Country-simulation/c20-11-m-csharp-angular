@@ -18,16 +18,7 @@ import { HeaderComponent } from './componentes/header/header.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HomeComponent,
-    ChefsComponent,
-    RecetasDelDiaComponent,
-    DashUserComponent,
-    RecetasComponent,
-    NavBarComponent,
-    CategoriaComponent,
-    CategoriasHomeComponent,
-    HeaderComponent,
+    AppComponent
   ],
   
   imports: [

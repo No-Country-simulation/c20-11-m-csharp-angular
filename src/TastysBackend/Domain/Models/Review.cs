@@ -26,7 +26,7 @@ public partial class Review
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime? create_at { get; set; } = DateTime.UtcNow;
 
-    public virtual Receta Receta { get; set; } = null!;
+    public virtual Receta? Receta { get; set; }
 
-    public virtual Usuario Usuario { get; set; } = null!;
+    public virtual Usuario? Usuario { get; set; }
 }

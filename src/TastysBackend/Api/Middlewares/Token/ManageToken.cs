@@ -10,26 +10,26 @@ internal class ManageToken(IConfiguration configuration)
         {
             Console.WriteLine(code);
             //Estos datos son keys auth0
-            var CLIEN_ID = configuration.GetSection("AUTH")["CLIEN_ID"];
+            var CLIENT_ID = configuration.GetSection("AUTH")["CLIENT_ID"];
             var CLIENT_SECRET = configuration.GetSection("AUTH")["CLIENT_SECRET"];
-            var CLIENT_HOST = configuration.GetSection("AUTH")["CLIEN_HOST"];
-
+            var CLIENT_HOST = configuration.GetSection("AUTH")["CLIENT_HOST"];
+            var DOMAIN = configuration.GetSection("AUTH")["DOMAIN"];
+            
             HttpClient httpClient = new HttpClient();
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,"https://dev-v2roygalmy6qyix2.us.auth0.com/oauth/token");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,$"https://{DOMAIN}/oauth/token");
 
-            var formData = new Dictionary<string,string>{
+            var formData = new Dictionary<string, string>{
                 {"grant_type", "authorization_code"},
-                {"client_id", $"{CLIEN_ID}"},
+                {"client_id", $"{CLIENT_ID}"},
                 {"client_secret", $"{CLIENT_SECRET}"},
                 {"code", $"{code}"},
-                {"redirect_uri", $"{CLIENT_HOST}/pages/redirect"}
+                {"redirect_uri", $"{CLIENT_HOST}/redirect"}
             };
-            
             request.Content = new FormUrlEncodedContent(formData);
+
             HttpResponseMessage response = await httpClient.SendAsync(request);
-
             response.EnsureSuccessStatusCode();
-
+            Console.WriteLine("datos ");
             RefreshTokenDTO token = await DeserializeRToken(response);
 
             Console.WriteLine($"Token: {token.AccessToken}");
@@ -71,6 +71,7 @@ internal class ManageToken(IConfiguration configuration)
                 response.EnsureSuccessStatusCode();
 
                 TokenDTO token = await DeserializeToken(response);
+                
                 Console.WriteLine($"TOKEN DE RT {token.AccessToken}" );
 
                 return token;
@@ -79,7 +80,7 @@ internal class ManageToken(IConfiguration configuration)
         catch (System.Exception)
         {
             
-            throw;
+            throw new Exception("No se creo un nuevo TOKEN a partir de RefreshToken, prueba volviendote a loguear");
         }
     }
     private static async Task<RefreshTokenDTO> DeserializeRToken(HttpResponseMessage dataResponse)

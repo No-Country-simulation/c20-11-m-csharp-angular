@@ -1,0 +1,61 @@
+name: "Desplegar front de PROD a Firebase"
+run-name: "Despliegue del front de PROD a Firebase. Evento: ${{ github.event_name }} por @${{ github.actor }}"
+
+env:
+  FRONT_BUILD_PATH: dist
+  FRONT_PROJECT_PATH: cliente
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "cliente/**"
+      - "**/*.md"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Compilar y crear artifact de prod
+    defaults:
+      run:
+        working-directory: ${{ env.FRONT_PROJECT_PATH }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@master
+      - name: Instalar Node
+        uses: actions/setup-node@master
+        with:
+          node-version: '20.x'
+      - name: Instalar dependencias
+        run:  |
+          pwd
+          npm ci
+      - name: Compilar
+        run: npm run build
+      - name: Archivar artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: prod_dist
+          path: ${{ env.FRONT_PROJECT_PATH }}/${{ env.FRONT_BUILD_PATH }}
+  deploy:
+    name: Desplegar a Firebase
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Descargar Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: prod_dist
+          path: ${{ env.FRONT_PROJECT_PATH }}/${{ env.FRONT_BUILD_PATH }}
+      - name: Desplegar a Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          PROJECT_ID: ${{ vars.PROD_FRONT_FIREBASE_ID }}
+          PROJECT_PATH: ${{ env.FRONT_PROJECT_PATH }}
+          FIREBASE_TOKEN: ${{ secrets.PROD_FRONT_FIREBASE_TOKEN }}

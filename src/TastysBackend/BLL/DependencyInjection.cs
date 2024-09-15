@@ -9,6 +9,7 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(MappingProfile));
 
         services.AddScoped<RecetaService>();
+        services.AddScoped<ICategoriaService, CategoriaService>();
 
         return services;
     }
