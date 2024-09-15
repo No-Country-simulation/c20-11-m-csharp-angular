@@ -9,6 +9,8 @@ import { NavBarComponent } from './componentes/navBar/navBar.component';
 import { BodyComponent } from './componentes/body/body.component';
 import { CategoriaComponent } from './componentes/categoria/categoria.component';
 import { ChefsComponent } from './componentes/chefs/chefs.component';
+import { VistaListasRecetasComponent } from './componentes/vista-listas-recetas/vista-listas-recetas.component';
+import { BarraLateralComponent } from './componentes/barra-lateral/barra-lateral.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +22,8 @@ import { ChefsComponent } from './componentes/chefs/chefs.component';
     BodyComponent,
     CategoriaComponent,
     ChefsComponent,
+    VistaListasRecetasComponent,
+    BarraLateralComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],
