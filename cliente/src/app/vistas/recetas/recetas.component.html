@@ -1,0 +1,35 @@
+<!-- <div *ngIf="isLoading"></div>
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<div *ngIf=" recetas.length === 0"></div>
+
+<div *ngIf="recetas.length > 0">
+  <div *ngFor="let categoria of recetas">
+    <h2>{{ categoria.nombre }}</h2>
+    <div *ngFor="let receta of categoria.recetas">
+      <div>
+        <h3>{{ receta.nombre }}</h3>
+        <p>{{ receta.descripcion }}</p>
+        <img [src]="receta.imageUrl" alt="{{ receta.nombre }}" width="200">
+      </div>
+    </div>
+  </div>
+</div> -->
+<div *ngIf="recetas.length === 0">
+  Sin recetas
+</div>
+
+<ul *ngIf="recetas.length > 0">
+  <!-- Iteramos sobre las recetas -->
+  <li *ngFor="let receta of recetas">
+    <!-- Iteramos sobre las categorías dentro de cada receta -->
+    <h2>Categorías:</h2>
+    <ul>
+      <li *ngFor="let categoria of receta.categorias">
+        {{ categoria.nombre }}
+      </li>
+    </ul>
+    <!-- Mostramos el nombre de la receta -->
+    <h3>Receta: {{ receta.nombre }}</h3>
+  </li>
+</ul>
