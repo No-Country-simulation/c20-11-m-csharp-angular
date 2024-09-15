@@ -11,6 +11,7 @@ import { CategoriaComponent } from './componentes/categoria/categoria.component'
 import { ChefsComponent } from './componentes/chefs/chefs.component';
 import { VistaListasRecetasComponent } from './componentes/vista-listas-recetas/vista-listas-recetas.component';
 import { BarraLateralComponent } from './componentes/barra-lateral/barra-lateral.component';
+import { VistaProfileComponent } from './componentes/vista-profile/vista-profile.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +25,7 @@ import { BarraLateralComponent } from './componentes/barra-lateral/barra-lateral
     ChefsComponent,
     VistaListasRecetasComponent,
     BarraLateralComponent,
+    VistaProfileComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],
