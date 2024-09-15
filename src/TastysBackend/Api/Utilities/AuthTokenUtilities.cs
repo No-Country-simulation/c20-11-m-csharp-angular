@@ -7,12 +7,12 @@ internal class Auth0Utilities
         {
             try
             {
-                string clientSecret = configuration.GetSection("AUTH")["AUTH_CLIENT_SECRET"];
-                string clientId = configuration.GetSection("AUTH")["CLIEN_ID"];
+                string clientSecret = configuration.GetSection("AUTH")["CLIENT_SECRET"];
+                string clientId = configuration.GetSection("AUTH")["CLIENT_ID"];
                 
-                if(clientSecret == null)
+                if(clientSecret == null || clientId == null)
                 {
-                    throw new Exception("No se aporto el client_secret");
+                    throw new Exception("No se aportaron datos env");
                 }
 
                 var httpClient = new HttpClient();

@@ -22,7 +22,7 @@ public partial class Receta
     [Column(TypeName = "text")]
     public string ImageUrl { get; set; } = null!;
 
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; set; } = false;
     [Column(TypeName = "datetime")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime? create_at { get; set; } = DateTime.UtcNow;

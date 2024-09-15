@@ -19,6 +19,73 @@ namespace Tastys.BLL.Services.RecetaCRUD
             _Context = _context;
             _Mapper = _mapper;
         }
+        public async Task<List<RecetaDto>> GetOrderRecetas(int pageIndex, int pageSize, QueryOrdersRecetas order, int day = -7)
+        {
+            var desdeFecha = DateTime.UtcNow.AddDays(day);
+
+            try
+            {
+                var recetasQuery = _Context.Recetas
+                    .Include(r => r.Reviews)
+                    .Include(r => r.RecetaCategorias).ThenInclude(rc => rc.Categoria)
+                    .Include(r => r.Usuario)
+                    .AsQueryable();
+
+                if (order == QueryOrdersRecetas.Fav)
+                {
+                    recetasQuery = recetasQuery
+                        .Where(r => r.Reviews.Any(review => review.create_at >= desdeFecha))
+                        .OrderByDescending(r => r.Reviews.Count(review => review.create_at >= desdeFecha));
+                }
+                else if (order == QueryOrdersRecetas.CreateDate)
+                {
+                    recetasQuery = recetasQuery.OrderByDescending(r => r.RecetaID);
+                }
+
+                var recetasPaged = await recetasQuery
+                    .Skip(pageIndex * pageSize)
+                    .Take(pageSize)
+                    .Select(r => new RecetaDto
+                    {
+                        RecetaID = r.RecetaID,
+                        Nombre = r.Nombre,
+                        Descripcion = r.Descripcion,
+                        ImageUrl = r.ImageUrl,
+                        Usuario = new UsuarioPublicDto
+                        {
+                            UsuarioID = r.Usuario.UsuarioID,
+                            Nombre = r.Usuario.Nombre
+                        },
+                        Reviews = r.Reviews.Select(review => new ReviewDto
+                        {
+                            ReviewID = review.ReviewID,
+                            Comentario = review.Comentario,
+                            Calificacion = review.Calificacion,
+                            Usuario = new UsuarioPublicDto
+                            {
+                                UsuarioID = review.Usuario.UsuarioID,
+                                Nombre = review.Usuario.Nombre
+                            }
+                        }).ToList(),
+                        Categorias = r.RecetaCategorias.Select(rc => new CategoriaDto
+                        {
+                            CategoriaID = rc.Categoria.CategoriaID,
+                            Nombre = rc.Categoria.Nombre
+                        }).ToList()
+                    })
+                    .ToListAsync();
+
+                return recetasPaged;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Ocurrió un error al obtener las recetas.", ex);
+            }
+        }
+
+
+
+
         public async Task<List<RecetaDto>> GetAllRecetas()
         {
             return await _Context.Recetas
@@ -31,30 +98,30 @@ namespace Tastys.BLL.Services.RecetaCRUD
                 .Select(r => new RecetaDto
                 {
                     RecetaID = r.RecetaID,
-                    Nombre = r.Nombre ?? "Default",
-                    Descripcion = r.Descripcion ?? "Default",
-                    ImageUrl = r.ImageUrl ?? "Default",
+                    Nombre = r.Nombre,
+                    Descripcion = r.Descripcion,
+                    ImageUrl = r.ImageUrl,
                     Usuario = new UsuarioPublicDto
                     {
                         UsuarioID = r.Usuario.UsuarioID,
-                        Nombre = r.Usuario.Nombre ?? "Default"
+                        Nombre = r.Usuario.Nombre
                     },
                     Reviews = r.Reviews.Select(review => new ReviewDto
                     {
                         ReviewID = review.ReviewID,
-                        Comentario = review.Comentario ?? "No Comment",
+                        Comentario = review.Comentario,
                         Calificacion = review.Calificacion,
                         Usuario = new UsuarioPublicDto
                         {
                             UsuarioID = review.Usuario.UsuarioID,
-                            Nombre = review.Usuario.Nombre ?? "Default"
+                            Nombre = review.Usuario.Nombre
                         }
-                    }).ToList(),  // Convert the IEnumerable<ReviewDto> to List<ReviewDto>
+                    }).ToList(),
                     Categorias = r.RecetaCategorias.Select((rc) => new CategoriaDto
                     {
                         CategoriaID = rc.Categoria.CategoriaID,
-                        Nombre = rc.Categoria.Nombre ?? "Default"
-                    }).ToList()  // Convert the IEnumerable<CategoriaDto> to List<CategoriaDto>
+                        Nombre = rc.Categoria.Nombre
+                    }).ToList()
                 })
                 .ToListAsync();
         }

@@ -38,6 +38,8 @@ public class UserController : ControllerBase
         }
     }
     [HttpGet("all")]
+    [CheckToken]
+    [CheckPermissions("user:user")]
     public ActionResult GetUser()
     {
         try
@@ -55,8 +57,8 @@ public class UserController : ControllerBase
     }
     [HttpGet("email")]
     [CheckToken]
-    [CheckPermissions("user:user")]
-    public ActionResult GetUser([FromQuery] string email)
+    [CheckPermissions("user:admin")]
+    public ActionResult AdminGetUser([FromQuery] string email)
     {
         try
         {
@@ -75,7 +77,8 @@ public class UserController : ControllerBase
     [HttpGet]
     [SetToken]
     [CheckToken]
-    public ActionResult GetUserAuth()
+    [CheckPermissions("user:user")]
+    public ActionResult LoginUserAuth()
     {
         try
         {

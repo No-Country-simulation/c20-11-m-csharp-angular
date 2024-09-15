@@ -71,6 +71,7 @@ internal class ManageToken(IConfiguration configuration)
                 response.EnsureSuccessStatusCode();
 
                 TokenDTO token = await DeserializeToken(response);
+                
                 Console.WriteLine($"TOKEN DE RT {token.AccessToken}" );
 
                 return token;

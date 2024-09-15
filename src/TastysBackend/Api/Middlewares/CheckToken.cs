@@ -12,61 +12,91 @@ public class CheckToken : Attribute, IAsyncAuthorizationFilter
     {
         try
         {
-            var configuration = context.HttpContext.RequestServices.GetService<IConfiguration>();
-
-            string authorizationHeader = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-
-            if (authorizationHeader != null && authorizationHeader.StartsWith("Bearer "))
+            if (context.HttpContext.Request.Cookies.TryGetValue("token", out string tokenCookie))
             {
-                string token = authorizationHeader.Substring("Bearer ".Length).Trim();
+                Console.WriteLine($"Cookie token exist");
+                context.HttpContext.Items["token"] = $"{tokenCookie}";
+            }
+            else
+            {
+                Console.WriteLine("Cookie token not found.");
+            }
+
+            var configuration = context.HttpContext.RequestServices.GetService<IConfiguration>();
+            if (configuration == null)
+            {
+                throw new NullReferenceException("Configuration service is null");
+            }
+
+            string itemToken = (string)context.HttpContext.Items["token"];
+            Console.WriteLine($"TOKEN DE Items: {itemToken}");
+
+            if (!string.IsNullOrEmpty(itemToken) && itemToken.StartsWith("Bearer "))
+            {
+                string token = itemToken.Substring("Bearer ".Length).Trim();
+                Console.WriteLine($"Token Extraído");
 
                 ValidateToken validate = new ValidateToken(configuration);
-
                 JwtSecurityToken validatedToken = await validate.ValidateAsync(token);
 
-                //Si el token no es valido intenta crear uno nuevo con el Refresh-Token
-                if (validatedToken == null)
+                if (validatedToken != null)
                 {
-                    string cookieRTValue = context.HttpContext.Request.Cookies["Refresh-Token"];
-                    if (!string.IsNullOrEmpty(cookieRTValue))
-                    {
-                        ManageToken manageToken = new ManageToken(configuration);
-                        TokenDTO newToken = await manageToken.GetTokenFromRT(cookieRTValue);
-                        Console.WriteLine(newToken.ExpiresIn);
-                        context.HttpContext.Request.Headers.Add("Authorization", $"Bearer {newToken.AccessToken}");
+                    Dictionary<string, string> claims = JwtValidate.ValidateClaimsToken(token, ["custom_email_claim", "custom_name_claim", "sub"]);
 
-                        //añadiendo la cookie del token y refresh_token
-                        context.HttpContext.Response.Cookies.Append("Token", newToken.AccessToken, SetCookie.Config(10));
+                    if (claims != null && claims.ContainsKey("sub"))
+                    {
+                        UserDataToken userData = new UserDataToken
+                        {
+                            authId = claims["sub"],
+                            authName = claims.ContainsKey("custom_name_claim") ? claims["custom_name_claim"] : null,
+                            email = claims.ContainsKey("custom_email_claim") ? claims["custom_email_claim"] : null,
+                            token = token
+                        };
+
+                        context.HttpContext.Items["userdata"] = userData;
+                        Console.WriteLine("Token Validado y Datos de Usuario Agregados al Contexto");
                         return;
                     }
-
-                    context.Result = new UnauthorizedResult();
-                    throw new UnauthorizedAccessException("Token invalido");
                 }
 
-                Dictionary<string, string> claims = JwtValidate.ValidateClaimsToken(token, ["custom_email_claim", "custom_name_claim", "sub"]);
-
-                UserDataToken userData = new UserDataToken
+                // Si el token no es válido, trata de generar uno nuevo usando el refresh token
+                if (context.HttpContext.Request.Cookies.TryGetValue("refresh-token", out string cookieRTValue))
                 {
-                    authId = claims["sub"],
-                    authName = claims["custom_name_claim"],
-                    email = claims["custom_email_claim"],
-                    token = token,
-                };
+                    Console.WriteLine($"Cookie exist");
+                    context.HttpContext.Items["refresh-token"] = $"Bearer {tokenCookie}";
+                }
+                else
+                {
+                    Console.WriteLine("Cookie not found.");
+                    throw new Exception("No Refresh Token");
+                }
+                Console.WriteLine($"Refresh-Token Cookie exist");
 
-                //AÑADO EL ITEM userdata para poder acceder desde el controlador a los datos del token mandado por el cliente.
-                context.HttpContext.Items.Add("userdata", userData);
+                if (!string.IsNullOrEmpty(cookieRTValue))
+                {
+                    ManageToken manageToken = new ManageToken(configuration);
+                    TokenDTO newToken = await manageToken.GetTokenFromRT(cookieRTValue);
+                    Console.WriteLine($"Nuevo Token Generado, Expira en: {newToken.ExpiresIn}");
 
-                Console.WriteLine("Token Validado");
-                return;
-
-
+                    context.HttpContext.Response.Cookies.Append("Token", $"Bearer {newToken.AccessToken}", new CookieOptions
+                    {
+                        Expires = DateTimeOffset.UtcNow.AddDays(7),
+                        HttpOnly = true,
+                        IsEssential = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None
+                    });
+                    context.HttpContext.Request.Headers["Authorization"] = $"Bearer {newToken.AccessToken}";
+                    return;
+                }
             }
-            throw new UnauthorizedAccessException("Error en la validacion del token");
+
+            throw new UnauthorizedAccessException("Error en la validación del token o falta de refresh token.");
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
             context.Result = new UnauthorizedResult();
+            Console.WriteLine($"Error en CheckToken middleware: {ex.Message}");
             throw;
         }
     }
