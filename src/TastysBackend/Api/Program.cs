@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -25,7 +26,6 @@ builder.Services.AddTransient<IAsyncAuthorizationFilter,SetToken>();
 builder.Services.AddTransient<IAsyncAuthorizationFilter,CheckPermissions>();
 builder.Services.AddScoped<ReviewCRUD>();
 
-
 builder.Services
     .AddControllers()
     .AddJsonOptions(opts =>
@@ -38,7 +38,14 @@ builder.Services
         opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
 
-
+// Configurar el middleware de manejo de errores
+builder.Services
+    .AddExceptionHandler<ErrorHandler>()
+    .AddProblemDetails()
+    .Configure<ApiBehaviorOptions>(opts =>
+    {
+        opts.SuppressModelStateInvalidFilter = true;
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -109,6 +116,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowSpecificOrigin");
 app.UseCookiePolicy();
+
+app.UseExceptionHandler();
+
 app.UseAuthorization();
 app.MapControllers();
 
