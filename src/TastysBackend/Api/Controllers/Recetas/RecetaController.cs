@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
+using Tastys.API.Middlewares;
 using Tastys.BLL;
 using Tastys.Domain;
 
@@ -70,11 +71,48 @@ public class RecetaController : ControllerBase
     /// Crear una receta nueva.
     /// </summary>
     [HttpPost]
+    [CheckToken]
+    [CheckPermissions("user:user")]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
     [ProducesResponseType<Receta>(200)]
     [SwaggerRequestExample(typeof(NewRecetaDTO), typeof(RecetaRequestExample))]
     public async Task<ActionResult<Receta>> CreateReceta([FromBody] NewRecetaDTO recetaData)
+    {
+        try
+        {
+            if (HttpContext.Items["userdata"] is not UserDataToken userData)
+            {
+                return BadRequest("No se encontró información del usuario.");
+            }
+            Receta postReceta = await _recetaService.Create(
+                new Receta
+                {
+                    Nombre = recetaData.receta.nombre,
+                    ImageUrl = recetaData.receta.imageUrl,
+                    Descripcion = recetaData.receta.descripcion
+                }
+                , recetaData.list_c, userData.authId);
+
+            //te retorna el codigo 201 -created- cuando se crea
+            //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id
+            return CreatedAtAction(nameof(CreateReceta), new { id = postReceta.RecetaID }, postReceta);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al crear la receta en DB");
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Crear una receta nueva y asignarla a un usuario arbitrario.
+    /// </summary>
+    [HttpPost("admin")]
+    [CheckToken]
+    [CheckPermissions("user:admin")]
+    [SwaggerRequestExample(typeof(NewRecetaDTO), typeof(RecetaRequestExample))]
+    public async Task<ActionResult<Receta>> CreateRecetaAdmin([FromBody] NewRecetaDTO recetaData)
     {
         try
         {
@@ -84,8 +122,7 @@ public class RecetaController : ControllerBase
                     Nombre = recetaData.receta.nombre,
                     ImageUrl = recetaData.receta.imageUrl,
                     Descripcion = recetaData.receta.descripcion
-                }
-                , recetaData.list_c, recetaData.user_id);
+                }, recetaData.list_c, recetaData.user_id);
 
             //te retorna el codigo 201 -created- cuando se crea
             //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id
@@ -94,7 +131,7 @@ public class RecetaController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error al crear la receta en DB");
-            return StatusCode(500);
+            return StatusCode(404, ex);
         }
     }
 

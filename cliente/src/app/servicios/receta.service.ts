@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Receta } from '../model/receta.model'; // Asegúrate de tener este modelo definido
+import { API_ENDPOINT } from '../../../vars';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecetasService {
-  private apiUrl = 'https://tasty-api-staging.onrender.com/api/receta';
-  private apiUrlOrdenadas = 'https://tasty-api-staging.onrender.com/api/receta/order';
+  private apiUrl = `${API_ENDPOINT}/api/receta`;
+  private apiUrlOrdenadas = `${API_ENDPOINT}/api/receta/order`;
 
   constructor(private http: HttpClient) {}
 

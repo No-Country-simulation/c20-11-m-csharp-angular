@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { RouterModule } from '@angular/router';
@@ -15,6 +15,9 @@ import { NavBarComponent } from './componentes/nav-bar/nav-bar.component';
 import { CategoriasComponent } from './componentes/categoria/categoria.component';
 import { CategoriasHomeComponent } from './vistas/categorias-home/categorias-home.component';
 import { HeaderComponent } from './componentes/header/header.component';
+import { RedirectLoginComponent } from './componentes/redirect-login/redirect-login.component';
+import { CrearRecetaComponent } from './componentes/create-receta/crear-receta.component';
+import { LoginButtonComponent } from "./componentes/login-button/login-button.component";
 
 
 @NgModule({
@@ -35,15 +38,20 @@ import { HeaderComponent } from './componentes/header/header.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule, 
+    HttpClientModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent },
-      { path: 'recetasdeldia', component: RecetasDelDiaComponent },
-      { path: 'chefs', component: ChefsComponent },
-      { path: 'user', component: DashUserComponent },
-      { path: 'categorias', component: CategoriasHomeComponent },
+        { path: '', component: HomeComponent },
+        { path: 'recetasdeldia', component: RecetasDelDiaComponent },
+        { path: 'chefs', component: ChefsComponent },
+        { path: 'user', component: DashUserComponent },
+        { path: 'categorias', component: CategoriasHomeComponent },
+        { path: 'redirect', component: RedirectLoginComponent },
+        { path: 'create', component: CrearRecetaComponent },
     ]),
-  ],
+    LoginButtonComponent
+    
+],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -142,31 +142,38 @@ public class RecetaService : IRecetaService
         return true;
     }
 
-    public async Task<Receta> Create(Receta receta, List<string> list_c, int userId)
+    public async Task<Receta> Create(Receta receta, List<string> list_c, string auth_id)
     {
-        var userE = _context.Usuarios.FirstOrDefault(u => u.UsuarioID == userId);
+        var userE = await _context.Usuarios.FirstOrDefaultAsync(u => u.Auth0Id == auth_id);
 
-        var newReceta = new Receta
+        if (userE == null)
+        {
+            int.TryParse(auth_id, out int usuarioId);
+
+            userE = await _context.Usuarios.FirstOrDefaultAsync(u => u.UsuarioID == usuarioId);
+
+            if (userE == null || userE.IsDeleted)
+            {
+                throw new Exception("Usuario no encontrado o eliminado.");
+            }
+        }
+
+        Receta newReceta = new Receta
         {
             Nombre = receta.Nombre,
             Descripcion = receta.Descripcion,
-            ImageUrl = receta.ImageUrl
+            ImageUrl = receta.ImageUrl,
+            Usuario = userE
         };
 
-        // TODO: Se puede agregar una receta por mas que no exista el usuario?
-        if (userE != null)
+        foreach (var categoria in list_c)
         {
-            foreach (var categoria in list_c)
-            {
-                var categoriaE = _context.Categorias.FirstOrDefault(c => c.Nombre.Equals(categoria, StringComparison.CurrentCultureIgnoreCase));
+            var categoriaE = await _context.Categorias.FirstOrDefaultAsync(c => c.Nombre.Equals(categoria, StringComparison.CurrentCultureIgnoreCase));
 
-                if (categoriaE == null)
-                    throw new NotFoundException($"No hay una categoría con el nombre \"{categoria}\"");
+            if (categoriaE == null)
+                throw new NotFoundException($"No hay una categoría con el nombre \"{categoria}\"");
 
-                newReceta.Categorias?.Add(categoriaE);
-            }
-
-            newReceta.Usuario = userE;
+            newReceta.Categorias?.Add(categoriaE);
         }
 
         _context.Recetas.Add(newReceta);

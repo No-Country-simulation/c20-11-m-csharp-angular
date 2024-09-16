@@ -1,0 +1,29 @@
+.redirect-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100vh;
+background-color: #f7f1e3;  /* Fondo blanco suave */
+}
+
+h1 {
+color: #ff6f00;  /* Naranja claro */
+font-size: 2em;
+}
+
+.btn-redirect {
+background-color: #ff6f00;  /* Naranja claro */
+color: white;
+border: none;
+padding: 10px 20px;
+font-size: 1.2em;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+margin-top: 20px;
+}
+
+.btn-redirect:hover {
+background-color: #ffa726;  /* Naranja más claro al hacer hover */
+}
