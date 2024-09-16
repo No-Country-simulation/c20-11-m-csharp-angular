@@ -16,5 +16,7 @@ public class MappingProfile : Profile
 
         CreateMap<Categoria, CategoriaConRecetasDto>()
             .IncludeBase<Categoria, CategoriaDto>();
+
+        CreateMap<Ingrediente, IngredienteDto>();
     }
 }

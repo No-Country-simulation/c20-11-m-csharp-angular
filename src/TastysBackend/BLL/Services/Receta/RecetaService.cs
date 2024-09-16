@@ -25,6 +25,7 @@ public class RecetaService : IRecetaService
                 .Include(r => r.Reviews)
                 .Include(r => r.RecetaCategorias).ThenInclude(rc => rc.Categoria)
                 .Include(r => r.Usuario)
+                .Include(r => r.RecetaIngredientes).ThenInclude(ri => ri.Ingrediente)
                 .AsQueryable();
 
             if (order == QueryOrdersRecetas.Fav)
@@ -59,11 +60,18 @@ public class RecetaService : IRecetaService
                             Nombre = review.Usuario.Nombre
                         }
                     }).ToList(),
+                    Ingredientes = r.RecetaIngredientes.Select(review => new IngredienteDto
+                    {
+                        IngredienteID = review.IngredienteId,
+                        Cantidad = review.Ingrediente.Cantidad,
+                        Nombre = review.Ingrediente.Nombre
+                    }).ToList(),
                     Categorias = r.RecetaCategorias.Select(rc => new CategoriaDto
                     {
                         CategoriaID = rc.Categoria.CategoriaID,
                         Nombre = rc.Categoria.Nombre
-                    }).ToList()
+                    }).ToList(),
+                    TiempoCoccion = r.TiempoCoccion
                 })
                 .ToListAsync();
 
@@ -82,6 +90,7 @@ public class RecetaService : IRecetaService
             .Include(receta => receta.Categorias)
             .Include(receta => receta.Reviews)
             //.ThenInclude(review => review.Usuario) // No lo incluyo porque es sería demasiada información innecesaria.
+            .Include(receta => receta.Ingredientes)
             .Where(r => !r.IsDeleted)
             .Select(receta => _mapper.Map<RecetaDto>(receta))
             .ToListAsync();
@@ -93,6 +102,8 @@ public class RecetaService : IRecetaService
             .Include(receta => receta.Usuario)
             .Include(receta => receta.Categorias)
             .Include(receta => receta.Reviews!.Take(queryParameters.CantReviews))
+            //.ThenInclude(review => review.Usuario) // No lo incluyo porque es sería demasiada información innecesaria.
+            .Include(receta => receta.Ingredientes)
             .Where(r => !r.IsDeleted)
             .AsQueryable();
 
@@ -118,6 +129,7 @@ public class RecetaService : IRecetaService
             .Include(receta => receta.Categorias)
             .Include(receta => receta.Reviews!)
             .ThenInclude(review => review.Usuario)
+            .Include(receta => receta.Ingredientes)
             .Where(receta => !receta.IsDeleted)
             .FirstAsync(r => r.RecetaID == ID);
 
@@ -142,31 +154,58 @@ public class RecetaService : IRecetaService
         return true;
     }
 
-    public async Task<Receta> Create(Receta receta, List<string> list_c, int userId)
+    public async Task<Receta> Create(Receta receta, List<string> list_c, List<IngredienteDto> list_ingredientes, string auth_id)
     {
-        var userE = _context.Usuarios.FirstOrDefault(u => u.UsuarioID == userId);
+        var userE = await _context.Usuarios.FirstOrDefaultAsync(u => u.Auth0Id == auth_id);
 
-        var newReceta = new Receta
+        if (userE == null)
+        {
+            int.TryParse(auth_id, out int usuarioId);
+
+            userE = await _context.Usuarios.FirstOrDefaultAsync(u => u.UsuarioID == usuarioId);
+
+            if (userE == null || userE.IsDeleted)
+            {
+                throw new Exception("Usuario no encontrado o eliminado.");
+            }
+        }
+
+        Receta newReceta = new Receta
         {
             Nombre = receta.Nombre,
             Descripcion = receta.Descripcion,
-            ImageUrl = receta.ImageUrl
+            ImageUrl = receta.ImageUrl,
+            Usuario = userE,
+            TiempoCoccion = receta.TiempoCoccion
         };
 
-        // TODO: Se puede agregar una receta por mas que no exista el usuario?
-        if (userE != null)
+        foreach (var categoria in list_c)
         {
-            foreach (var categoria in list_c)
+            var categoriaE = await _context.Categorias
+                .FirstOrDefaultAsync(c => c.Nombre.Equals(categoria, StringComparison.CurrentCultureIgnoreCase));
+
+            if (categoriaE == null)
+                throw new NotFoundException($"No hay una categoría con el nombre \"{categoria}\"");
+
+            newReceta.Categorias?.Add(categoriaE);
+        }
+
+        foreach (var ingrediente in list_ingredientes)
+        {
+            var ingredienteE = await _context.Ingredientes
+                .FirstOrDefaultAsync(i => i.Nombre.Equals(ingrediente.Nombre, StringComparison.CurrentCultureIgnoreCase));
+
+            if (ingredienteE == null)
             {
-                var categoriaE = _context.Categorias.FirstOrDefault(c => c.Nombre.Equals(categoria, StringComparison.CurrentCultureIgnoreCase));
+                Ingrediente newI = new Ingrediente
+                {
+                    Nombre = ingrediente.Nombre,
+                    Cantidad = ingrediente.Cantidad
+                };
+                await _context.Ingredientes.AddAsync(newI);
 
-                if (categoriaE == null)
-                    throw new NotFoundException($"No hay una categoría con el nombre \"{categoria}\"");
-
-                newReceta.Categorias?.Add(categoriaE);
+                newReceta.Ingredientes.Add(newI);
             }
-
-            newReceta.Usuario = userE;
         }
 
         _context.Recetas.Add(newReceta);

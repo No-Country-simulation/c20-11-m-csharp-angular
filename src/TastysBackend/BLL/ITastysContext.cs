@@ -7,6 +7,8 @@ public interface ITastysContext
     DbSet<Categoria> Categorias { get; set; }
 
     DbSet<RecetaCategoria> RecetaCategoria { get; set; }
+    DbSet<RecetaIngrediente> RecetaIngredientes { get; set; }
+    DbSet<Ingrediente> Ingredientes { get; set; }
 
     DbSet<Receta> Recetas { get; set; }
 

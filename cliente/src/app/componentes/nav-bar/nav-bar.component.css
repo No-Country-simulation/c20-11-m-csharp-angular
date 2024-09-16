@@ -1,6 +1,9 @@
 .navBar-main {
     width: 95%;
     background-color: transparent; /* Cambiamos para que no interfiera */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     color: #333;
     margin: 0 auto;
     padding: 1rem 0;
