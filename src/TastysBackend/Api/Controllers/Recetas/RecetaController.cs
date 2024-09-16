@@ -58,7 +58,7 @@ namespace Tastys.API.Controllers.Recetas
             }
         }
         [HttpGet(":id")]
-        public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
+        public async Task<ActionResult<Receta>> GetRecetaByID(int ID)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace Tastys.API.Controllers.Recetas
                         ImageUrl = recetaData.receta.imageUrl,
                         Descripcion = recetaData.receta.descripcion
                     }
-                    , recetaData.list_c, userData.authId);
+                    , userData.authId, recetaData.list_c,recetaData.list_i);
 
                 //te retorna el codigo 201 -created- cuando se crea
                 //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id
@@ -119,9 +119,10 @@ namespace Tastys.API.Controllers.Recetas
                     {
                         Nombre = recetaData.receta.nombre,
                         ImageUrl = recetaData.receta.imageUrl,
-                        Descripcion = recetaData.receta.descripcion
+                        Descripcion = recetaData.receta.descripcion,
+                        TiempoCoccion = recetaData.receta.tiempo_de_coccion
                     }
-                    , recetaData.list_c, recetaData.user_id);
+                    , recetaData.user_id, recetaData.list_c,recetaData.list_i);
 
                 //te retorna el codigo 201 -created- cuando se crea
                 //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id

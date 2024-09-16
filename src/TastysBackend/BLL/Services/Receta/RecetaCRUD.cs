@@ -29,6 +29,7 @@ namespace Tastys.BLL.Services.RecetaCRUD
                     .Include(r => r.Reviews)
                     .Include(r => r.RecetaCategorias).ThenInclude(rc => rc.Categoria)
                     .Include(r => r.Usuario)
+                    .Include(r => r.RecetaIngredientes).ThenInclude(ri => ri.Ingrediente)
                     .AsQueryable();
 
                 if (order == QueryOrdersRecetas.Fav)
@@ -67,11 +68,19 @@ namespace Tastys.BLL.Services.RecetaCRUD
                                 Nombre = review.Usuario.Nombre
                             }
                         }).ToList(),
+                        Ingredientes = r.RecetaIngredientes.Select(review => new IngredienteDto
+                        {
+                            IngredienteID = review.IngredienteId,
+                            Cantidad = review.Ingrediente.Cantidad,
+                            Nombre = review.Ingrediente.Nombre
+                        }).ToList(),
                         Categorias = r.RecetaCategorias.Select(rc => new CategoriaDto
                         {
                             CategoriaID = rc.Categoria.CategoriaID,
                             Nombre = rc.Categoria.Nombre
-                        }).ToList()
+                        }).ToList(),
+                        TiempoCoccion = r.TiempoCoccion
+
                     })
                     .ToListAsync();
 
@@ -117,11 +126,19 @@ namespace Tastys.BLL.Services.RecetaCRUD
                             Nombre = review.Usuario.Nombre
                         }
                     }).ToList(),
-                    Categorias = r.RecetaCategorias.Select((rc) => new CategoriaDto
+                    Ingredientes = r.RecetaIngredientes.Select(review => new IngredienteDto
+                    {
+                        IngredienteID = review.IngredienteId,
+                        Cantidad = review.Ingrediente.Cantidad,
+                        Nombre = review.Ingrediente.Nombre
+                    }).ToList(),
+                    Categorias = r.RecetaCategorias.Select(rc => new CategoriaDto
                     {
                         CategoriaID = rc.Categoria.CategoriaID,
                         Nombre = rc.Categoria.Nombre
-                    }).ToList()
+                    }).ToList(),
+                    TiempoCoccion = r.TiempoCoccion
+
                 })
                 .ToListAsync();
         }
@@ -132,18 +149,65 @@ namespace Tastys.BLL.Services.RecetaCRUD
         {
             try
             {
-                var receta = await _Context.Recetas.Where(receta => !receta.IsDeleted).FirstAsync(r => r.RecetaID == ID);
+                var receta = await _Context.Recetas
+                    .Include(r => r.Usuario)
+                    .Include(r => r.RecetaCategorias)
+                        .ThenInclude(rc => rc.Categoria)
+                    .Include(r => r.Reviews)
+                        .ThenInclude(review => review.Usuario)
+                    .Include(r => r.RecetaIngredientes) // Asegúrate de incluir los ingredientes
+                        .ThenInclude(ri => ri.Ingrediente)
+                    .Where(r => !r.IsDeleted)
+                    .Select(r => new RecetaDto
+                    {
+                        RecetaID = r.RecetaID,
+                        Nombre = r.Nombre,
+                        Descripcion = r.Descripcion,
+                        ImageUrl = r.ImageUrl,
+                        Usuario = new UsuarioPublicDto
+                        {
+                            UsuarioID = r.Usuario.UsuarioID,
+                            Nombre = r.Usuario.Nombre
+                        },
+                        Reviews = r.Reviews.Select(review => new ReviewDto
+                        {
+                            ReviewID = review.ReviewID,
+                            Comentario = review.Comentario,
+                            Calificacion = review.Calificacion,
+                            Usuario = new UsuarioPublicDto
+                            {
+                                UsuarioID = review.Usuario.UsuarioID,
+                                Nombre = review.Usuario.Nombre
+                            }
+                        }).ToList(),
+                        Ingredientes = r.RecetaIngredientes.Select(ri => new IngredienteDto
+                        {
+                            IngredienteID = ri.Ingrediente.IngredienteID,
+                            Cantidad = ri.Ingrediente.Cantidad,
+                            Nombre = ri.Ingrediente.Nombre
+                        }).ToList(),
+                        Categorias = r.RecetaCategorias.Select(rc => new CategoriaDto
+                        {
+                            CategoriaID = rc.Categoria.CategoriaID,
+                            Nombre = rc.Categoria.Nombre
+                        }).ToList(),
+                        TiempoCoccion = r.TiempoCoccion
+                    })
+                    .FirstOrDefaultAsync(r => r.RecetaID == ID);
+
                 if (receta == null)
                 {
                     throw new KeyNotFoundException($"Receta con ID {ID} no fue encontrada");
                 }
-                return _Mapper.Map<RecetaDto>(receta);
+
+                return receta;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new ApplicationException("Algo falló");
+                throw new ApplicationException("Algo falló: " + ex.Message);
             }
         }
+
         public async Task<bool> UpdateReceta(RecetaDto recetaDto, int ID)
         {
 
@@ -163,7 +227,7 @@ namespace Tastys.BLL.Services.RecetaCRUD
                 throw new ApplicationException($"Algo falló al actualizar la receta, {ex}");
             }
         }
-        public async Task<Receta> CreateReceta(Receta receta, List<string> list_c, string auth_id)
+        public async Task<Receta> CreateReceta(Receta receta, string auth_id, List<string> list_c, List<IngredienteDto> list_ingredientes)
         {
             try
             {
@@ -171,11 +235,11 @@ namespace Tastys.BLL.Services.RecetaCRUD
 
                 if (userE == null)
                 {
-                    int.TryParse(auth_id,out int usuarioId);
-
+                    int.TryParse(auth_id, out int usuarioId);
+                    Console.WriteLine(usuarioId);
                     userE = await _Context.Usuarios.FirstOrDefaultAsync(u => u.UsuarioID == usuarioId);
 
-                    if (userE == null || userE.IsDeleted != null)
+                    if (userE == null)
                     {
                         throw new Exception("Usuario no encontrado o eliminado.");
                     }
@@ -186,7 +250,8 @@ namespace Tastys.BLL.Services.RecetaCRUD
                     Nombre = receta.Nombre,
                     Descripcion = receta.Descripcion,
                     ImageUrl = receta.ImageUrl,
-                    Usuario = userE
+                    Usuario = userE,
+                    TiempoCoccion = receta.TiempoCoccion
                 };
 
                 foreach (var categoria in list_c)
@@ -198,6 +263,23 @@ namespace Tastys.BLL.Services.RecetaCRUD
                         throw new Exception($"La categoría '{categoria}' no existe.");
                     }
                     newReceta.Categorias.Add(categoriaE);
+                }
+
+                foreach (var ingrediente in list_ingredientes)
+                {
+                    Ingrediente ingredienteE = await _Context.Ingredientes.FirstOrDefaultAsync(i => i.Nombre == ingrediente.Nombre);
+
+                    if (ingredienteE == null)
+                    {
+                        Ingrediente newI = new Ingrediente
+                        {
+                            Nombre = ingrediente.Nombre,
+                            Cantidad = ingrediente.Cantidad
+                        };
+                        await _Context.Ingredientes.AddAsync(newI);
+
+                        newReceta.Ingredientes.Add(newI);
+                    }
                 }
 
                 _Context.Recetas.Add(newReceta);

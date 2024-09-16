@@ -8,7 +8,7 @@ using Tastys.Infrastructure;
 
 #nullable disable
 
-namespace Tastys.Infrastructure.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TastysContext))]
     partial class TastysContextModelSnapshot : ModelSnapshot
@@ -44,6 +44,27 @@ namespace Tastys.Infrastructure.Migrations
                     b.ToTable("Categorias");
                 });
 
+            modelBuilder.Entity("Tastys.Domain.Ingrediente", b =>
+                {
+                    b.Property<int>("IngredienteID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IngredienteID"));
+
+                    b.Property<string>("Cantidad")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("IngredienteID");
+
+                    b.ToTable("Ingredientes");
+                });
+
             modelBuilder.Entity("Tastys.Domain.Receta", b =>
                 {
                     b.Property<int>("RecetaID")
@@ -68,6 +89,10 @@ namespace Tastys.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("TiempoCoccion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("UsuarioID")
                         .HasColumnType("int");
 
@@ -86,17 +111,35 @@ namespace Tastys.Infrastructure.Migrations
 
             modelBuilder.Entity("Tastys.Domain.RecetaCategoria", b =>
                 {
-                    b.Property<int>("CategoriaID")
-                        .HasColumnType("int");
-
                     b.Property<int>("RecetaID")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoriaID", "RecetaID");
+                    b.Property<int>("CategoriaID")
+                        .HasColumnType("int");
 
-                    b.HasIndex("RecetaID");
+                    b.HasKey("RecetaID", "CategoriaID");
+
+                    b.HasIndex("CategoriaID");
 
                     b.ToTable("RecetaCategoria");
+                });
+
+            modelBuilder.Entity("Tastys.Domain.RecetaIngrediente", b =>
+                {
+                    b.Property<int>("RecetaID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredienteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecetaIngredienteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RecetaID", "IngredienteId");
+
+                    b.HasIndex("IngredienteId");
+
+                    b.ToTable("RecetaIngredientes");
                 });
 
             modelBuilder.Entity("Tastys.Domain.Review", b =>
@@ -188,18 +231,37 @@ namespace Tastys.Infrastructure.Migrations
             modelBuilder.Entity("Tastys.Domain.RecetaCategoria", b =>
                 {
                     b.HasOne("Tastys.Domain.Categoria", "Categoria")
-                        .WithMany()
+                        .WithMany("RecetaCategorias")
                         .HasForeignKey("CategoriaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Tastys.Domain.Receta", "Receta")
-                        .WithMany()
+                        .WithMany("RecetaCategorias")
                         .HasForeignKey("RecetaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Categoria");
+
+                    b.Navigation("Receta");
+                });
+
+            modelBuilder.Entity("Tastys.Domain.RecetaIngrediente", b =>
+                {
+                    b.HasOne("Tastys.Domain.Ingrediente", "Ingrediente")
+                        .WithMany("RecetaIngredientes")
+                        .HasForeignKey("IngredienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tastys.Domain.Receta", "Receta")
+                        .WithMany("RecetaIngredientes")
+                        .HasForeignKey("RecetaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingrediente");
 
                     b.Navigation("Receta");
                 });
@@ -223,8 +285,22 @@ namespace Tastys.Infrastructure.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("Tastys.Domain.Categoria", b =>
+                {
+                    b.Navigation("RecetaCategorias");
+                });
+
+            modelBuilder.Entity("Tastys.Domain.Ingrediente", b =>
+                {
+                    b.Navigation("RecetaIngredientes");
+                });
+
             modelBuilder.Entity("Tastys.Domain.Receta", b =>
                 {
+                    b.Navigation("RecetaCategorias");
+
+                    b.Navigation("RecetaIngredientes");
+
                     b.Navigation("Reviews");
                 });
 

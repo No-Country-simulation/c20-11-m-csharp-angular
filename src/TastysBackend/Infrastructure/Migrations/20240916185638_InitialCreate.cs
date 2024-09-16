@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Tastys.Infrastructure.Migrations
+namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class m1 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,11 +22,30 @@ namespace Tastys.Infrastructure.Migrations
                     CategoriaID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ImgUrl = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categorias", x => x.CategoriaID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Ingredientes",
+                columns: table => new
+                {
+                    IngredienteID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Cantidad = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredientes", x => x.IngredienteID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -65,6 +84,8 @@ namespace Tastys.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ImageUrl = table.Column<string>(type: "text", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    TiempoCoccion = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     create_at = table.Column<DateTime>(type: "datetime", nullable: true)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
@@ -90,7 +111,7 @@ namespace Tastys.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecetaCategoria", x => new { x.CategoriaID, x.RecetaID });
+                    table.PrimaryKey("PK_RecetaCategoria", x => new { x.RecetaID, x.CategoriaID });
                     table.ForeignKey(
                         name: "FK_RecetaCategoria_Categorias_CategoriaID",
                         column: x => x.CategoriaID,
@@ -99,6 +120,32 @@ namespace Tastys.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RecetaCategoria_Recetas_RecetaID",
+                        column: x => x.RecetaID,
+                        principalTable: "Recetas",
+                        principalColumn: "RecetaID",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RecetaIngredientes",
+                columns: table => new
+                {
+                    RecetaID = table.Column<int>(type: "int", nullable: false),
+                    IngredienteId = table.Column<int>(type: "int", nullable: false),
+                    RecetaIngredienteId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecetaIngredientes", x => new { x.RecetaID, x.IngredienteId });
+                    table.ForeignKey(
+                        name: "FK_RecetaIngredientes_Ingredientes_IngredienteId",
+                        column: x => x.IngredienteId,
+                        principalTable: "Ingredientes",
+                        principalColumn: "IngredienteID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecetaIngredientes_Recetas_RecetaID",
                         column: x => x.RecetaID,
                         principalTable: "Recetas",
                         principalColumn: "RecetaID",
@@ -140,9 +187,14 @@ namespace Tastys.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecetaCategoria_RecetaID",
+                name: "IX_RecetaCategoria_CategoriaID",
                 table: "RecetaCategoria",
-                column: "RecetaID");
+                column: "CategoriaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecetaIngredientes_IngredienteId",
+                table: "RecetaIngredientes",
+                column: "IngredienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recetas_UsuarioID",
@@ -167,10 +219,16 @@ namespace Tastys.Infrastructure.Migrations
                 name: "RecetaCategoria");
 
             migrationBuilder.DropTable(
+                name: "RecetaIngredientes");
+
+            migrationBuilder.DropTable(
                 name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Categorias");
+
+            migrationBuilder.DropTable(
+                name: "Ingredientes");
 
             migrationBuilder.DropTable(
                 name: "Recetas");
