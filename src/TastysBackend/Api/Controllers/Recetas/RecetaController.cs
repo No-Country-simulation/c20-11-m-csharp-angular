@@ -90,9 +90,10 @@ public class RecetaController : ControllerBase
                 {
                     Nombre = recetaData.receta.nombre,
                     ImageUrl = recetaData.receta.imageUrl,
-                    Descripcion = recetaData.receta.descripcion
-                }
-                , recetaData.list_c, userData.authId);
+                    Descripcion = recetaData.receta.descripcion,
+                    TiempoCoccion = recetaData.receta.tiempo_de_coccion
+                },
+                recetaData.list_c, recetaData.list_i, userData.authId);
 
             //te retorna el codigo 201 -created- cuando se crea
             //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id
@@ -121,8 +122,10 @@ public class RecetaController : ControllerBase
                 {
                     Nombre = recetaData.receta.nombre,
                     ImageUrl = recetaData.receta.imageUrl,
-                    Descripcion = recetaData.receta.descripcion
-                }, recetaData.list_c, recetaData.user_id);
+                    Descripcion = recetaData.receta.descripcion,
+                    TiempoCoccion = recetaData.receta.tiempo_de_coccion
+                },
+                recetaData.list_c, recetaData.list_i, recetaData.user_id!);
 
             //te retorna el codigo 201 -created- cuando se crea
             //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id

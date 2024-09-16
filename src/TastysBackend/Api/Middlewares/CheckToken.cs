@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Tastys.API.Token;
+using Tastys.BLL;
 using Tastys.BLL.Utils;
 
 namespace Tastys.API.Middlewares;
@@ -90,14 +91,18 @@ public class CheckToken : Attribute, IAsyncAuthorizationFilter
                     return;
                 }
             }
-
-            throw new UnauthorizedAccessException("Error en la validación del token o falta de refresh token.");
+            else
+            {
+                throw new UnauthorizedException("Falta el refresh token.");
+            }
         }
-        catch (Exception ex)
+        catch (UnauthorizedException)
         {
-            context.Result = new UnauthorizedResult();
-            Console.WriteLine($"Error en CheckToken middleware: {ex.Message}");
             throw;
+        }
+        catch (Exception ex) 
+        {
+            throw new UnauthorizedException($"Error en la validación del token: {ex.Message}");
         }
     }
 }

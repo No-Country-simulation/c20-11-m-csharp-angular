@@ -21,11 +21,7 @@ public class UnauthorizedException : DomainException
     /// <summary>
     /// Crea una nueva instancia de este error con el nombre de la acción o recurso al que se intentó acceder.
     /// </summary>
-    /// <param name="target">El nombre de la acción o recurso al que se intentó acceder.</param>
-    public UnauthorizedException(string target) : base($"No tiene los permisos necesarios para acceder a '{target}'.")
-    {
-        Target = target;
-    }
+    public UnauthorizedException(string message) : base(message) { }
 
     /// <summary>
     /// Crea una nueva instancia de este error con el nombre de la acción o recurso y el motivo por el que no se puede acceder.

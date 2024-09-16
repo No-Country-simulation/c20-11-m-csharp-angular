@@ -1,4 +1,6 @@
-﻿namespace Tastys.BLL;
+﻿using Tastys.Domain;
+
+namespace Tastys.BLL;
 
 public class RecetaDto
 {
@@ -41,4 +43,24 @@ public class RecetaDto
     /// Las categorías de la receta.
     /// </summary>
     public ICollection<CategoriaDto> Categorias { get; set; }
+
+    /// <summary>
+    /// Los ingredientes de la receta.
+    /// </summary>
+    public ICollection<IngredienteDto> Ingredientes { get; set; }
+
+    /// <summary>
+    /// El tiempo de cocción de la receta.
+    /// </summary>
+    public string? TiempoCoccion { get; set; }
+
+    /// <summary>
+    /// Si es true, la receta está por ser eliminada.
+    /// </summary>
+    public bool IsDeleted { get; set; }
+
+    /// <summary>
+    /// Fecha de creación de la receta.
+    /// </summary>
+    public DateTime? CreateAt { get; set; } = DateTime.Now;
 }

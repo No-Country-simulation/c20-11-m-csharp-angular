@@ -82,6 +82,8 @@ public class ErrorHandler : IExceptionHandler
 
     private async Task<bool> HandleGeneralException(HttpContext context, Exception exception, CancellationToken cancellationToken)
     {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
         if (_environment.IsProduction())
         {
             var errorDto = new ErrorResponseDto() { Message = "Error interno del servidor." };
@@ -92,8 +94,6 @@ public class ErrorHandler : IExceptionHandler
             var errorDto = new ExceptionDto() { Message = "Error interno del servidor.", Exception = exception };
             await context.Response.WriteAsJsonAsync(errorDto, cancellationToken);
         }
-
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
         _logger.LogError(exception, "Excepción desconocida no controlada.");
 
