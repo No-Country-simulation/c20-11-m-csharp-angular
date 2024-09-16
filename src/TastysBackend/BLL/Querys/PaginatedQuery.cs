@@ -8,16 +8,16 @@ namespace Tastys.BLL;
 public record PaginatedQuery
 {
     /// <summary>
-    /// La cantidad de elementos a saltear en la paginación.
-    /// Debe ser mayor que 0.
+    /// El número de página a traer (la primera es la 0).
+    /// Debe ser mayor que 1.
     /// </summary>
     [Range(0, int.MaxValue)]
-    public int? Offset { get; init; }
+    public int? Page { get; set; } = 0;
 
     /// <summary>
-    /// La cantidad de elementos a incluir en la paginación.
-    /// Debe ser mayor que 0.
+    /// El tamaño de las páginas.
+    /// Debe ser mayor que 1.
     /// </summary>
-    [Range(0, int.MaxValue)]
-    public int? Length { get; init; }
+    [Range(1, int.MaxValue)]
+    public int? PageSize { get; set; } = 10;
 }

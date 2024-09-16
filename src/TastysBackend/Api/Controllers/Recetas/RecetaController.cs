@@ -1,126 +1,115 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using Tastys.BLL.Services.RecetaCRUD;
+using Swashbuckle.AspNetCore.Filters;
 using Tastys.BLL;
 using Tastys.Domain;
-using Microsoft.CodeAnalysis.Host.Mef;
-using Swashbuckle.AspNetCore.Filters;
 
-namespace Tastys.API.Controllers.Recetas
+namespace Tastys.API.Controllers;
+
+/// <summary>
+/// Endpoints para obtener recetas.
+/// </summary>
+[Route("/api/receta")]
+[ApiController]
+public class RecetaController : ControllerBase
 {
+    private readonly ILogger<RecetaController> _logger;
+    private readonly IRecetaService _recetaService;
 
-    [Route("/api/receta")]
-    [ApiController]
-    public class RecetaController : ControllerBase
+    public RecetaController(ILogger<RecetaController> logger, IRecetaService recetaService)
     {
-        private readonly ILogger<RecetaController> _logger;
-        private readonly RecetaCRUD _recetaService;
+        _logger = logger;
+        _recetaService = recetaService;
+    }
 
-        public RecetaController(ILogger<RecetaController> logger, RecetaCRUD recetaService)
-        {
-            _logger = logger;
-            _recetaService = recetaService;
-        }
-        [HttpGet("order")]
-        public async Task<ActionResult<List<RecetaDto>>> GetOrderRecetas([FromQuery] int page=0,[FromQuery] int pageSize = 10,[FromQuery] QueryOrdersRecetas sort_by = QueryOrdersRecetas.Fav)
-        {
-            try
-            {
-                List<RecetaDto> recetas = await _recetaService.GetOrderRecetas(page, pageSize,sort_by);
-                
-                return Ok(recetas);
-            
-            }
-            catch (System.Exception ex)
-            {
-                _logger.LogError("Error al traer recetas ordenadas: "+ex);
-                return StatusCode(500);
-                throw;
-            }
-        }
-        [HttpGet]
-        public async Task<ActionResult<List<RecetaDto>>> GetAllRecetas()
-        {
-            // Los queryParameters se validan automáticamente
-            // de acuerdo a las anotaciones en RecetasQuery
+    /// <summary>
+    /// Obtener recetas paginadas y ordenadas.
+    /// </summary>
+    /// <param name="page">El número de página (depende de pageSize, la primera es 0).</param>
+    /// <param name="pageSize">La cantidad de recetas por página.</param>
+    /// <param name="sort_by">"fav": Ordenar por cantidad de reviews. "createDate": Ordenar por fecha.</param>
+    [HttpGet("order")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType<List<RecetaDto>>(200)]
+    public async Task<ActionResult<List<RecetaDto>>> GetOrderRecetas([FromQuery] int page = 0, [FromQuery] int pageSize = 10, [FromQuery] QueryOrdersRecetas sort_by = QueryOrdersRecetas.Fav)
+    {
+        List<RecetaDto> recetas = await _recetaService.GetOrderRecetas(page, pageSize, sort_by);
 
-            try
-            {
-                List<RecetaDto> recetas = await _recetaService.GetAllRecetas();
+        return Ok(recetas);
+    }
 
-                return Ok(recetas);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al traer recetas desde DB");
-                return StatusCode(404);
-            }
-        }
-        [HttpGet(":id")]
-        public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
+    /// <summary>
+    /// Obtener una lista de todas las recetas, con la posibilidad de filtrarlas.
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType<List<RecetaDto>>(200)]
+    public async Task<ActionResult<List<RecetaDto>>> GetAllRecetas([FromQuery] RecetasQuery queryParemeters)
+    {
+        List<RecetaDto> recetas = await _recetaService.GetAll(queryParemeters);
+
+        return Ok(recetas);
+    }
+
+    /// <summary>
+    /// Obtener una recetas según su id.
+    /// </summary>
+    [HttpGet(":id")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType<RecetaDto>(200)]
+    public async Task<ActionResult<RecetaDto>> GetRecetaByID(int ID)
+    {
+        RecetaDto receta = await _recetaService.GetByID(ID);
+
+        return Ok(receta);
+    }
+
+    /// <summary>
+    /// Crear una receta nueva.
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType<Receta>(200)]
+    [SwaggerRequestExample(typeof(NewRecetaDTO), typeof(RecetaRequestExample))]
+    public async Task<ActionResult<Receta>> CreateReceta([FromBody] NewRecetaDTO recetaData)
+    {
+        try
         {
-            try
-            {
-                var receta = await _recetaService.GetRecetaByID(ID);
-                if (receta == null)
+            Receta postReceta = await _recetaService.Create(
+                new Receta
                 {
-                    return NotFound();
+                    Nombre = recetaData.receta.nombre,
+                    ImageUrl = recetaData.receta.imageUrl,
+                    Descripcion = recetaData.receta.descripcion
                 }
-                return Ok(receta);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al traer la receta, comprobar que el ID sea correcto");
-                return StatusCode(500);
-            }
-        }
-        [HttpPost]
-        [SwaggerRequestExample(typeof(NewRecetaDTO), typeof(RecetaRequestExample))]
-        public async Task<ActionResult<Receta>> CreateReceta([FromBody] NewRecetaDTO recetaData)
-        {
-            try
-            {
-                Receta postReceta = await _recetaService.CreateReceta(
-                    new Receta
-                    {
-                        Nombre = recetaData.receta.nombre,
-                        ImageUrl = recetaData.receta.imageUrl,
-                        Descripcion = recetaData.receta.descripcion
-                    }
-                    , recetaData.list_c, recetaData.user_id);
+                , recetaData.list_c, recetaData.user_id);
 
-                //te retorna el codigo 201 -created- cuando se crea
-                //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id
-                return CreatedAtAction(nameof(CreateReceta), new { id = postReceta.RecetaID }, postReceta);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al crear la receta en DB");
-                return StatusCode(500);
-            }
+            //te retorna el codigo 201 -created- cuando se crea
+            //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id
+            return CreatedAtAction(nameof(CreateReceta), new { id = postReceta.RecetaID }, postReceta);
         }
-        [HttpDelete("{ID}")]
-        public async Task<ActionResult<RecetaDto>> DeleteReceta(int ID)
+        catch (Exception ex)
         {
-            try
-            {
-                var receta = await _recetaService.GetRecetaByID(ID);
-                if (receta == null)
-                {
-                    return NotFound();
-                }
-                bool deleted = await _recetaService.DeleteReceta(ID);
-                if (!deleted)
-                {
-                    return StatusCode(500, $"Error al borrar la receta con ID {ID}");
-                }
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al borrar la receta en DB");
-                return StatusCode(500, "Error no específico, contactar a un administrador");
-            }
+            _logger.LogError(ex, "Error al crear la receta en DB");
+            return StatusCode(500);
         }
+    }
+
+    /// <summary>
+    /// Eliminar una receta según su id.
+    /// </summary>
+    /// <param name="ID">El id de la receta.</param>
+    [HttpDelete("{ID}")]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType(200)]
+    public async Task<ActionResult> DeleteReceta(int ID)
+    {
+        bool deleted = await _recetaService.DeleteById(ID);
+
+        return Ok();
     }
 }

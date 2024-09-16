@@ -15,8 +15,8 @@ public record RecetasQuery : PaginatedQuery
 
     /// <summary>
     /// La cantidad máxima de reviews a incluir en cada receta.
-    /// Debe ser mayor que 0.
+    /// Debe ser mayor que o igual a 0.
     /// </summary>
     [Range(0, int.MaxValue)]
-    public int? CantReviews { get; init; }
+    public int CantReviews { get; init; } = 1;
 }
