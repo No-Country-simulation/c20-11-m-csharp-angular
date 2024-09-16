@@ -163,48 +163,57 @@ namespace Tastys.BLL.Services.RecetaCRUD
                 throw new ApplicationException($"Algo falló al actualizar la receta, {ex}");
             }
         }
-        public async Task<Receta> CreateReceta(Receta receta, List<string> list_c, int userId)
+        public async Task<Receta> CreateReceta(Receta receta, List<string> list_c, string auth_id)
         {
             try
             {
-                Usuario userE = _Context.Usuarios.FirstOrDefault(u => u.UsuarioID == userId);
+                Usuario userE = await _Context.Usuarios.FirstOrDefaultAsync(u => u.Auth0Id == auth_id);
+
+                if (userE == null)
+                {
+                    int.TryParse(auth_id,out int usuarioId);
+
+                    userE = await _Context.Usuarios.FirstOrDefaultAsync(u => u.UsuarioID == usuarioId);
+
+                    if (userE == null || userE.IsDeleted != null)
+                    {
+                        throw new Exception("Usuario no encontrado o eliminado.");
+                    }
+                }
 
                 Receta newReceta = new Receta
                 {
                     Nombre = receta.Nombre,
                     Descripcion = receta.Descripcion,
-                    ImageUrl = receta.ImageUrl
+                    ImageUrl = receta.ImageUrl,
+                    Usuario = userE
                 };
 
-                if (userE != null)
+                foreach (var categoria in list_c)
                 {
+                    Categoria categoriaE = await _Context.Categorias.FirstOrDefaultAsync(c => c.Nombre == categoria.ToLower());
 
-                    foreach (var categoria in list_c)
+                    if (categoriaE == null)
                     {
-                        Categoria categoriaE = _Context.Categorias.FirstOrDefault(c => c.Nombre == categoria.ToLower());
-
-                        if (categoriaE == null)
-                        {
-                            throw new Exception($"{categoria} no existe");
-                        }
-                        newReceta.Categorias.Add(categoriaE);
-
+                        throw new Exception($"La categoría '{categoria}' no existe.");
                     }
-
-                    newReceta.Usuario = userE;
-
+                    newReceta.Categorias.Add(categoriaE);
                 }
 
                 _Context.Recetas.Add(newReceta);
+
                 await _Context.SaveChangesAsync();
+
                 Console.WriteLine("RECETA CREADA!");
+
                 return newReceta;
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("Algo falló al crear la receta", ex);
+                throw new ApplicationException("Algo falló al crear la receta" + ex.Message);
             }
         }
+
         public async Task<bool> DeleteReceta(int ID)
         {
             try

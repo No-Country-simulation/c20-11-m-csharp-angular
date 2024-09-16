@@ -4,7 +4,7 @@ public class NewRecetaDTO
 {
     public RecetaDtoDetailPost receta { get; set; }
     public List<string> list_c { get; set; }
-    public int user_id { get; set; }
+    public string? user_id { get; set; }
 }
 
 public class RecetaDtoDetailPost
@@ -27,7 +27,7 @@ public class RecetaRequestExample : IExamplesProvider<NewRecetaDTO>
                 imageUrl = "example.com"
             },
             list_c = new List<string> { "Postres" },
-            user_id = 1
+            user_id = "123"
         };
     }
 }

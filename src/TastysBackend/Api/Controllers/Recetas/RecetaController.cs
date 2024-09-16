@@ -4,6 +4,7 @@ using Tastys.BLL.Services.RecetaCRUD;
 using Tastys.BLL;
 using Tastys.Domain;
 using Microsoft.CodeAnalysis.Host.Mef;
+using Tastys.API.Middlewares;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Tastys.API.Controllers.Recetas
@@ -22,18 +23,18 @@ namespace Tastys.API.Controllers.Recetas
             _recetaService = recetaService;
         }
         [HttpGet("order")]
-        public async Task<ActionResult<List<RecetaDto>>> GetOrderRecetas([FromQuery] int page=0,[FromQuery] int pageSize = 10,[FromQuery] QueryOrdersRecetas sort_by = QueryOrdersRecetas.Fav)
+        public async Task<ActionResult<List<RecetaDto>>> GetOrderRecetas([FromQuery] int page = 0, [FromQuery] int pageSize = 10, [FromQuery] QueryOrdersRecetas sort_by = QueryOrdersRecetas.Fav)
         {
             try
             {
-                List<RecetaDto> recetas = await _recetaService.GetOrderRecetas(page, pageSize,sort_by);
-                
+                List<RecetaDto> recetas = await _recetaService.GetOrderRecetas(page, pageSize, sort_by);
+
                 return Ok(recetas);
-            
+
             }
             catch (System.Exception ex)
             {
-                _logger.LogError("Error al traer recetas ordenadas: "+ex);
+                _logger.LogError("Error al traer recetas ordenadas: " + ex);
                 return StatusCode(500);
                 throw;
             }
@@ -76,7 +77,40 @@ namespace Tastys.API.Controllers.Recetas
         }
         [HttpPost]
         [SwaggerRequestExample(typeof(NewRecetaDTO), typeof(RecetaRequestExample))]
+        [CheckToken]
+        [CheckPermissions("user:user")]
         public async Task<ActionResult<Receta>> CreateReceta([FromBody] NewRecetaDTO recetaData)
+        {
+            try
+            {
+                if (HttpContext.Items["userdata"] is not UserDataToken userData)
+                {
+                    return BadRequest("No se encontró información del usuario.");
+                }
+                Receta postReceta = await _recetaService.CreateReceta(
+                    new Receta
+                    {
+                        Nombre = recetaData.receta.nombre,
+                        ImageUrl = recetaData.receta.imageUrl,
+                        Descripcion = recetaData.receta.descripcion
+                    }
+                    , recetaData.list_c, userData.authId);
+
+                //te retorna el codigo 201 -created- cuando se crea
+                //y ademas te dice en el header, che, encontras esta receta en la ruta /recetas/:id
+                return CreatedAtAction(nameof(CreateReceta), new { id = postReceta.RecetaID }, postReceta);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al crear la receta en DB");
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost("admin")]
+        [SwaggerRequestExample(typeof(NewRecetaDTO), typeof(RecetaRequestExample))]
+        [CheckToken]
+        [CheckPermissions("user:admin")]
+        public async Task<ActionResult<Receta>> CreateRecetaAdmin([FromBody] NewRecetaDTO recetaData)
         {
             try
             {
@@ -96,7 +130,7 @@ namespace Tastys.API.Controllers.Recetas
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear la receta en DB");
-                return StatusCode(500);
+                return StatusCode(404,ex);
             }
         }
         [HttpDelete("{ID}")]
