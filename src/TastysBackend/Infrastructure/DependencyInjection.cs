@@ -11,9 +11,15 @@ public static class DependencyInjection
     {
         services.AddDbContext<TastysContext>(
             options => options
-            .UseMySql(configuration.GetConnectionString("MySqlConnection"),
-                new MySqlServerVersion(new Version(8, 0, 23)),
-                    b => b.MigrationsAssembly("Infrastructure")));
+                .UseMySql(
+                    configuration.GetConnectionString("MySqlConnection"),
+                    new MySqlServerVersion(new Version(8, 0, 23)),
+                    options =>
+                    {
+                        options.MigrationsAssembly("Infrastructure");
+                        options.EnableStringComparisonTranslations();
+                    })
+                );
 
         services.AddScoped<ITastysContext>(provider => provider.GetRequiredService<TastysContext>());
 

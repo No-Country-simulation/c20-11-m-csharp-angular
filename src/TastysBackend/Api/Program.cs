@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tastys.API.Middlewares;
+using Tastys.BLL;
 using Tastys.BLL.Services;
-using Tastys.BLL.Services.RecetaCRUD;
 using Tastys.BLL.Services.Review;
 using Tastys.Infrastructure;
 
@@ -18,7 +18,7 @@ builder.Services.AddBLLServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddScoped<UserServices>();
 
-builder.Services.AddScoped<RecetaCRUD>();
+builder.Services.AddScoped<IRecetaService, RecetaService>();
 
 //Autenticacion
 builder.Services.AddTransient<IAsyncAuthorizationFilter,CheckToken>();
