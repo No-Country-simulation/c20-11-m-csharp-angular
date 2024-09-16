@@ -9,6 +9,7 @@ import { ChefsComponent } from './vistas/chefs-home/chefs.component';
 import { RecetasDelDiaComponent } from './componentes/recetasdeldia-home/recetasdeldia.component';
 import { DashUserComponent } from './vistas/dash-user/dash-user.component';
 import { RecetasComponent } from './vistas/recetas/recetas.component';
+import { CalificacionStarComponent } from './componentes/calificacion-star/calificacion-star.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavBarComponent } from './componentes/nav-bar/nav-bar.component';
 import { CategoriasComponent } from './componentes/categoria/categoria.component';
@@ -30,7 +31,8 @@ import { LoginButtonComponent } from "./componentes/login-button/login-button.co
     NavBarComponent,
     CategoriasComponent,
     CategoriasHomeComponent,
-    HeaderComponent
+    HeaderComponent,
+    CalificacionStarComponent
   ],
   
   imports: [

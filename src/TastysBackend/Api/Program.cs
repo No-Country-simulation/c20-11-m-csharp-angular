@@ -69,17 +69,23 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
-//CORS para el Cliente
+// CORS para el Cliente
+// Estaría mejor si estuvieran en un appsettings o en las variables de entorno
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:4200")
-                   .AllowAnyMethod()
-                   .AllowAnyHeader()
-                   .AllowCredentials();
-        });
+    builder =>
+    {
+        builder
+            .WithOrigins(
+                "http://localhost:4200",
+                "https://tasty-cliente.web.app",
+                "https://tasty-cliente-staging.web.app"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
 });
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
