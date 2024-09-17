@@ -12,23 +12,13 @@ h2 {
   color: #ff6f3c;
 }
 
+.form {
+  padding: 20px;
+}
+
 .form-group {
-  margin-bottom: 15px;
+  padding: 5px;
 }
-
-.form-group label {
-  font-weight: bold;
-  color: #666;
-}
-
-.form-control {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 5px;
-}
-
 .btn-primary {
   background-color: #f7e4b1;
   border: none;
@@ -41,41 +31,6 @@ h2 {
 
 .btn-primary:hover {
   background-color: #ff8c00;
-}
-
-.custom-tag-input {
-  background-color: #ffebcc;
-  border: 1px solid #ffcc99;
-  border-radius: 4px;
-  padding: 10px;
-  color: #333;
-}
-
-.custom-tag-input input {
-  background-color: #ffcc99;
-  border: none;
-  color: #333;
-  padding: 5px;
-  outline: none;
-}
-
-.custom-tag-input input::placeholder {
-  color: #666;
-}
-
-.custom-tag-input .tag {
-  background-color: #ff9900;
-  color: white;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin-right: 5px;
-  display: inline-block;
-}
-
-.custom-tag-input .tag-remove {
-  color: white;
-  cursor: pointer;
-  margin-left: 5px;
 }
 
 .modal-backdrop {

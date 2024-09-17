@@ -20,6 +20,7 @@ import { CrearRecetaComponent } from './componentes/create-receta/crear-receta.c
 import { LoginButtonComponent } from "./componentes/login-button/login-button.component";
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TagFormComponent } from './componentes/tag-form/tag-form.component';
 
 
 @NgModule({
