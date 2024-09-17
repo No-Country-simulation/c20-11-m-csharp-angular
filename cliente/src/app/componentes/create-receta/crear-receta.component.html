@@ -1,67 +1,95 @@
 <div class="crear-receta-container">
-    <h2>Crea tu Receta</h2>
-    
-    <form (ngSubmit)="onSubmit()" #recetaForm="ngForm">
-      <!-- Nombre -->
-      <div class="form-group">
-        <label for="nombre">Nombre de la receta:</label>
-        <input 
-          type="text" 
-          id="nombre" 
-          name="nombre" 
-          [(ngModel)]="receta.nombre" 
-          required 
-          class="form-control" />
-      </div>
-      
-      <!-- Descripción -->
-      <div class="form-group">
-        <label for="descripcion">Descripción:</label>
-        <textarea 
-          id="descripcion" 
-          name="descripcion" 
-          [(ngModel)]="receta.descripcion" 
-          required 
-          class="form-control">
-        </textarea>
-      </div>
-      
-      <!-- URL de Imagen -->
-      <div class="form-group">
-        <label for="imageUrl">URL de la Imagen:</label>
-        <input 
-          type="text" 
-          id="imageUrl" 
-          name="imageUrl" 
-          [(ngModel)]="receta.imageUrl" 
-          required 
-          class="form-control" />
-      </div>
+  <h2>Crea tu Receta</h2>
   
-      <!-- Categoría -->
-      <div class="form-group">
-        <label for="categoria">Categoría:</label>
-        <select 
-          id="categoria" 
-          name="categoria" 
-          [(ngModel)]="list_c[0]" 
-          class="form-control" 
-          required>
-          <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
-        </select>
-      </div>
-      
-      <!-- ID de Usuario -->
+  <form (ngSubmit)="onSubmit()" #recetaForm="ngForm">
+    <!-- Nombre -->
+    <div class="form-group">
+      <label for="nombre">Nombre de la receta:</label>
       <input 
-        type="hidden" 
-        name="user_id" 
-        [(ngModel)]="user_id" 
+        type="text" 
+        id="nombre" 
+        name="nombre" 
+        [(ngModel)]="receta.nombre" 
+        required 
         class="form-control" />
-      
-      <!-- Botón de Enviar -->
-      <button type="submit" class="btn btn-primary" [disabled]="!recetaForm.form.valid">
-        Crear Receta
-      </button>
-    </form>
-  </div>
-  
+    </div>
+    
+    <!-- Descripción -->
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <textarea 
+        id="descripcion" 
+        name="descripcion" 
+        [(ngModel)]="receta.descripcion" 
+        required 
+        class="form-control">
+      </textarea>
+    </div>
+    
+    <!-- URL de Imagen -->
+    <div class="form-group">
+      <label for="imageUrl">URL de la Imagen:</label>
+      <input 
+        type="text" 
+        id="imageUrl" 
+        name="imageUrl" 
+        [(ngModel)]="receta.imageUrl" 
+        required 
+        class="form-control" />
+    </div>
+    
+    <!-- Ingredientes -->
+    <div class="form-group">
+      <label>Ingredientes:</label>
+      <tag-input class="custom-tag-input" [(ngModel)]="items" 
+        [identifyBy]="'id'" [displayBy]="'displayName'"
+        (onAdd)="onAdd($event)" (onRemove)="onRemove($event)"
+        [ngModelOptions]="{standalone: true}">
+      </tag-input>
+    </div>
+
+    
+    <!-- Modal Ingredientes -->
+    <div *ngIf="showModal" class="modal-backdrop">
+      <div class="modal-content">
+        <h3>Agregar Ingrediente</h3>
+    
+        <label for="name_input">Ingrediente:</label>
+        <input type="text" id="name_input" name="name_input" [(ngModel)]="name_input" placeholder="Nombre del ingrediente">
+        
+        <label for="cantidad_input">Cantidad:</label>
+        <input type="text" id="cantidad_input" name="cantidad_input" [(ngModel)]="cantidad_input" placeholder="Cantidad">
+    
+        <div class="modal-buttons">
+          <button type="button" (click)="addIngrediente()">Agregar</button>
+          <button type="button" (click)="closeModal()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Categoría -->
+    <div class="form-group">
+      <label for="categoria">Categoría:</label>
+      <select 
+        id="categoria" 
+        name="categoria" 
+        [(ngModel)]="list_c[0]" 
+        class="form-control" 
+        required>
+        <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
+      </select>
+    </div>
+    
+    <!-- ID de Usuario -->
+    <input 
+      type="hidden" 
+      name="user_id" 
+      [(ngModel)]="user_id" 
+      class="form-control" />
+    
+    <!-- Botón de Enviar -->
+    <button type="submit" class="btn btn-primary" [disabled]="!recetaForm.form.valid">
+      Crear Receta
+    </button>
+  </form>
+</div>
