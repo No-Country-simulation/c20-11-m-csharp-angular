@@ -1,13 +1,14 @@
 <div class="body-card">
   <div class="flex-container-categoria">
     <!-- Recorremos cada categoría y la mostramos en una tarjeta -->
-    <div class="card-categoria-interna" *ngFor="let categoria of categorias">
-      <!-- Reemplazamos el src y el nombre con los datos de la categoría -->
+    <div 
+      class="card-categoria-interna" 
+      *ngFor="let categoria of categorias" 
+      [routerLink]="['/resultados']" 
+      [queryParams]="{ categoriaId: categoria.categoriaID }"
+    >
       <img [src]="categoria.imgUrl" alt="{{ categoria.nombre }}" />
       <p>{{ categoria.nombre }}</p>
     </div>
   </div>
 </div>
-
-
-

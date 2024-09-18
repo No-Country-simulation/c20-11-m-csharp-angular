@@ -18,6 +18,8 @@ import { HeaderComponent } from './componentes/header/header.component';
 import { RedirectLoginComponent } from './componentes/redirect-login/redirect-login.component';
 import { CrearRecetaComponent } from './componentes/create-receta/crear-receta.component';
 import { LoginButtonComponent } from "./componentes/login-button/login-button.component";
+import { VistaProfileComponent } from './componentes/vista-profile/vista-profile.component';
+import { VistaListaRecetasComponent } from './componentes/vista-lista-recetas/vista-lista-recetas.component';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { LoginButtonComponent } from "./componentes/login-button/login-button.co
     CategoriasComponent,
     CategoriasHomeComponent,
     HeaderComponent,
-    CalificacionStarComponent
+    CalificacionStarComponent,
+    VistaProfileComponent,
+    VistaListaRecetasComponent,
   ],
   
   imports: [
@@ -47,6 +51,7 @@ import { LoginButtonComponent } from "./componentes/login-button/login-button.co
         { path: 'categorias', component: CategoriasHomeComponent },
         { path: 'redirect', component: RedirectLoginComponent },
         { path: 'create', component: CrearRecetaComponent },
+        { path: 'resultados', component: VistaListaRecetasComponent },
     ]),
     LoginButtonComponent
     
