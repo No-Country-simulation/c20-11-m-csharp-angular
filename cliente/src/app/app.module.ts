@@ -20,7 +20,8 @@ import { CrearRecetaComponent } from './componentes/create-receta/crear-receta.c
 import { LoginButtonComponent } from "./componentes/login-button/login-button.component";
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TagFormComponent } from './componentes/tag-form/tag-form.component';
+import { VistaProfileComponent } from './componentes/vista-profile/vista-profile.component';
+import { VistaListaRecetasComponent } from './componentes/vista-lista-recetas/vista-lista-recetas.component';
 
 
 @NgModule({
@@ -35,7 +36,9 @@ import { TagFormComponent } from './componentes/tag-form/tag-form.component';
     CategoriasComponent,
     CategoriasHomeComponent,
     HeaderComponent,
-    CalificacionStarComponent
+    CalificacionStarComponent,
+    VistaProfileComponent,
+    VistaListaRecetasComponent,
   ],
   
   imports: [
@@ -52,6 +55,7 @@ import { TagFormComponent } from './componentes/tag-form/tag-form.component';
         { path: 'categorias', component: CategoriasHomeComponent },
         { path: 'redirect', component: RedirectLoginComponent },
         { path: 'create', component: CrearRecetaComponent },
+        { path: 'resultados', component: VistaListaRecetasComponent },
     ]),
     LoginButtonComponent,
     

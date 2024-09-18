@@ -1,0 +1,38 @@
+<app-header></app-header>
+<div class="row titulo-receta">
+    <div class="col">
+      <h1> {{ categoriaNombre  }}</h1>
+    </div>
+  </div>
+  
+  <div class="body-card-lista-receta">
+    <div *ngIf="isLoading" class="body-card-lista-receta-interna">
+      <div class="row lista-receta-fila">
+        <div class="col-txt">
+          <p>Cargando recetas...</p>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="!isLoading && recetas.length === 0" class="body-card-lista-receta-interna">
+      <div class="row lista-receta-fila">
+        <div class="col-txt">
+          <p>No se encontraron recetas para esta categoría.</p>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="!isLoading && recetas.length > 0" class="body-card-lista-receta-interna">
+      <div class="row lista-receta-fila" *ngFor="let receta of recetas">
+        <div class="col-txt">
+          <h1>{{ receta.nombre }}</h1>
+          <p>{{ receta.descripcion }}</p>
+        </div>
+  
+        <div class="col-img">
+          <img [src]="receta.imageUrl" alt="{{ receta.nombre }}" />
+        </div>
+      </div>
+    </div>
+  </div>
+  

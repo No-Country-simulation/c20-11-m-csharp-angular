@@ -1,20 +1,21 @@
-<div class="body-card" *ngIf="!isLoading && recetasDelDia.length > 0">
-  <h2 class="recetas-del-dia">RECETA DEL DÍA</h2>
+<div class="body-card">
   <div class="body-card-interna">
-    
-    <div class="image-container">
-    
+    <div class="body-card-interna-content">
       <img [src]="recetasDelDia[0].imageUrl" id="imgRecetaDelDia" alt="Imagen de la receta del día" />
     </div>
 
-    <div class="content-container ">
-      <div class="titleRecetaDia">    
-        <h3>Preparación</h3>
-        <app-calificacion-star></app-calificacion-star>      
-      </div>
-      
+    <div class="body-card-interna-content">
+      <h5 id="miTitulo">Ingredientes</h5>
+      <ul>
+        <li *ngFor="let ingrediente of recetasDelDia[0].ingredientes">
+          {{ ingrediente.nombre }} - {{ ingrediente.cantidad }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="body-card-interna-content">
+      <h5>{{ recetasDelDia[0].nombre }}</h5>
       <p>{{ recetasDelDia[0].descripcion }}</p>
-      
     </div>
   </div>
 </div>

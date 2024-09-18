@@ -14,16 +14,15 @@ export class RecetasDelDiaComponent implements OnInit {
   constructor(private recetasService: RecetasService) {}
 
   ngOnInit(): void {
-    // Llamada para obtener las recetas ordenadas por calificación
     this.recetasService.getRecetasOrdenadas().subscribe(
       (data: Receta[]) => {
+        console.log('Datos recibidos en el componente:', data); // Agrega este log
         this.recetasDelDia = data;
-        this.isLoading = false; // Desactiva el estado de carga
+        this.isLoading = false;
       },
       (error) => {
         console.error('Error al obtener recetas:', error);
-        this.isLoading = false; // Desactiva el estado de carga incluso en caso de error
+        this.isLoading = false;
       }
     );
-  }
-}
+  }}
