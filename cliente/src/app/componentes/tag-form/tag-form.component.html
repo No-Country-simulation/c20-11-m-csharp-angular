@@ -1,0 +1,16 @@
+<div>
+    <label>Cateogirias:</label>
+    <tag-input 
+        class="custom-tag-input"
+        [(ngModel)]="items"
+        (onAdd)="onAdd($event)" 
+        (onRemove)="onRemove($event)"
+        [ngModelOptions]="{standalone: true}"
+        >
+        
+        <tag-input-dropdown 
+          [autocompleteItems]="filteredCategorias">
+        </tag-input-dropdown>
+    </tag-input>
+  </div>
+  

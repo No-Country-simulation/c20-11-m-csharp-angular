@@ -176,7 +176,9 @@ public class RecetaService : IRecetaService
             Descripcion = receta.Descripcion,
             ImageUrl = receta.ImageUrl,
             Usuario = userE,
-            TiempoCoccion = receta.TiempoCoccion
+            TiempoCoccion = receta.TiempoCoccion,
+            Categorias = new List<Categoria>(),
+            Ingredientes = new List<Ingrediente>()
         };
 
         foreach (var categoria in list_c)
@@ -197,6 +199,7 @@ public class RecetaService : IRecetaService
 
             if (ingredienteE == null)
             {
+                
                 Ingrediente newI = new Ingrediente
                 {
                     Nombre = ingrediente.Nombre,
