@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { API_ENDPOINT } from '../../../../vars';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../redirect-login/redirect-login.component';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-redirect-register',
   templateUrl: './redirect-register.component.html',
-  styleUrl: './redirect-register.component.css'
+  styleUrl: './redirect-register.component.css',
+  standalone:true,
+  imports:[RouterOutlet, RouterLink, RouterLinkActive,CommonModule],
 })
 export class RedirectRegisterComponent implements OnInit {
   title = 'register';
@@ -15,6 +18,7 @@ export class RedirectRegisterComponent implements OnInit {
   isLoading: boolean = true;
   code: string | null = null;
   showRedirectButton: boolean = false;
+  showIsRegistered: boolean = false;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -40,6 +44,7 @@ export class RedirectRegisterComponent implements OnInit {
       error: (e) => {
         console.error('Error al obtener los datos de la API:', e);
         this.showRedirectButton = true;
+        this.showIsRegistered = true;
       },
       complete: () => {
         console.info('Solicitud completada');
