@@ -16,7 +16,7 @@
   </ul>
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <app-login-button class="nav-link" *ngIf="!isAuthenticated"/>
+      <app-login-button *ngIf="!isAuthenticated"/>
     </li>
     <li class="nav-item">
       <a class="nav-link" *ngIf="isAuthenticated" routerLink="/create" routerLinkActive="active">Crear Receta</a>

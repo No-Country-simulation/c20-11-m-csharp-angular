@@ -1,23 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { API_ENDPOINT } from '../../../../vars';
-import { CommonModule } from '@angular/common';
-
-export interface User {
-  name: string;
-  email: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { User } from '../redirect-login/redirect-login.component';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-redirect-login',
-  standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive,CommonModule],
-  templateUrl: './redirect-login.component.html',
-  styleUrls: ['./redirect-login.component.css']
+  selector: 'app-redirect-register',
+  templateUrl: './redirect-register.component.html',
+  styleUrl: './redirect-register.component.css'
 })
-export class RedirectLoginComponent implements OnInit {
-  title = 'redirect';
+export class RedirectRegisterComponent implements OnInit {
+  title = 'register';
   user: User | null = null;
   isLoading: boolean = true;
   code: string | null = null;
@@ -38,7 +31,7 @@ export class RedirectLoginComponent implements OnInit {
   }
 
   loginUser(): void {
-    this.http.post(`${API_ENDPOINT}/users/login?code=${this.code}`, null, { withCredentials: true }).subscribe({
+    this.http.post(`${API_ENDPOINT}/users/register?code=${this.code}`, null, { withCredentials: true }).subscribe({
       next: (data: any) => {
         console.log('Datos completos:', data);
         localStorage.setItem("nombre", data.nombre);
