@@ -23,7 +23,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VistaProfileComponent } from './componentes/vista-profile/vista-profile.component';
 import { VistaListaRecetasComponent } from './componentes/vista-lista-recetas/vista-lista-recetas.component';
 import { BusquedaComponent } from './componentes/busqueda/busqueda.component';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
+import { RedirectRegisterComponent } from './componentes/redirect-register/redirect-register.component'; 
 
 
 @NgModule({
@@ -41,7 +42,7 @@ import { FormsModule } from '@angular/forms';
     CalificacionStarComponent,
     VistaProfileComponent,
     VistaListaRecetasComponent,
-    BusquedaComponent,
+    BusquedaComponent
   ],
   
   imports: [
@@ -58,6 +59,7 @@ import { FormsModule } from '@angular/forms';
         { path: 'user', component: DashUserComponent },
         { path: 'categorias', component: CategoriasHomeComponent },
         { path: 'redirect', component: RedirectLoginComponent },
+        { path: 'redirect/register', component: RedirectRegisterComponent },
         { path: 'create', component: CrearRecetaComponent },
         { path: 'resultados', component: VistaListaRecetasComponent },
     ]),
