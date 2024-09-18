@@ -11,11 +11,7 @@ import { map } from 'rxjs/operators';
 })
 export class RecetasService {
   private apiUrl = `${API_ENDPOINT}/api/receta`;
-<<<<<<< HEAD
-  private apiUrlBusqueda = `${API_ENDPOINT}/api/receta`; // Endpoint para búsqueda
-=======
   private apiUrlBusqueda = `${API_ENDPOINT}/api/receta`;
->>>>>>> 9b5ead52ffd11f6ead9d80c1ed3810f1c3701a65
   private apiUrlOrdenadas = `${API_ENDPOINT}/api/receta/order`;
   private apiUrlPorCategoria = `${API_ENDPOINT}/api/categorias`;
 
