@@ -1,6 +1,6 @@
 .navBar-main {
     width: 95%;
-    background-color: transparent; /* Cambiamos para que no interfiera */
+    background-color: transparent; 
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -37,25 +37,25 @@
   }
   
   .nav-link.active, .nav-link:hover {
-    background-color: #f5a623; /* Color de fondo cuando está activo */
-    color: #fff; /* Color de texto cuando está activo */
+    background-color: #f5a623; 
+    color: #fff; 
   }
   
   .nav-link img {
-    width: 25px; /* Tamaño de la imagen */
+    width: 25px; 
     height: 25px;
-    margin-right: 10px; /* Espacio entre la imagen y el texto */
+    margin-right: 10px; 
     border-radius: 50%;
     object-fit: cover;
   }
   
 
   .nav-tabs {
-    border-bottom: none; /* Elimina el borde inferior de la lista de navegación */
+    border-bottom: none; 
   }
   
   .nav-link {
-    border: none; /* Elimina cualquier borde por defecto en los enlaces */
-    box-shadow: none; /* Si hay sombra por defecto, también la quitamos */
+    border: none; 
+    box-shadow: none;
   }
   

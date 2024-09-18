@@ -37,6 +37,5 @@ export class LoginButtonComponent {
         audience: `${AUDIENCE}`,
       });
     window.location.replace(url);
-    alert('Login');
   }
 }
