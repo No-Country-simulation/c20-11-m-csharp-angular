@@ -1,3 +1,61 @@
-.login-button{
+.navBar-main {
+    width: 95%;
+    background-color: transparent; /* Cambiamos para que no interfiera */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: #333;
+    margin: 0 auto;
+    padding: 1rem 0;
+  }
+  
+  .nav-tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    background-color: #e7e7e7;
+    border-radius: 50px;
     text-decoration: none;
-}
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .nav-link.active, .nav-link:hover {
+    background-color: #f5a623; /* Color de fondo cuando está activo */
+    color: #fff; /* Color de texto cuando está activo */
+  }
+  
+  .nav-link img {
+    width: 25px; /* Tamaño de la imagen */
+    height: 25px;
+    margin-right: 10px; /* Espacio entre la imagen y el texto */
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+
+  .nav-tabs {
+    border-bottom: none; /* Elimina el borde inferior de la lista de navegación */
+  }
+  
+  .nav-link {
+    border: none; /* Elimina cualquier borde por defecto en los enlaces */
+    box-shadow: none; /* Si hay sombra por defecto, también la quitamos */
+  }
+  

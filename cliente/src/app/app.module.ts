@@ -20,6 +20,8 @@ import { CrearRecetaComponent } from './componentes/create-receta/crear-receta.c
 import { LoginButtonComponent } from "./componentes/login-button/login-button.component";
 import { VistaProfileComponent } from './componentes/vista-profile/vista-profile.component';
 import { VistaListaRecetasComponent } from './componentes/vista-lista-recetas/vista-lista-recetas.component';
+import { BusquedaComponent } from './componentes/busqueda/busqueda.component';
+import { FormsModule } from '@angular/forms'; 
 
 
 @NgModule({
@@ -37,12 +39,14 @@ import { VistaListaRecetasComponent } from './componentes/vista-lista-recetas/vi
     CalificacionStarComponent,
     VistaProfileComponent,
     VistaListaRecetasComponent,
+    BusquedaComponent,
   ],
   
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     RouterModule.forRoot([
         { path: '', component: HomeComponent },
         { path: 'recetasdeldia', component: RecetasDelDiaComponent },
