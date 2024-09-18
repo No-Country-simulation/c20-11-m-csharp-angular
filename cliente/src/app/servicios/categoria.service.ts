@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CategoriasService {
-  private apiUrl = `${API_ENDPOINT}api/categorias/all?page=0&pageSize=100`;
+  private apiUrl = `${API_ENDPOINT}/api/categorias/all?page=0&pageSize=100`;
 
   constructor(private http: HttpClient) {}
 

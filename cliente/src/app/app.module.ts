@@ -18,6 +18,8 @@ import { HeaderComponent } from './componentes/header/header.component';
 import { RedirectLoginComponent } from './componentes/redirect-login/redirect-login.component';
 import { CrearRecetaComponent } from './componentes/create-receta/crear-receta.component';
 import { LoginButtonComponent } from "./componentes/login-button/login-button.component";
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VistaProfileComponent } from './componentes/vista-profile/vista-profile.component';
 import { VistaListaRecetasComponent } from './componentes/vista-lista-recetas/vista-lista-recetas.component';
 import { BusquedaComponent } from './componentes/busqueda/busqueda.component';
@@ -44,6 +46,8 @@ import { FormsModule } from '@angular/forms';
   
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    CommonModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
@@ -57,7 +61,7 @@ import { FormsModule } from '@angular/forms';
         { path: 'create', component: CrearRecetaComponent },
         { path: 'resultados', component: VistaListaRecetasComponent },
     ]),
-    LoginButtonComponent
+    LoginButtonComponent,
     
 ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
