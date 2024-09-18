@@ -9,6 +9,14 @@
   justify-content: space-between;
 }
 
+
+.top30 {
+  padding-top: 30px;
+}
+
+.bot30{
+  margin-bottom: 30px;
+}
 .home-header {
   width: 95%;
   height: 250px;
@@ -27,68 +35,9 @@
   margin: 0 auto;
 }
 
-/* .body-card {
-  width: 95%;
-  background-color: rgb(255, 235, 163, 0.3);
-  color: #333;
-  padding: 20px;
-  margin: 0 auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-.body-card-interna {
-  background-color: red;
-  height: auto;
-  width: 100%;
-  padding: 15px;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  display: flex;
-  align-items: flex-start;
-}
-
-.image-container {
-  flex: 0 0 400px;
-  margin-right: 15px;
-}
-
-.image-container img {
-  width: 100%;
-  width: 30vw;
-  min-height: 220px;
-  margin: 30px;
-  border-radius: 8px;
-  object-fit: cover;
-
-  
-}
-
-.content-container {
-  flex: 1; 
-  height: 40vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding:30px;
-}
-
-.content-container h3 {
-  margin: 0 0 10px 0;
-}
-
-.content-container p {
-  margin: 0;
-  overflow: hidden;
-  overflow-y:scroll;
-} */
-
-
 .body-card {
   width: 95%;
-  background-color: rgb(255, 235, 163, 0.3);
+  background-color:#e7e7e7;
   color: #333;
   padding: 20px;
   margin: 0 auto 0 auto;
@@ -97,12 +46,12 @@
 }
 
 .body-card-interna {
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   height: 350px;
-  padding: 15px;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  padding: 0px;
+  margin-top: 0px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  /* border-radius: 8px; */
   text-align: center;
   display: flex;
 }
@@ -184,7 +133,7 @@ img {
   height: 15.6rem;
   border-radius: 10px;
   border-style: solid;
-  border-color: rgb(248, 248, 147);
+  border-color: rgb(255, 255, 255);
   margin: 10px;
   padding: 20px;
 }
@@ -265,6 +214,7 @@ img {
 
 .body-card-lista-receta-interna {
   width: 90%;
+  min-height: 270px;
   float: left;
   padding: auto;
   margin: 20px;
