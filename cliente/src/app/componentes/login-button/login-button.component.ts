@@ -22,7 +22,7 @@ export class LoginButtonComponent {
   title = 'login';
 
   // Función que será llamada al hacer clic en el botón
-  handleClick(): void {
+  handleClickLogin(): void {
     localStorage.clear();
     const webAuth = new auth0.WebAuth({
         domain:`${DOMAIN}`,
@@ -33,6 +33,22 @@ export class LoginButtonComponent {
         clientID: `${CLIENT_ID}`,
         responseType: `${RESPONSE_TYPE}`,
         redirectUri: `${REDIRECT_URI}`,
+        scope: `${SCOPE}`,
+        audience: `${AUDIENCE}`,
+      });
+    window.location.replace(url);
+  }
+  handleClickRegister(): void {
+    localStorage.clear();
+    const webAuth = new auth0.WebAuth({
+        domain:`${DOMAIN}`,
+        clientID:`${CLIENT_ID}`
+    })
+
+    let url = webAuth.client.buildAuthorizeUrl({
+        clientID: `${CLIENT_ID}`,
+        responseType: `${RESPONSE_TYPE}`,
+        redirectUri: `${REDIRECT_URI}/register`,
         scope: `${SCOPE}`,
         audience: `${AUDIENCE}`,
       });
