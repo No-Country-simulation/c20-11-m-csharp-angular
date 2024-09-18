@@ -28,6 +28,7 @@ public class UserController : ControllerBase
             }
 
             UsuarioPublicDto usuarioPublicDto = _userService.PostUserAuth0(userData);
+            
 
             return Ok(usuarioPublicDto);
 
@@ -74,7 +75,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpGet]
+    [HttpPost("login")]
     [SetToken]
     [CheckToken]
     [CheckPermissions("user:user")]

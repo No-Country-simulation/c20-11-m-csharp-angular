@@ -15,14 +15,14 @@
 
   </ul>
   <ul class="nav nav-tabs">
-    <li class="nav-link">
-      <app-login-button/>
-    </li>
-    <li >
-      <button class="nav-link" *ngIf="isAuthenticated" (click)="logout()">Logout</button>
+    <li>
+      <app-login-button class="nav-link"  *ngIf="!isAuthenticated"/>
     </li>
     <li class="nav-item">
       <a class="nav-link" *ngIf="isAuthenticated" routerLink="/create" routerLinkActive="active">Crear Receta</a>
+    </li>
+    <li>
+      <button class="nav-link" *ngIf="isAuthenticated" (click)="logout()">Logout</button>
     </li>
   </ul>
 </div>
