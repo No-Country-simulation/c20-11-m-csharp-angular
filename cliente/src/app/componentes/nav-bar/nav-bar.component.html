@@ -9,19 +9,19 @@
     <li class="nav-item">
       <a class="nav-link" routerLink="/categorias" routerLinkActive="active">Categorías</a>
     </li>
-    <!-- <li class="nav-item">
-      <a class="nav-link" routerLink="/chefs" routerLinkActive="active">Chefs</a>
-    </li> -->
+    <li class="nav-item">
+      <app-busqueda></app-busqueda>
+    </li>
 
   </ul>
   <ul class="nav nav-tabs">
-    <li>
-      <app-login-button class="nav-link"  *ngIf="!isAuthenticated"/>
+    <li class="nav-item">
+      <app-login-button class="nav-link" *ngIf="!isAuthenticated"/>
     </li>
     <li class="nav-item">
       <a class="nav-link" *ngIf="isAuthenticated" routerLink="/create" routerLinkActive="active">Crear Receta</a>
     </li>
-    <li>
+    <li class="nav-item">
       <button class="nav-link" *ngIf="isAuthenticated" (click)="logout()">Logout</button>
     </li>
   </ul>
