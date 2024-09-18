@@ -48,6 +48,7 @@
  -->
 
   <app-header></app-header>
+  <app-nav-bar></app-nav-bar>
   <div class="row titulo-receta">
     <div class="col">
       <h1>{{ searchTerm ? searchTerm : categoriaNombre }}</h1>
@@ -71,10 +72,10 @@
       </div>
     </div>
   
-    <div *ngIf="!isLoading && recetas.length > 0" class="body-card-lista-receta-interna">
+    <div *ngIf="!isLoading && recetas.length > 0" class="body-card-lista-receta-interna ">
       <div class="row lista-receta-fila" *ngFor="let receta of recetas">
         <div class="col-txt">
-          <h2>{{ receta.nombre }}</h2>
+          <h2 class="top30">{{ receta.nombre }}</h2>
           <p>{{ receta.descripcion }}</p>
           <ul>
             <li *ngFor="let ingrediente of receta.ingredientes">
@@ -84,7 +85,7 @@
         </div>
   
         <div class="col-img">
-          <img [src]="receta.imageUrl" alt="{{ receta.nombre }}" />
+          <img  [src]="receta.imageUrl" alt="{{ receta.nombre }}" />
         </div>
       </div>
     </div>

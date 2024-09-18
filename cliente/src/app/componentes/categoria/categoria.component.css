@@ -6,8 +6,8 @@
 } */
 
 .card-categoria-interna {
-  border: 2px solid #f5c542; /* Borde amarillo */
-  border-radius: 12px; /* Bordes más redondeados */
+  border: 2px solid #ffffff; 
+  border-radius: 18px; 
   padding: 16px;
   text-align: center;
   flex-grow: 1;
