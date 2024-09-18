@@ -38,19 +38,27 @@ export class RedirectLoginComponent implements OnInit {
   }
 
   loginUser(): void {
-    this.http.post(`${API_ENDPOINT}/users/register?code=${this.code}`, null, { withCredentials: true }).subscribe({
+    this.http.post(`${API_ENDPOINT}/users/login?code=${this.code}`, null, { withCredentials: true }).subscribe({
       next: (data: any) => {
         console.log('Datos completos:', data);
         localStorage.setItem("nombre", data.nombre);
         localStorage.setItem('isAuthenticated', 'true');
-        if (data && data.user) {
-          this.user = data.user;
-        } else {
-          console.warn('La propiedad "user" no está presente en los datos recibidos');
-        }
       },
       error: (e) => {
-        console.error('Error al obtener los datos de la API:', e);
+        this.http.post(`${API_ENDPOINT}/users/register?code=${this.code}`, null, { withCredentials: true }).subscribe({
+          next: (data: any) => {
+            console.log('Datos completos:', data);
+            localStorage.setItem("nombre", data.nombre);
+            localStorage.setItem('isAuthenticated', 'true');
+          },
+          error: (e) => {
+            console.error('Error al obtener los datos de la API:', e);
+          },
+          complete: () => {
+            console.info('Solicitud completada');
+            this.showRedirectButton = true;
+          }
+        });
       },
       complete: () => {
         console.info('Solicitud completada');
