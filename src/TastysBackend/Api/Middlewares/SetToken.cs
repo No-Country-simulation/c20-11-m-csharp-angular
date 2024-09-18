@@ -41,6 +41,7 @@ public class SetToken : Attribute, IAsyncAuthorizationFilter
             ManageToken manageToken = new ManageToken(configuration);
             string code = context.HttpContext.Request.Query["code"];
 
+            Console.WriteLine("Code : " + code);
             if (!string.IsNullOrEmpty(code))
             {
                 RefreshTokenDTO tokenWRT = await manageToken.GetTokenWCode(code);
