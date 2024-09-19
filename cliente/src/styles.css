@@ -74,14 +74,15 @@ ul {
 
 .body-card-interna-content {
   background-color: #ffffff;
-  padding: 20px;
+  padding: 25px;
   margin: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   justify-content: center;
-  width: 90%;
+  width: 100%;
+  
 }
-
+ 
 .image-container,
 .ingredients-container,
 .preparation-container {
@@ -168,8 +169,9 @@ img {
   text-align: center;
   margin: 0.6rem auto;
   padding: 0.8rem;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
+
 }
 
 .card-chefs {
@@ -320,6 +322,14 @@ img {
   justify-content: center;
   width: 90%;
 } */
+
+
+
+
+
+.recdes{
+  font-size:18px
+}
 
 .barra-lateral {
   width: 30vw;
@@ -573,5 +583,14 @@ img {
 
 #derechos-reservados {
   margin-bottom: 0px;
-  text-align: center; /* Centra el texto de derechos reservados */
+  justify-content: end;
+}
+
+#titulo-footer {
+  font-weight: bold;
+  color: orangered;
+}
+
+#anio-footer {
+  font-weight: bolder;
 }

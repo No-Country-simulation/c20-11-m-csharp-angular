@@ -1,0 +1,14 @@
+#nopad {
+    padding:0px;
+
+}
+
+#nopad img{
+    padding:0px;
+    width: 100%;
+}
+
+#recnom{
+    padding-left: 45px;
+    padding-right: 45px;
+}
