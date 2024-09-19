@@ -1,0 +1,55 @@
+
+<app-header></app-header>
+<app-nav-bar></app-nav-bar>
+    <div *ngIf="receta">
+        <div class="row titulo-receta">
+            <div class="col">
+              <h2>MIS CREACIONES</h2>
+            </div>
+          </div>
+          
+          <div class="row body-card-lista-receta">
+            <div class="col-4 profile-izquierda">
+              <img [src]="receta.imageUrl" id="imagenDetallereceta" alt="{{ receta.nombre }}" />
+          
+              <div class="row" id="card-profile-receta-propia">
+                <div class="col-5" id="card-imagen-detalle">
+                  <!-- Puedes ajustar la imagen del chef según lo que quieras mostrar -->
+                  <img src="/assets/chefs.jpg" />
+                </div>
+          
+                <div class="col-6 " id="card-texto">
+                  <h4 class="top15">{{ receta.usuario.nombre }}</h4>
+                  <p>
+                    <!-- {{ receta.usuario.}} -->
+Amante de la cocina y la repostería, me encanta explorar recetas tradicionales y compartir mis hallazgos. 
+                </div>
+              </div>
+            </div>
+          
+            <div class="col-7 text-detalle-receta">
+              <h1>{{ receta.nombre }}</h1>
+              <br />
+              <h4>Ingredientes</h4>
+          
+              <ul>
+                <li *ngFor="let ingrediente of receta.ingredientes">
+                  {{ ingrediente.cantidad }} de {{ ingrediente.nombre }}
+                </li>
+              </ul>
+              <h4>Tiempo de coción</h4>
+              <p>
+                  {{ receta.tiempoCoccion }}  minutos
+              </p>
+              <br />
+              <h4>Preparación.</h4>
+              <p>
+                {{ receta.descripcion }} <!-- Puedes ajustar esto según cómo quieras mostrar la preparación -->
+              </p>
+            </div>
+          </div>
+          
+  </div>
+  <app-footer></app-footer>
+
+  

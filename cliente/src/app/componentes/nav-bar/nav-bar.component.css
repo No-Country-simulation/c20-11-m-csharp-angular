@@ -59,3 +59,32 @@
     box-shadow: none; /* Si hay sombra por defecto, también la quitamos */
   }
   
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa; /* Color de fondo de la navbar, ajusta según tu diseño */
+    padding: 10px;
+  }
+  
+  .home-button {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff; /* Color del texto */
+    background-color: #FFA500; /* Color de fondo amarillo */
+    border-radius: 50%; /* Hace que el botón sea circular */
+    padding: 10px; /* Espacio dentro del botón */
+    font-size: 1rem; /* Tamaño del texto */
+    transition: background-color 0.3s, color 0.3s; /* Transiciones suaves */
+    border: 2px solid #ccc; /* Borde gris alrededor del botón */
+  }
+  
+  .home-button i {
+    margin-right: 8px; /* Espacio entre el icono y el texto */
+  }
+  
+  .home-button:hover {
+    background-color: #FFD700; /* Color de fondo amarillo más claro al pasar el ratón */
+    border-color: #999; /* Borde gris más oscuro al pasar el ratón */
+  }

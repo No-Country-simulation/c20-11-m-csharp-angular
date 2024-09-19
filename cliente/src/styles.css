@@ -20,12 +20,23 @@
 .home-header {
   width: 95%;
   height: 250px;
-  background-color: #000000;
   color: rgb(252, 215, 9);
   display: flex;
-  justify-content: right;
+  justify-content: center;
   margin: 20px auto 0 auto;
-  opacity: 0.4;
+  /* opacity: 0.2; */
+  background-image: url(assets/platoh.jpg);
+  opacity: 0.5;
+
+  background-size: cover; /* Cubre todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-color: #f0f0f0;
+}
+
+.home-header img {
+  width: 30%;
+  z-index: 0;
 }
 
 .navBar-main {
@@ -37,7 +48,7 @@
 
 .body-card {
   width: 95%;
-  background-color:#e7e7e7;
+  background-color: wheat;
   color: #333;
   padding: 20px;
   margin: 0 auto 0 auto;
@@ -435,4 +446,127 @@ img {
   background: url("/assets/platoh.jpg");
   background-size: cover;
   background-position: center;
+}
+.profile-izquierda {
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+}
+
+#profileIzquierdaImg {
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 300px;
+}
+
+#profileIzquierdaTxt {
+  font-size: 1.3rem;
+  padding: 10px;
+  text-align: justify;
+}
+
+.card-mis-creaciones {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  border: solid;
+  border-color: rgb(248, 248, 147);
+  height: 20vh;
+  margin-top: 20px;
+  max-width: 100%;
+}
+
+.card-mis-creaciones > img {
+  width: 30%;
+  height: 100%;
+  margin: 15px 15px 15px 15px;
+  padding: 5px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.card-mis-creaciones > p {
+  text-align: justify;
+}
+
+#imagenDetallereceta {
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 30px;
+  Object-fit : cover;
+  max-height: 600px;
+}
+
+#card-profile-receta-propia {
+  border: solid;
+  border-radius: 10px;
+  border-color: rgb(248, 248, 147);
+  margin: 10px;
+}
+
+.text-detalle-receta {
+  margin: 20px;
+  padding: 20px;
+}
+
+#card-texto {
+  font-size: small;
+  word-wrap: break-word;
+}
+
+#card-imagen-detalle {
+  margin: 5px;
+  padding: 5px;
+}
+
+.top15 {
+  margin-top: 15px;
+}
+
+.linkgen {
+  font-size: 2.5rem; /* Ajusta el tamaño de la fuente */
+  margin-bottom: 10px; /* Espacio debajo del encabezado */
+}
+
+.linkgen a {
+  text-decoration: none; /* Elimina el subrayado por defecto */
+  color: #333; /* Color de texto por defecto, ajusta según tu esquema de colores */
+  transition: color 0.3s; /* Transición suave para el cambio de color */
+}
+
+.linkgen a:hover {
+  color: #FFA500; /* Color naranja al pasar el ratón, ajusta según tu esquema de colores */
+}
+.footer {
+  width: 95%; 
+  height: auto; 
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  margin: 0 auto; 
+  padding: 20px; 
+  background-color: #f8f9fa; 
+}
+
+.footer img {
+  width: 150px;
+  height: auto;
+  max-width: 100%;
+}
+
+.footer h5, .footer p {
+  font-size: small;
+  padding: 10px;
+  text-align: center; /* Centra el texto dentro de los elementos */
+}
+
+#derechos-reservados {
+  margin-bottom: 0px;
+  text-align: center; /* Centra el texto de derechos reservados */
 }
