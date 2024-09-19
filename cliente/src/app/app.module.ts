@@ -24,7 +24,9 @@ import { VistaProfileComponent } from './componentes/vista-profile/vista-profile
 import { VistaListaRecetasComponent } from './componentes/vista-lista-recetas/vista-lista-recetas.component';
 import { BusquedaComponent } from './componentes/busqueda/busqueda.component';
 import { FormsModule } from '@angular/forms';
-import { RedirectRegisterComponent } from './componentes/redirect-register/redirect-register.component'; 
+import { RedirectRegisterComponent } from './componentes/redirect-register/redirect-register.component';
+import { RecetaDetalleComponent } from './componentes/receta-detalle/receta-detalle.component';
+import { FooterComponent } from './componentes/footer/footer.component';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { RedirectRegisterComponent } from './componentes/redirect-register/redir
     CalificacionStarComponent,
     VistaProfileComponent,
     VistaListaRecetasComponent,
-    BusquedaComponent
+    BusquedaComponent,
+    RecetaDetalleComponent,
+    FooterComponent
   ],
   
   imports: [
@@ -62,6 +66,8 @@ import { RedirectRegisterComponent } from './componentes/redirect-register/redir
         { path: 'redirect/register', component: RedirectRegisterComponent },
         { path: 'create', component: CrearRecetaComponent },
         { path: 'resultados', component: VistaListaRecetasComponent },
+        { path: 'receta/:id', component: RecetaDetalleComponent },  
+        
     ]),
     LoginButtonComponent,
     

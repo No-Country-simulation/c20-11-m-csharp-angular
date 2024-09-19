@@ -47,5 +47,14 @@ export class RecetasService {
     const url = `${API_ENDPOINT}/api/receta?S=${query}`;
     return this.http.get<Receta[]>(url);
   }
+
+  getRecetaById(id: string): Observable<Receta> {
+    const url = `${API_ENDPOINT}/api/receta/:id?ID=${id}`;
+    console.log(`Fetching receta with URL: ${url}`);
+    return this.http.get<Receta>(url);
+  }
+  
+
+  
   
 }

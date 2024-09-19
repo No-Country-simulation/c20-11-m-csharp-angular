@@ -1,52 +1,3 @@
-<!-- <app-header></app-header>
-<div class="row titulo-receta">
-    <div class="col">
-      <h1> {{ categoriaNombre  }}</h1>
-    </div>
-  </div>
-  
-  <div class="body-card-lista-receta">
-    <div *ngIf="isLoading" class="body-card-lista-receta-interna">
-      <div class="row lista-receta-fila">
-        <div class="col-txt">
-          <p>Cargando recetas...</p>
-        </div>
-      </div>
-    </div>
-  
-    <div *ngIf="!isLoading && recetas.length === 0" class="body-card-lista-receta-interna">
-      <div class="row lista-receta-fila">
-        <div class="col-txt">
-          <p>No se encontraron recetas para esta categoría.</p>
-        </div>
-      </div>
-    </div>
-  
-    <div *ngIf="!isLoading && recetas.length > 0" class="body-card-lista-receta-interna">
-      <div class="row lista-receta-fila" *ngFor="let receta of recetas">
-        <div class="col-txt">
-          <h2>{{ receta.nombre }}</h2>
-          <p>{{ receta.descripcion }}</p>
-
-          <h5>Ingredientes</h5>
-        <ul>
-          <li *ngFor="let ingrediente of receta.ingredientes">
-            {{ ingrediente.nombre }} - {{ ingrediente.cantidad }}
-          </li>
-        </ul>
-        </div>
-
-        
-  
-        <div class="col-img">
-          <img [src]="receta.imageUrl" alt="{{ receta.nombre }}" />
-        </div>
-      </div>
-    </div>
-  </div>
-   
- -->
-
   <app-header></app-header>
   <app-nav-bar></app-nav-bar>
   <div class="row titulo-receta">
@@ -54,7 +5,6 @@
       <h1>{{ searchTerm ? searchTerm : categoriaNombre }}</h1>
     </div>
   </div>
-  
   <div class="body-card-lista-receta">
     <div *ngIf="isLoading" class="body-card-lista-receta-interna">
       <div class="row lista-receta-fila">
@@ -71,23 +21,24 @@
         </div>
       </div>
     </div>
-  
-    <div *ngIf="!isLoading && recetas.length > 0" class="body-card-lista-receta-interna ">
-      <div class="row lista-receta-fila" *ngFor="let receta of recetas">
-        <div class="col-txt">
-          <h2 class="top30">{{ receta.nombre }}</h2>
-          <p>{{ receta.descripcion }}</p>
-          <ul>
-            <li *ngFor="let ingrediente of receta.ingredientes">
-              {{ ingrediente.nombre }} - {{ ingrediente.cantidad }}
-            </li>
-          </ul>
-        </div>
-  
-        <div class="col-img">
-          <img  [src]="receta.imageUrl" alt="{{ receta.nombre }}" />
-        </div>
+
+   <div *ngIf="!isLoading && recetas.length > 0" class="body-card-lista-receta-interna ">
+    <div class="row lista-receta-fila" *ngFor="let receta of recetas">
+      <div class="col-txt">
+        <h2 class="top30 linkgen">
+          <a [routerLink]="['/receta', receta.recetaID]">{{ receta.nombre }}</a>
+        </h2>
+        <p>{{ receta.descripcion }}</p>
+        <ul>
+          <li *ngFor="let ingrediente of receta.ingredientes">
+            {{ ingrediente.nombre }} - {{ ingrediente.cantidad }}
+          </li>
+        </ul>
+      </div>
+      <div class="col-img">
+        <img [src]="receta.imageUrl" alt="{{ receta.nombre }}" />
       </div>
     </div>
   </div>
-  
+  </div>
+  <app-footer></app-footer>
