@@ -42,6 +42,7 @@ export class RedirectLoginComponent implements OnInit {
       next: (data: any) => {
         console.log('Datos completos:', data);
         localStorage.setItem("nombre", data.nombre);
+        localStorage.setItem("id_user",data.usuarioID);
         localStorage.setItem('isAuthenticated', 'true');
       },
       error: (e) => {

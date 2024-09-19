@@ -14,7 +14,28 @@ public class RecetaService : IRecetaService
         this._context = _context;
         this._mapper = _mapper;
     }
+    public async Task<List<RecetaDto>> GetUserRecetas(int idUser)
+    {
+        try
+        {
+            List<Receta> userRecetas = await _context.Recetas
+                .Include(r => r.Reviews)
+                .Include(r => r.RecetaCategorias).ThenInclude(rc => rc.Categoria)
+                .Include(r => r.Usuario)
+                .Include(r => r.RecetaIngredientes).ThenInclude(ri => ri.Ingrediente)
+                .Where(r => r.UsuarioID == idUser && !r.IsDeleted)
+                .ToListAsync();
 
+            List<RecetaDto> recetaDtos = userRecetas.Select(r => _mapper.Map<RecetaDto>(r)).ToList();
+
+            return recetaDtos;
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
+    }
     public async Task<List<RecetaDto>> GetOrderRecetas(int pageIndex, int pageSize, QueryOrdersRecetas order, int day = -7)
     {
         var desdeFecha = DateTime.UtcNow.AddDays(day);
@@ -82,7 +103,7 @@ public class RecetaService : IRecetaService
             throw new ApplicationException("Ocurrió un error al obtener las recetas.", ex);
         }
     }
-
+    
     public async Task<List<RecetaDto>> GetAll()
     {
         return await _context.Recetas

@@ -82,6 +82,7 @@ namespace Tastys.BLL.Services.Review
                 return await _Context.Reviews.Where(review => review.IsDeleted != true)
 
                 .Include(review => review.Usuario)
+                .Include(review => review.Receta)
                 .Select(review => _Mapper.Map<ReviewDto>(review))
                 .ToListAsync();
 
@@ -97,7 +98,11 @@ namespace Tastys.BLL.Services.Review
         {
             try
             {
-                Tastys.Domain.Review reviewExist = _Context.Reviews.FirstOrDefault(u => u.ReviewID == id);
+                Tastys.Domain.Review reviewExist = _Context.Reviews.Include(review => review.Usuario)
+                .Include(review => review.Receta)
+                .First(u => u.ReviewID == id);
+                
+
 
                 if (reviewExist != null)
                 {
@@ -152,12 +157,12 @@ namespace Tastys.BLL.Services.Review
         {
             try
             {
-
-                Tastys.Domain.Review ReviewExist = _Context.Reviews.FirstOrDefault(u => u.ReviewID == Id);
-
-                if (ReviewExist != null)
+                Tastys.Domain.Review reviewExist = _Context.Reviews.Include(review => review.Usuario)
+                .Include(review => review.Receta)
+                .First(u => u.ReviewID == Id);
+                if (reviewExist != null)
                 {
-                    return _Mapper.Map<ReviewDto>(ReviewExist);
+                    return _Mapper.Map<ReviewDto>(reviewExist);
                 }
                 else
                 {
