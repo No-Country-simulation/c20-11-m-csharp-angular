@@ -28,8 +28,8 @@ public class RecetaController : ControllerBase
     /// <param name="user_id">Id del usuario que desea obtener la lista de recetas</param>
     /// <returns></returns>
     [HttpGet("user")]
-    [CheckToken]
-    [CheckPermissions("user:user")]
+    // [CheckToken]
+    // [CheckPermissions("user:user")]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
     [ProducesResponseType<List<RecetaDto>>(200)]
@@ -178,5 +178,25 @@ public class RecetaController : ControllerBase
         bool deleted = await _recetaService.DeleteById(ID);
 
         return Ok();
+    }
+    [HttpPut(":id")]
+    public async Task<ActionResult> PutReceta(int id,[FromBody] RecetaDto recetaData)
+    {
+        try
+        {
+            bool updateReceta = await _recetaService.UpdateById(recetaData,id);
+
+            if(updateReceta)
+            {
+                return Ok(recetaData);
+            }else{
+                throw new Exception("No se actualizo la receta");
+            }
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
     }
 }

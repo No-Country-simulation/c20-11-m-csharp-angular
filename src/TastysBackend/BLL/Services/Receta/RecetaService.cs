@@ -32,7 +32,7 @@ public class RecetaService : IRecetaService
         }
         catch (System.Exception)
         {
-            
+
             throw;
         }
     }
@@ -103,7 +103,7 @@ public class RecetaService : IRecetaService
             throw new ApplicationException("Ocurrió un error al obtener las recetas.", ex);
         }
     }
-    
+
     public async Task<List<RecetaDto>> GetAll()
     {
         return await _context.Recetas
@@ -164,15 +164,24 @@ public class RecetaService : IRecetaService
 
     public async Task<bool> UpdateById(RecetaDto recetaDto, int ID)
     {
-        var receta = await _context.Recetas.FindAsync(ID);
+        try
+        {
+            var receta = await _context.Recetas.FindAsync(ID);
 
-        if (receta == null)
-            throw new NotFoundException(ID, "No se encontró una receta con esta ID");
+            if (receta == null)
+                throw new NotFoundException(ID, "No se encontró una receta con esta ID");
 
-        _mapper.Map(recetaDto, receta);
-        await _context.SaveChangesAsync();
+            _mapper.Map(recetaDto, receta);
+            await _context.SaveChangesAsync();
 
-        return true;
+            return true;
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+
     }
 
     public async Task<Receta> Create(Receta receta, List<string> list_c, List<IngredienteDto> list_ingredientes, string auth_id)
@@ -220,7 +229,7 @@ public class RecetaService : IRecetaService
 
             if (ingredienteE == null)
             {
-                
+
                 Ingrediente newI = new Ingrediente
                 {
                     Nombre = ingrediente.Nombre,
