@@ -337,3 +337,8 @@ img {
   margin-bottom: 0px;
   justify-content: end;
 }
+
+#titulo-footer {
+  font-weight: bold;
+  color: orangered;
+}
