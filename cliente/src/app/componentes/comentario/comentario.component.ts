@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 export interface Usuario {
   usuarioID: number;
@@ -28,7 +28,16 @@ export class ComentarioComponent {
 
 
   all_comentarios:Array<Review> = []
+  constructor(
+    private route: ActivatedRoute
+  ) {}
 
+  ngOnInit(): void {
+    const recetaID = this.route.snapshot.paramMap.get('id');
+    if (recetaID) {
+      
+    }
+  }
   getAllComentarios(){
 
   } 
