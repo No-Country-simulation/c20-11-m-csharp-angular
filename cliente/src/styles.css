@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+ul {
+  list-style-type: none; /* Quita los puntos de las listas */
+  padding: 0; /* Quita el padding */
+  margin: 0; /* Quita el margin */
+}
 .flex {
   display: flex;
   justify-content: space-between;

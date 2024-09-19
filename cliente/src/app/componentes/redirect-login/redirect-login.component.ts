@@ -42,6 +42,7 @@ export class RedirectLoginComponent implements OnInit {
       next: (data: any) => {
         console.log('Datos completos:', data);
         localStorage.setItem("nombre", data.nombre);
+        localStorage.setItem("id_user",data.usuarioID);
         localStorage.setItem('isAuthenticated', 'true');
       },
       error: (e) => {
@@ -56,6 +57,11 @@ export class RedirectLoginComponent implements OnInit {
   }
 
   redirectToHome(): void {
-    this.router.navigate(['/']);
+    const userId = localStorage.getItem('id_user'); // Obtener el ID del usuario del local storage
+    if (userId) {
+      this.router.navigate(['/usuarios/', userId]); // Redirigir pasando el ID
+    } else {
+      console.error('No se encontró el ID del usuario en el local storage.');
+    }
   }
 }

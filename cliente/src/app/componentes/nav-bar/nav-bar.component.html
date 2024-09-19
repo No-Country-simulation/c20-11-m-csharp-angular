@@ -26,6 +26,11 @@
       <app-login-button *ngIf="!isAuthenticated"/>
     </li>
     <li class="nav-item">
+      <a class="nav-link" *ngIf="isAuthenticated" routerLink="/usuarios/:id" routerLinkActive="active">
+        <i class="fas fa-user marg"></i> 
+      </a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" *ngIf="isAuthenticated" routerLink="/create" routerLinkActive="active">Crear Receta</a>
     </li>
     <li class="nav-item">
