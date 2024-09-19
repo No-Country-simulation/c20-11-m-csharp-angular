@@ -13,6 +13,7 @@ import { VistaListasRecetasComponent } from './componentes/vista-listas-recetas/
 import { BarraLateralComponent } from './componentes/barra-lateral/barra-lateral.component';
 import { VistaProfileComponent } from './componentes/vista-profile/vista-profile.component';
 import { VistaDetalleRecetaComponent } from './componentes/vista-detalle-receta/vista-detalle-receta.component';
+import { FooterComponent } from './componentes/footer/footer.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { VistaDetalleRecetaComponent } from './componentes/vista-detalle-receta/
     BarraLateralComponent,
     VistaProfileComponent,
     VistaDetalleRecetaComponent,
+    FooterComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],

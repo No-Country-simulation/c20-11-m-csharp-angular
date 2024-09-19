@@ -297,3 +297,32 @@ img {
   margin: 5px;
   padding: 5px;
 }
+
+.footer {
+  width: 95%;
+  height: 20vh;
+  display: flex;
+  margin: 0 auto 20px auto;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.footer img {
+  width: 150px;
+  height: auto;
+  max-width: 100%;
+}
+
+.footer h5 {
+  font-size: small;
+  padding: 10px;
+}
+
+.footer p {
+  font-size: small;
+}
+
+#derechos-reservados {
+  margin-bottom: 0px;
+  justify-content: end;
+}
