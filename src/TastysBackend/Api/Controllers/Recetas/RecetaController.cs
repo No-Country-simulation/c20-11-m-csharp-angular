@@ -23,6 +23,33 @@ public class RecetaController : ControllerBase
     }
 
     /// <summary>
+    /// Obtiene las recetas del usuario que se pase por query
+    /// </summary>
+    /// <param name="user_id">Id del usuario que desea obtener la lista de recetas</param>
+    /// <returns></returns>
+    [HttpGet("user")]
+    [CheckToken]
+    [CheckPermissions("user:user")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType<List<RecetaDto>>(200)]
+    public async Task<ActionResult<List<RecetaDto>>> GetUserRecetas([FromQuery] int user_id)
+    {
+        try
+        {
+            List<RecetaDto> recetas = await _recetaService.GetUserRecetas(user_id);
+
+            return Ok(recetas);
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
+    }
+
+
+    /// <summary>
     /// Obtener recetas paginadas y ordenadas.
     /// </summary>
     /// <param name="page">El número de página (depende de pageSize, la primera es 0).</param>

@@ -115,3 +115,17 @@
 <a href="/" class="btn btn-primary">
   Volver al Inicio
 </a>
+
+
+<!-- MODAL DE CONFIRMACION  -->
+<div *ngIf="showConfirmationModal" class="modal-backdrop">
+  <div class="modal-content">
+    <h3>Confirmar Subida de Receta</h3>
+    <p>¿Estás seguro de que quieres subir la receta?</p>
+
+    <div class="modal-buttons">
+      <button type="button" (click)="confirmarSubidaReceta()" class="btn btn-primary">Confirmar</button>
+      <button type="button" (click)="closeConfirmationModal()" class="btn btn-primary">Cancelar</button>
+    </div>
+  </div>
+</div>

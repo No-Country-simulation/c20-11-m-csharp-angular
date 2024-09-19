@@ -33,10 +33,11 @@ export class CrearRecetaComponent {
   user_id = null;
 
   @ViewChild(TagFormComponent) tagFormComponent!: TagFormComponent;
+  showConfirmationModal = false;
+
 
   constructor(private http: HttpClient) {}
 
-  // Método que valida y almacena errores
   validateField(event: Event) {
     const input = event.target as HTMLInputElement;
     const validationResult = ValidateForm(input);
@@ -90,8 +91,52 @@ export class CrearRecetaComponent {
   handleEnterKey(event: KeyboardEvent) {
     event.preventDefault();
   }
+
+  openConfirmationModal() {
+    this.showConfirmationModal = true;
+  }
+  
+  closeConfirmationModal() {
+    this.showConfirmationModal = false;
+  }
+  confirmarSubidaReceta() {
+    const selectedCategories = this.tagFormComponent.items.map(item => item.value);
+  
+    const data = {
+      receta: this.receta,
+      list_i: this.items,
+      list_c: selectedCategories,
+      user_id: this.user_id
+    };
+  
+    this.http.post(`${API_ENDPOINT}/api/receta`, data, { withCredentials: true })
+      .subscribe({
+        next: (data: any) => {
+          console.log('Datos enviados:', data);
+        },
+        error: (e) => {
+          console.error('Error al enviar los datos:', e);
+        },
+        complete: () => {
+          console.info('Solicitud completada');
+        }
+      });
+  
+    this.closeConfirmationModal();
+  }
+  
   onSubmit(event: KeyboardEvent) {
     event.preventDefault();
+
+    for (const key in this.validationErrors) {
+      if (this.validationErrors[key].length > 1){
+        alert("Corrija los datos para hacer el envio de los datos"); 
+        return;
+      } 
+    }
+
+    this.openConfirmationModal();
+    
     const selectedCategories = this.tagFormComponent.items.map(item => item.value);
 
     const data = {
@@ -101,25 +146,5 @@ export class CrearRecetaComponent {
       user_id: this.user_id
     };
     console.log(data);
-    
-    const confirmacion = window.confirm('¿Estás seguro de que quieres subir la receta?');
-
-    if (confirmacion) {
-      this.http.post(`${API_ENDPOINT}/api/receta`, data, { withCredentials: true })
-        .subscribe({
-          next: (data: any) => {
-            console.log('Datos enviados:', data);
-          },
-          error: (e) => {
-            console.error('Error al enviar los datos:', e);
-          },
-          complete: () => {
-            console.info('Solicitud completada');
-          }
-        });
-    } else {
-      // Si el usuario cancela, no hace nada
-      console.log('El usuario canceló la subida de la receta.');
-    }
   }
 }
