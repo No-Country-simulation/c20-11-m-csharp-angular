@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TagInputModule } from 'ngx-chips';
 import { API_ENDPOINT } from '../../../../vars';
 import { TagFormComponent } from "../tag-form/tag-form.component";
+import { ValidateForm } from '../../../utils/Form/form.validation';
 
 @Component({
   selector: 'app-crear-receta',
@@ -14,12 +15,14 @@ import { TagFormComponent } from "../tag-form/tag-form.component";
   imports: [FormsModule, CommonModule, ReactiveFormsModule, TagInputModule, TagFormComponent]
 })
 export class CrearRecetaComponent {
+  validationErrors: { [key: string]: string } = {};
   receta = {
     nombre: '',
     descripcion: '',
     imageUrl: '',
     tiempo_de_coccion:"0",
   };
+
   showModal = false;
   name_input = '';
   cantidad_input = '';
@@ -33,6 +36,17 @@ export class CrearRecetaComponent {
 
   constructor(private http: HttpClient) {}
 
+  // Método que valida y almacena errores
+  validateField(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const validationResult = ValidateForm(input);
+
+    if (validationResult !== true) {
+      this.validationErrors[input.name] = validationResult as string;
+    } else {
+      delete this.validationErrors[input.name];
+    }
+  }
   onAdd(event: any) {
     this.name_input = event.displayName
     this.items = this.items.filter(item => item.displayName !== event.displayName);

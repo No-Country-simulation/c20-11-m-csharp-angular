@@ -11,7 +11,11 @@
         name="nombre" 
         [(ngModel)]="receta.nombre" 
         required 
-        class="form-control" />
+        class="form-control"
+        (blur)="validateField($event)" />
+      <div *ngIf="validationErrors['nombre']" style="color: red;">
+        {{ validationErrors['nombre'] }}
+      </div>
     </div>
     
     <!-- Descripción -->
@@ -22,8 +26,12 @@
         name="descripcion" 
         [(ngModel)]="receta.descripcion" 
         required 
-        class="form-control">
+        class="form-control"
+        (blur)="validateField($event)">
       </textarea>
+      <div *ngIf="validationErrors['descripcion']" style="color: red;">
+        {{ validationErrors['descripcion'] }}
+      </div>
     </div>
 
     <!-- Tiempo de cocción -->
@@ -35,7 +43,11 @@
         name="tiempo_de_coccion" 
         [(ngModel)]="receta.tiempo_de_coccion" 
         required 
-        class="form-control" />
+        class="form-control"
+        (blur)="validateField($event)" />
+        <div *ngIf="validationErrors['tiempo_de_coccion']" style="color: red;">
+          {{ validationErrors['tiempo_de_coccion'] }}
+        </div>
     </div>
     
     <!-- URL de Imagen -->
@@ -47,7 +59,11 @@
         name="imageUrl" 
         [(ngModel)]="receta.imageUrl" 
         required 
-        class="form-control" />
+        class="form-control"
+        (blur)="validateField($event)" />
+        <div *ngIf="validationErrors['imageUrl']" style="color: red;">
+          {{ validationErrors['imageUrl'] }}
+        </div>
     </div>
     
     <!-- Ingredientes -->

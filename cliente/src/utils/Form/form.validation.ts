@@ -26,7 +26,7 @@ const ValidateActions:Dicctionary<(value:any) => true|string> = {
     imageUrl:ImageUrlValidate,
     descripcion:DescriptionValidate,
     nombre:NombreValidate,
-    tiempo_de_coccion:
+    tiempo_de_coccion:TiempoCoccionValidate
 }
 
 export const ValidateForm = (event:HTMLInputElement) => {
