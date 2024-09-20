@@ -34,7 +34,7 @@ export class CrearRecetaComponent {
 
   @ViewChild(TagFormComponent) tagFormComponent!: TagFormComponent;
   showConfirmationModal = false;
-
+  showRecetaCreated = false;
 
   constructor(private http: HttpClient) {}
 
@@ -99,32 +99,6 @@ export class CrearRecetaComponent {
   closeConfirmationModal() {
     this.showConfirmationModal = false;
   }
-  confirmarSubidaReceta() {
-    const selectedCategories = this.tagFormComponent.items.map(item => item.value);
-  
-    const data = {
-      receta: this.receta,
-      list_i: this.items,
-      list_c: selectedCategories,
-      user_id: this.user_id
-    };
-  
-    this.http.post(`${API_ENDPOINT}/api/receta`, data, { withCredentials: true })
-      .subscribe({
-        next: (data: any) => {
-          console.log('Datos enviados:', data);
-        },
-        error: (e) => {
-          console.error('Error al enviar los datos:', e);
-        },
-        complete: () => {
-          console.info('Solicitud completada');
-        }
-      });
-  
-    this.closeConfirmationModal();
-  }
-  
   onSubmit(event: KeyboardEvent) {
     event.preventDefault();
 
@@ -146,5 +120,34 @@ export class CrearRecetaComponent {
       user_id: this.user_id
     };
     console.log(data);
+  }
+  confirmarSubidaReceta() {
+
+
+    const selectedCategories = this.tagFormComponent.items.map(item => item.value);
+  
+    const data = {
+      receta: this.receta,
+      list_i: this.items,
+      list_c: selectedCategories,
+      user_id: this.user_id
+    };
+    this.showRecetaCreated =false;
+    this.http.post(`${API_ENDPOINT}/api/receta`, data, { withCredentials: true })
+      .subscribe({
+        next: (data: any) => {
+          console.log('Datos enviados:', data);
+          this.showRecetaCreated = true;
+        },
+        error: (e) => {
+          console.error('Error al enviar los datos:', e);
+        },
+        complete: () => {
+          console.info('Solicitud completada');
+
+        }
+      });
+  
+    this.closeConfirmationModal();
   }
 }
