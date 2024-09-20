@@ -1,7 +1,7 @@
 
 <div class="comment-section">
     <h1>Comentarios</h1>
-    <form (ngSubmit)="AddComentario()" class="search-bar">
+    <form *ngIf="isAuthenticated" (ngSubmit)="AddComentario()" class="search-bar">
         <input type="text" [(ngModel)]="comentario" name="comentario" placeholder="Escribe tu comentario" required>
         <button type="submit">Subir comentario</button>
     </form>

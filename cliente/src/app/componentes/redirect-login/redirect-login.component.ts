@@ -22,6 +22,7 @@ export class RedirectLoginComponent implements OnInit {
   isLoading: boolean = true;
   code: string | null = null;
   showRedirectButton: boolean = false;
+  login_exitoso = 0;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -40,12 +41,14 @@ export class RedirectLoginComponent implements OnInit {
   loginUser(): void {
     this.http.post(`${API_ENDPOINT}/users/login?code=${this.code}`, null, { withCredentials: true }).subscribe({
       next: (data: any) => {
+        this.login_exitoso = 1;
         console.log('Datos completos:', data);
         localStorage.setItem("nombre", data.nombre);
         localStorage.setItem("id_user",data.usuarioID);
         localStorage.setItem('isAuthenticated', 'true');
       },
       error: (e) => {
+        this.login_exitoso = 2;
         console.error('Error al obtener los datos de la API:', e);
         this.showRedirectButton = true;
       },
@@ -61,6 +64,7 @@ export class RedirectLoginComponent implements OnInit {
     if (userId) {
       this.router.navigate(['/usuarios/', userId]); // Redirigir pasando el ID
     } else {
+      this.router.navigate(['/']);
       console.error('No se encontró el ID del usuario en el local storage.');
     }
   }
