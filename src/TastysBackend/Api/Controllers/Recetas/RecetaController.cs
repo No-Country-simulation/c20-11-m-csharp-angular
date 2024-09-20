@@ -23,6 +23,33 @@ public class RecetaController : ControllerBase
     }
 
     /// <summary>
+    /// Obtiene las recetas del usuario que se pase por query
+    /// </summary>
+    /// <param name="user_id">Id del usuario que desea obtener la lista de recetas</param>
+    /// <returns></returns>
+    [HttpGet("user")]
+    // [CheckToken]
+    // [CheckPermissions("user:user")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType<List<RecetaDto>>(200)]
+    public async Task<ActionResult<List<RecetaDto>>> GetUserRecetas([FromQuery] int user_id)
+    {
+        try
+        {
+            List<RecetaDto> recetas = await _recetaService.GetUserRecetas(user_id);
+
+            return Ok(recetas);
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
+    }
+
+
+    /// <summary>
     /// Obtener recetas paginadas y ordenadas.
     /// </summary>
     /// <param name="page">El número de página (depende de pageSize, la primera es 0).</param>
@@ -151,5 +178,25 @@ public class RecetaController : ControllerBase
         bool deleted = await _recetaService.DeleteById(ID);
 
         return Ok();
+    }
+    [HttpPut(":id")]
+    public async Task<ActionResult> PutReceta(int id,[FromBody] RecetaDto recetaData)
+    {
+        try
+        {
+            bool updateReceta = await _recetaService.UpdateById(recetaData,id);
+
+            if(updateReceta)
+            {
+                return Ok(recetaData);
+            }else{
+                throw new Exception("No se actualizo la receta");
+            }
+        }
+        catch (System.Exception)
+        {
+            
+            throw;
+        }
     }
 }

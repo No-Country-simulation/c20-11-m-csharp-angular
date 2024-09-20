@@ -14,7 +14,28 @@ public class RecetaService : IRecetaService
         this._context = _context;
         this._mapper = _mapper;
     }
+    public async Task<List<RecetaDto>> GetUserRecetas(int idUser)
+    {
+        try
+        {
+            List<Receta> userRecetas = await _context.Recetas
+                .Include(r => r.Reviews)
+                .Include(r => r.RecetaCategorias).ThenInclude(rc => rc.Categoria)
+                .Include(r => r.Usuario)
+                .Include(r => r.RecetaIngredientes).ThenInclude(ri => ri.Ingrediente)
+                .Where(r => r.UsuarioID == idUser && !r.IsDeleted)
+                .ToListAsync();
 
+            List<RecetaDto> recetaDtos = userRecetas.Select(r => _mapper.Map<RecetaDto>(r)).ToList();
+
+            return recetaDtos;
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+    }
     public async Task<List<RecetaDto>> GetOrderRecetas(int pageIndex, int pageSize, QueryOrdersRecetas order, int day = -7)
     {
         var desdeFecha = DateTime.UtcNow.AddDays(day);
@@ -143,15 +164,24 @@ public class RecetaService : IRecetaService
 
     public async Task<bool> UpdateById(RecetaDto recetaDto, int ID)
     {
-        var receta = await _context.Recetas.FindAsync(ID);
+        try
+        {
+            var receta = await _context.Recetas.FindAsync(ID);
 
-        if (receta == null)
-            throw new NotFoundException(ID, "No se encontró una receta con esta ID");
+            if (receta == null)
+                throw new NotFoundException(ID, "No se encontró una receta con esta ID");
 
-        _mapper.Map(recetaDto, receta);
-        await _context.SaveChangesAsync();
+            _mapper.Map(recetaDto, receta);
+            await _context.SaveChangesAsync();
 
-        return true;
+            return true;
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+
     }
 
     public async Task<Receta> Create(Receta receta, List<string> list_c, List<IngredienteDto> list_ingredientes, string auth_id)
@@ -199,7 +229,7 @@ public class RecetaService : IRecetaService
 
             if (ingredienteE == null)
             {
-                
+
                 Ingrediente newI = new Ingrediente
                 {
                     Nombre = ingrediente.Nombre,

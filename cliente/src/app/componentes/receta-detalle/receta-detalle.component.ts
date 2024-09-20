@@ -27,6 +27,8 @@ export class RecetaDetalleComponent implements OnInit {
     this.recetasService.getRecetaById(id).subscribe(
       (data: Receta) => {
         this.receta = data;
+        console.log(data);
+        
       },
       (error) => {
         console.error('Error al obtener la receta:', error);

@@ -27,6 +27,7 @@ import { FormsModule } from '@angular/forms';
 import { RedirectRegisterComponent } from './componentes/redirect-register/redirect-register.component';
 import { RecetaDetalleComponent } from './componentes/receta-detalle/receta-detalle.component';
 import { FooterComponent } from './componentes/footer/footer.component';
+import { ComentarioComponent } from './componentes/comentario/comentario.component';
 
 
 @NgModule({
@@ -66,11 +67,10 @@ import { FooterComponent } from './componentes/footer/footer.component';
         { path: 'redirect/register', component: RedirectRegisterComponent },
         { path: 'create', component: CrearRecetaComponent },
         { path: 'resultados', component: VistaListaRecetasComponent },
-        { path: 'receta/:id', component: RecetaDetalleComponent },  
-        
+        { path: 'receta/:id', component: RecetaDetalleComponent },
     ]),
     LoginButtonComponent,
-    
+    ComentarioComponent
 ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers: [],

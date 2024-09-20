@@ -20,7 +20,7 @@ h2 {
   padding: 5px;
 }
 .btn-primary {
-  background-color: #f7e4b1;
+  background-color:#ff8c00;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -30,7 +30,7 @@ h2 {
 }
 
 .btn-primary:hover {
-  background-color: #ff8c00;
+  background-color: #f7e4b1;
 }
 
 .modal-backdrop {
@@ -85,4 +85,38 @@ h2 {
 
 .modal-buttons button:hover {
   background-color: #c4a88b;
+}
+
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+.modal-buttons button {
+  margin: 0 10px;
 }

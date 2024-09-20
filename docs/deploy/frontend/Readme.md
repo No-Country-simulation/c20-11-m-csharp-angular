@@ -17,7 +17,9 @@ Luego, se deben ejecutar estos comandos:
 npm install
 npm run build
 
-# Deployar a https://tasty-cliente.web.app/
+# --project tasty-cliente = Deployar a https://tasty-cliente.web.app/
+# --project tasty-cliente-staging = Deployar a https://tasty-cliente-staging.web.app/
+# Los dos usan el mismo TOKEN
 firebase deploy --project tasty-cliente --only hosting --token TOKEN
 ```
 
