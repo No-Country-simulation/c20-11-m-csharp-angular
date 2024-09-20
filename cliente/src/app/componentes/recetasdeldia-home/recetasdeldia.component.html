@@ -1,21 +1,24 @@
 <div class="body-card">
   <div class="body-card-interna">
-    <div class="body-card-interna-content">
+    <!-- Imagen de la receta del día -->
+    <div class="body-card-interna-content" id="nopad">
       <img [src]="recetasDelDia[0].imageUrl" id="imgRecetaDelDia" alt="Imagen de la receta del día" />
     </div>
 
+    <!-- Nombre y descripción de la receta -->
+    <div class="body-card-interna-content" id="recnom">
+      <h2>{{ recetasDelDia[0].nombre }}</h2>
+      <p class="recdes">{{ recetasDelDia[0].descripcion }}</p>
+    </div>
+
+    <!-- Ingredientes de la receta -->
     <div class="body-card-interna-content">
-      <h5 id="miTitulo">Ingredientes</h5>
+      <h2 id="miTitulo">Ingredientes</h2>
       <ul>
         <li *ngFor="let ingrediente of recetasDelDia[0].ingredientes">
           {{ ingrediente.nombre }} - {{ ingrediente.cantidad }}
         </li>
       </ul>
-    </div>
-
-    <div class="body-card-interna-content">
-      <h5>{{ recetasDelDia[0].nombre }}</h5>
-      <p>{{ recetasDelDia[0].descripcion }}</p>
     </div>
   </div>
 </div>

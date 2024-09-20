@@ -1,37 +1,31 @@
 <app-header></app-header>
+<app-nav-bar></app-nav-bar>
 <div class="row titulo-receta">
-    <div class="col">
-      <h1>Name profile.</h1>
+  <div class="col">
+    <h1>{{ usuario?.nombre }}</h1> <!-- Muestra el nombre del usuario -->
+  </div>
+</div>
+
+<div class="row body-card-lista-receta">
+  <div class="col-5 profile-izquierda">
+    <img src="/assets/chefs.jpg" id="profileIzquierdaImg" />
+    
+    <p id="profileIzquierdaTxt">
+      Amante de la cocina y la repostería, me encanta explorar recetas tradicionales y compartir mis hallazgos. Me encantan los platos saldos también y cocinar al fuego.
+    </p>
+  </div>
+
+  <div class="col-7">
+    <h1>MIS CREACIONES</h1>
+
+    <h3 *ngIf="isLoading">Cargando recetas...</h3>
+    <h3 *ngIf="!isLoading && recetas.length === 0">No tienes recetas creadas.</h3>
+    
+    <div *ngFor="let receta of recetas" class="card-mis-creaciones">
+      <img [src]="receta.imageUrl" alt="{{ receta.nombre }}" /> <!-- Cambia la ruta a la imagen de la receta -->
+      <h4>{{ receta.nombre }}</h4> <!-- Muestra el nombre de la receta -->
     </div>
   </div>
-  
-  <div class="row body-card-lista-receta">
-    <div class="col-5 profile-izquierda">
-      <img src="/assets/chefs.jpg" id="profileIzquierdaImg" />
-  
-      <p id="profileIzquierdaTxt">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora aut omnis
-        esse, fuga id in aspernatur. Quaerat dolor aperiam nemo adipisci
-        consequuntur dicta accusantium ea, ab fugit molestias maxime illum.
-      </p>
-    </div>
-  
-    <div class="col-7">
-      <h1>MIS CREACIONES.</h1>
-  
-      <div class="card-mis-creaciones">
-        <img src="/assets/chefs.jpg" />
-        <h4>Mi receta del día</h4>
-      </div>
-  
-      <div class="card-mis-creaciones">
-        <img src="/assets/chefs.jpg" />
-        <h4>Mi receta del día</h4>
-      </div>
-  
-      <div class="card-mis-creaciones">
-        <img src="/assets/chefs.jpg" />
-        <h4>Mi receta del día</h4>
-      </div>
-    </div>
-  </div>
+</div>
+
+<app-footer></app-footer>
