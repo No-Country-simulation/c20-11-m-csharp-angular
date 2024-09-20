@@ -5,7 +5,7 @@ public class SetCookie
         return new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,  // En desarrollo sin HTTPS
+            Secure = false,  // En desarrollo sin HTTPS
             SameSite = SameSiteMode.None,
             Expires = DateTimeOffset.UtcNow.AddHours(expira)
         };

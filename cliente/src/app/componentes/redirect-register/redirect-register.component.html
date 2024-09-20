@@ -1,5 +1,8 @@
 <div class="redirect-container">
     <h1>Register Redirect</h1>
+    <div *ngIf="showRedirectButton">
+        <h1 class="ingreso">Ingreso exitoso</h1>
+    </div>
     
     <!-- Si el login está completo, mostrar el botón -->
     <button *ngIf="showRedirectButton" class="btn-redirect" (click)="redirectToHome()">
