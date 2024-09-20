@@ -1,9 +1,13 @@
 <div class="redirect-container">
 <h1>Login Redirect</h1>
-
+<h1 class="ingreso">Ingreso exitoso</h1>
 <!-- Si el login está completo, mostrar el botón -->
-<button *ngIf="showRedirectButton" class="btn-redirect" (click)="redirectToHome()">
-    Volver a la página principal
-</button>
+ <div *ngIf="showRedirectButton">
+
+    <button class="btn-redirect" (click)="redirectToHome()">
+        Volver a la página principal
+    </button>
+ </div>
+
 </div>
   

@@ -6,7 +6,9 @@ justify-content: center;
 height: 100vh;
 background-color: #f7f1e3;  /* Fondo blanco suave */
 }
-
+.ingreso{
+    color: rgb(94, 142, 23);
+}
 h1 {
 color: #ff6f00;  /* Naranja claro */
 font-size: 2em;
