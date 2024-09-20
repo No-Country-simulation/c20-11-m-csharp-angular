@@ -12,7 +12,5 @@ Esta aplicacion web cuenta con categorias de recetas segun el pais, carne princi
 Tasty permite a los usuarios crear,guardar y compartir recetas personalizadas con fotos de los resultados, ingredientes y pasos detallados de como realizar la receta elegida,
 tambien permite a los usuarios buscar y filtrar recetas segun lo que el usuario busque, guardar recetas favoritas y hacer comentarios acerca de las mismas.
 
-Tasty nos permite calificar una receta con una puntuacion de 0 a 5 estrellas.
-
 Otro dato no menor es que Tasty permite aunque no este el usuario registrado, visualizar y buscar recetas.
 
