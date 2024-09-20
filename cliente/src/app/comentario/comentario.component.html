@@ -1,0 +1,14 @@
+
+<div class="comment-section">
+    <h1>Comentarios</h1>
+    <form (ngSubmit)="AddComentario()" class="search-bar">
+        <input type="text" [(ngModel)]="comentario" name="comentario" placeholder="Escribe tu comentario" required>
+        <button type="submit">Subir comentario</button>
+    </form>
+    <div class="row lista-receta-fila" *ngFor="let comentario of all_comentarios">
+        <div class="comment-item">
+            <label>{{comentario.usuario.nombre}}:</label>
+            <span>{{comentario.comentario}}</span>
+        </div>
+    </div>
+</div>

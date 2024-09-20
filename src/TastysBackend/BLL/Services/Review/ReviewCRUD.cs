@@ -24,30 +24,43 @@ namespace Tastys.BLL.Services.Review
             _Mapper = mapper;
         }
 
-        public async Task<ReviewDto> AddReview(Domain.Review review)
+        public async Task<ReviewDto> AddReview(CreateReviewDTO review, string auth0Id)
         {
+            Console.WriteLine("RecetaID: " + review.RecetaID);
             try
             {
-                Domain.Review reviewExist = _Context.Reviews.FirstOrDefault(r => r.RecetaID == review.RecetaID && r.UsuarioID == review.UsuarioID);
+                // Asegúrate de que el auth0Id existe y corresponde a un usuario
+                Usuario usuario = _Context.Usuarios.FirstOrDefault(u => u.Auth0Id == auth0Id);
+                if (usuario == null)
+                {
+                    throw new Exception("Usuario no encontrado");
+                }
+
+                // Busca si ya existe una review para esa receta y usuario
+                Tastys.Domain.Review reviewExist = _Context.Reviews
+                    .FirstOrDefault(r => r.RecetaID == review.RecetaID && r.UsuarioID == usuario.UsuarioID);
 
                 if (reviewExist == null)
                 {
+                    // Crea una nueva review si no existe
                     Domain.Review newReview = new Domain.Review
                     {
                         Calificacion = review.Calificacion,
                         Comentario = review.Comentario,
                         RecetaID = review.RecetaID,
-                        UsuarioID = review.UsuarioID,
+                        UsuarioID = usuario.UsuarioID, // Cambiado de reviewExist.UsuarioID
                     };
-                    _Context.Reviews.Add(newReview);
 
+                    _Context.Reviews.Add(newReview);
                     _Context.SaveChanges();
 
+                    // Verifica la review recién creada
                     var reviewCheck = await _Context.Reviews
                         .Include(r => r.Usuario)
                         .Include(r => r.Receta)
                         .FirstOrDefaultAsync(r => r.ReviewID == newReview.ReviewID);
 
+                    // Devuelve el DTO de la review
                     return new ReviewDto
                     {
                         ReviewID = reviewCheck.ReviewID,
@@ -60,7 +73,7 @@ namespace Tastys.BLL.Services.Review
                             UsuarioID = reviewCheck.Usuario.UsuarioID,
                             Nombre = reviewCheck.Usuario.Nombre
                         },
-                        Receta =reviewCheck.Receta
+                        Receta = reviewCheck.Receta
                     };
                 }
                 else
@@ -68,12 +81,13 @@ namespace Tastys.BLL.Services.Review
                     throw new Exception("El usuario ya hizo una review de la receta");
                 }
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                // Manejo de excepciones
+                throw new Exception($"Error al agregar la review: {ex.Message}", ex);
             }
         }
+
 
         public async Task<List<ReviewDto>> GetAllReview()
         {
@@ -101,7 +115,7 @@ namespace Tastys.BLL.Services.Review
                 Tastys.Domain.Review reviewExist = _Context.Reviews.Include(review => review.Usuario)
                 .Include(review => review.Receta)
                 .First(u => u.ReviewID == id);
-                
+
 
 
                 if (reviewExist != null)
@@ -149,20 +163,17 @@ namespace Tastys.BLL.Services.Review
             }
         }
 
-
-
-
-
-        public ReviewDto GetReviewById(int Id)
+        public async Task<List<ReviewDto>> GetReviewFromRecetaId(int RecetaID)
         {
             try
             {
-                Tastys.Domain.Review reviewExist = _Context.Reviews.Include(review => review.Usuario)
+                List<Tastys.Domain.Review> reviews = await _Context.Reviews.Include(review => review.Usuario)
                 .Include(review => review.Receta)
-                .First(u => u.ReviewID == Id);
-                if (reviewExist != null)
+                .Where(u => u.RecetaID == RecetaID).ToListAsync();
+                if (reviews != null)
                 {
-                    return _Mapper.Map<ReviewDto>(reviewExist);
+                    List<ReviewDto> recetaDtos = reviews.Select(r => _Mapper.Map<ReviewDto>(r)).ToList();
+                    return recetaDtos;
                 }
                 else
                 {
