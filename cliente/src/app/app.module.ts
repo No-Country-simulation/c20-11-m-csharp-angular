@@ -27,7 +27,7 @@ import { FormsModule } from '@angular/forms';
 import { RedirectRegisterComponent } from './componentes/redirect-register/redirect-register.component';
 import { RecetaDetalleComponent } from './componentes/receta-detalle/receta-detalle.component';
 import { FooterComponent } from './componentes/footer/footer.component';
-import { ComentarioComponent } from './componentes/comentario/comentario.component';
+import { ComentarioComponent } from './comentario/comentario.component';
 
 
 @NgModule({

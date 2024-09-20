@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using Tastys.BLL;
 using Tastys.BLL.Services.Review;
-
+using Tastys.API.Middlewares;
+using DTO;
 
 namespace Tastys.API.Controllers.Review
 {
@@ -18,17 +20,25 @@ namespace Tastys.API.Controllers.Review
             _reviewService = recetaService;
         }
         [HttpPost]
-        public async Task<IActionResult> PostReview([FromBody]Domain.Review reviewDTO)
+        [CheckToken]
+        [CheckPermissions("user:user")]
+        [SwaggerRequestExample(typeof(CreateReviewDTO), typeof(ReviewRequestExample))]
+        public async Task<IActionResult> PostReview([FromBody] CreateReviewDTO reviewDTO)
         {
             try
             {
-                ReviewDto review =  await _reviewService.AddReview(reviewDTO);
+                if (HttpContext.Items["userdata"] is not UserDataToken userData)
+                {
+                    return BadRequest("No se encontró información del usuario.");
+                }
+
+                ReviewDto review = await _reviewService.AddReview(reviewDTO,userData.authId);
 
                 return Ok(review);
             }
             catch (System.Exception)
             {
-                
+
                 throw;
             }
         }
@@ -51,13 +61,13 @@ namespace Tastys.API.Controllers.Review
             }
         }
 
-        [HttpGet("{Id}")]
-        public ActionResult GetReview( int Id)
+        [HttpGet(":id")]
+        public async Task<ActionResult> GetReviewFromrecetas(int RecetaId)
         {
             try
             {
 
-                ReviewDto review = _reviewService.GetReviewById(Id);
+                List<ReviewDto> review = await _reviewService.GetReviewFromRecetaId(RecetaId);
 
                 return Ok(review);
 
