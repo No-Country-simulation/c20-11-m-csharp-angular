@@ -425,6 +425,7 @@ img {
   margin: 20px;
   padding: 10px;
   border-radius: 300px;
+  max-height: 400px;
 }
 
 #profileIzquierdaTxt {
@@ -474,7 +475,8 @@ img {
   justify-content: center;
   margin: 20px;
   padding: 10px;
-  border-radius: 300px;
+  border-radius: 90px;
+  max-height: 500px;
 }
 
 #profileIzquierdaTxt {
@@ -594,3 +596,5 @@ img {
 #anio-footer {
   font-weight: bolder;
 }
+
+
