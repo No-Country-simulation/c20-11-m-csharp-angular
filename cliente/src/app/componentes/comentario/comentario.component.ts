@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ComentarioService, CrearReview, Review } from '../servicios/comentario.service';
+import { ComentarioService, CrearReview, Review } from '../../servicios/comentario.service';
 import { FormsModule } from '@angular/forms';
 
 export interface Usuario {
@@ -17,6 +17,7 @@ export interface Usuario {
   imports:[RouterOutlet, RouterLink, RouterLinkActive,CommonModule,FormsModule]
 })
 export class ComentarioComponent {
+  isAuthenticated = false;
 
   all_comentarios:Array<Review> = [];
   comentario: string = '';
@@ -27,6 +28,7 @@ export class ComentarioComponent {
   ) {}
 
   async ngOnInit() {
+    this.isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     const recetaID = this.route.snapshot.paramMap.get('id');
     if (recetaID) {
       this.comentarioService.getAllComentarios(recetaID).subscribe({

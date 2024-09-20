@@ -1,7 +1,10 @@
 <div class="redirect-container">
 <h1>Login Redirect</h1>
-<div *ngIf="showRedirectButton">
+<div *ngIf="login_exitoso == 1">
     <h1 class="ingreso">Ingreso exitoso</h1>
+</div>
+<div *ngIf="login_exitoso == 2">
+    <h1 class="ingreso-error">El usuario ya existe, registrese</h1>
 </div>
 
 <!-- Si el login está completo, mostrar el botón -->
