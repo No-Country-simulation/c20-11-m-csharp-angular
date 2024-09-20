@@ -6,7 +6,7 @@ public class SetCookie
         {
             HttpOnly = true,
             Secure = true,  // En desarrollo sin HTTPS
-            SameSite = SameSiteMode.Lax,
+            SameSite = SameSiteMode.None,
             Expires = DateTimeOffset.UtcNow.AddHours(expira)
         };
     }
