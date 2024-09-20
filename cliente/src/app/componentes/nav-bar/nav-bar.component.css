@@ -88,3 +88,8 @@
     background-color: #FFD700; /* Color de fondo amarillo más claro al pasar el ratón */
     border-color: #999; /* Borde gris más oscuro al pasar el ratón */
   }
+
+
+  .marg{
+    padding:4px;
+  }

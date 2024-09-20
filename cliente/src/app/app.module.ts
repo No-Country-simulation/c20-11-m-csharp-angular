@@ -61,7 +61,7 @@ import { ComentarioComponent } from './comentario/comentario.component';
         { path: '', component: HomeComponent },
         { path: 'recetasdeldia', component: RecetasDelDiaComponent },
         { path: 'chefs', component: ChefsComponent },
-        { path: 'user', component: DashUserComponent },
+        { path: 'usuarios/:id', component: DashUserComponent },
         { path: 'categorias', component: CategoriasHomeComponent },
         { path: 'redirect', component: RedirectLoginComponent },
         { path: 'redirect/register', component: RedirectRegisterComponent },
